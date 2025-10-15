@@ -52,5 +52,5 @@ jobs:
           REMOTE_HOST: "www.triority.cc"
           REMOTE_USER: "root"
           # 目标目录
-          TARGET: "/www/wwwroot/www.triority.cc"
+          TARGET: "/hexo"
       - run: echo "Deploy Successful!"
