@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>本科毕业设计论文：巷道移动机器人SLAM技术研究 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计划完成的任务目标 制作一台移动机器人 使用三维激光雷达和毫米波雷达进行建图 使用深度相机和imu数据融合进行建图和导航  三维激光雷达建图的实现（LeGO-LOAM） 算法：LeGO-LOAM 激光雷达：RS-Helios-5515  通讯连接和基本配置首先用交换机连接激光雷达和电脑，为了方便我决定在vmware中开发，系统为Ubuntu 18.04安装了ROS1-melodic。网络设置为桥接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本科毕业设计论文：巷道移动机器人SLAM技术研究">
+<meta property="og:url" content="http://triority.cc/2025/Visual-SLAM/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="计划完成的任务目标 制作一台移动机器人 使用三维激光雷达和毫米波雷达进行建图 使用深度相机和imu数据融合进行建图和导航  三维激光雷达建图的实现（LeGO-LOAM） 算法：LeGO-LOAM 激光雷达：RS-Helios-5515  通讯连接和基本配置首先用交换机连接激光雷达和电脑，为了方便我决定在vmware中开发，系统为Ubuntu 18.04安装了ROS1-melodic。网络设置为桥接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/favicon.png">
+<meta property="article:published_time" content="2025-02-06T20:41:20.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.757Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="ROS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/favicon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2025/Visual-SLAM/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '本科毕业设计论文：巷道移动机器人SLAM技术研究',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background: /img/"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">本科毕业设计论文：巷道移动机器人SLAM技术研究</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2025-02-06T20:41:20.000Z" title="发表于 2025-02-06 20:41:20">2025-02-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E6%A1%A3-%E7%AC%94%E8%AE%B0/">文档&amp;笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2025/Visual-SLAM/" data-flag-title="本科毕业设计论文：巷道移动机器人SLAM技术研究"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="计划完成的任务目标"><a href="#计划完成的任务目标" class="headerlink" title="计划完成的任务目标"></a>计划完成的任务目标</h1><ul>
+<li>制作一台移动机器人</li>
+<li>使用三维激光雷达和毫米波雷达进行建图</li>
+<li>使用深度相机和imu数据融合进行建图和导航</li>
+</ul>
+<h1 id="三维激光雷达建图的实现（LeGO-LOAM）"><a href="#三维激光雷达建图的实现（LeGO-LOAM）" class="headerlink" title="三维激光雷达建图的实现（LeGO-LOAM）"></a>三维激光雷达建图的实现（LeGO-LOAM）</h1><ul>
+<li>算法：<a target="_blank" rel="noopener" href="https://github.com/RobustFieldAutonomyLab/LeGO-LOAM">LeGO-LOAM</a></li>
+<li>激光雷达：<a href="RS-Helios-5515%E4%BA%A7%E5%93%81%E6%89%8B%E5%86%8C.pdf">RS-Helios-5515</a></li>
+</ul>
+<h2 id="通讯连接和基本配置"><a href="#通讯连接和基本配置" class="headerlink" title="通讯连接和基本配置"></a>通讯连接和基本配置</h2><p>首先用交换机连接激光雷达和电脑，为了方便我决定在vmware中开发，系统为<code>Ubuntu 18.04</code>安装了<code>ROS1-melodic</code>。网络设置为桥接模式，系统内设置网络手动ip<code>192.168.1.102</code>，子网掩码<code>255.255.255.0</code>（雷达默认ip<code>192.168.1.200</code>发送udp数据包到<code>192.168.1.102</code>的端口<code>6699``7788</code>）</p>
+<p>新建ros工作空间后<code>src</code>文件夹放入<a href="5515_SDK.rar">雷达ros驱动</a>和<a href="rslidar_msg-master.zip">雷达话题定义(驱动文档也有说明)</a>，按照里面的要求进行配置修改即可，以及<code>LeGO-LOAM</code>代码包，除了按照文档说明进行修改以外，还要将<code>CMakeLists.txt</code>第四行的c++版本14:<code>set(CMAKE_CXX_FLAGS &quot;$&#123;CMAKE_CXX_FLAGS&#125; -std=c++14 -O3&quot;)</code>。</p>
+<p>设置雷达数据为我们使用的32线雷达，修改<code>LeGO-LOAM/include/utility.h</code>，这里我补充一些注释</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// Mine</span><br><span class="line">// 传感器垂直方向上的扫描线数量</span><br><span class="line">extern const int N_SCAN = 32;</span><br><span class="line">// 水平方向上扫描一周360度所采集的点数</span><br><span class="line">extern const int Horizon_SCAN = 1800;</span><br><span class="line">// 水平方向上的角度分辨率</span><br><span class="line">extern const float ang_res_x = 0.2;</span><br><span class="line">// 垂直方向上的角度分辨率（某些垂直角度分辨率可能不是均匀的，可以写平均值）</span><br><span class="line">extern const float ang_res_y = 2.2;</span><br><span class="line">// 最底部扫描线的垂直角度</span><br><span class="line">extern const float ang_bottom = 55.0;</span><br><span class="line">// 地面点分割或移除算法中，指定了一个扫描线的索引号。索引号小于或等于groundScanInd的扫描线上的点，会被认为是潜在的地面点</span><br><span class="line">extern const int groundScanInd = 7;</span><br></pre></td></tr></table></figure>
+
+<p>由于雷达数据的格式不同，使用<a target="_blank" rel="noopener" href="https://github.com/HViktorTsoi/rs_to_velodyne">rs_to_velodyne</a>进行格式转化，<code>A ros tool for converting Robosense pointcloud to Velodyne pointcloud format, which can be directly used for downstream algorithm, such as LOAM, LEGO-LOAM, LIO-SAM, etc.</code><br>使用<code>rostopic list</code>可以看到代码接收雷达topic<code>/rslidar_points</code>转换后发送到<code>/velodyne_points</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">triority@ubuntu:~/Desktop/lidar$ rostopic list</span><br><span class="line">/rosout</span><br><span class="line">/rosout_agg</span><br><span class="line">/rslidar_points</span><br><span class="line">/velodyne_points</span><br></pre></td></tr></table></figure>
+
+<p>这里我由于openGL驱动问题导致rviz报错闪退，即使不闪退也不显示任何点云，要将其改为软件驱动。由于rviz错误log为空文件导致我很久没有找到问题所在。没有在物理机上试过不知道和vmware有没有关系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LIBGL_ALWAYS_SOFTWARE=1</span><br></pre></td></tr></table></figure>
+
+<p>按照LeGO-LOAM文档要求在实际运行和使用rosbag时需要使用不同的roslaunch配置，具体是修改<code>LeGO-LOAM/launch/run.launch</code>的第四行，仿真下设置为false否则为true</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;param name=&quot;/use_sim_time&quot; value=&quot;false&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>由于雷达驱动和LeGO-LOAM都会启动rviz，我这里直接修改雷达驱动启动文件<code>rslidar_sdk-dev_opt/launch/start.launch</code>注释掉rviz的启动内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;launch&gt;</span><br><span class="line">  &lt;node pkg=&quot;rslidar_sdk&quot; name=&quot;rslidar_sdk_node&quot; type=&quot;rslidar_sdk_node&quot; output=&quot;screen&quot;&gt;</span><br><span class="line">    &lt;param name=&quot;config_path&quot; value=&quot;&quot;/&gt;</span><br><span class="line">  &lt;/node&gt;</span><br><span class="line">  &lt;!-- rviz --&gt;</span><br><span class="line">  &lt;!--&lt;node pkg=&quot;rviz&quot; name=&quot;rviz&quot; type=&quot;rviz&quot; args=&quot;-d $(find rslidar_sdk)/rviz/rviz.rviz&quot; /&gt;--&gt;</span><br><span class="line">&lt;/launch&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="建图测试"><a href="#建图测试" class="headerlink" title="建图测试"></a>建图测试</h2><p>习惯上我喜欢先单独启动roscore</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br></pre></td></tr></table></figure>
+
+<p>启动雷达：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roslaunch rslidar_sdk start.launch</span><br></pre></td></tr></table></figure>
+
+<p>启动雷达数据转换：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosrun rs_to_velodyne rs_to_velodyne XYZIRT XIRI</span><br></pre></td></tr></table></figure>
+
+<p>启动建图：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roslaunch lego_loam run.launch</span><br></pre></td></tr></table></figure>
+
+<p>这时就可以使用激光雷达的数据进行建图了，下图是我所在的实验室<br><img src="/2025/Visual-SLAM/69a805494e5c171e8fcc88a78ff7393.png"></p>
+<h2 id="地图保存和数据记录"><a href="#地图保存和数据记录" class="headerlink" title="地图保存和数据记录"></a>地图保存和数据记录</h2><p>如果需要保存建好的地图，在建图快要结束时，打开终端订阅全局点云地图的话题<code>/laser_cloud_surround</code>保存为bag包，然后转bag为pcd，使用<br><code>pcl_viewer</code>打开点云地图</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">triority@ubuntu:~/Desktop/lidar$ rosbag record /laser_cloud_surround</span><br><span class="line">[ INFO] [1744615722.083300899]: Subscribing to /laser_cloud_surround</span><br><span class="line">[ INFO] [1744615722.089056296]: Recording to &#x27;2025-04-14-00-28-42.bag&#x27;.</span><br><span class="line"></span><br><span class="line">triority@ubuntu:~/Desktop/lidar$ rosrun pcl_ros bag_to_pcd 2025-04-14-00-28-42.bag /laser_cloud_surround pcd1</span><br><span class="line">Creating directory pcd1</span><br><span class="line">Saving recorded sensor_msgs::PointCloud2 messages on topic /laser_cloud_surround to pcd1</span><br><span class="line">Got 1681 data points in frame /camera_init on topic /laser_cloud_surround with the following fields: x y z intensity</span><br><span class="line">Data saved to pcd1/1744615726.458191872.pcd</span><br><span class="line"></span><br><span class="line">triority@ubuntu:~/Desktop/lidar$ pcl_viewer pcd1/1744615726.458191872.pcd</span><br></pre></td></tr></table></figure>
+
+<p>此外也可以直接记录雷达原始数据，便于后续对算法进行改进测试比较等</p>
+<h1 id="LeGO-LOAM源码分析"><a href="#LeGO-LOAM源码分析" class="headerlink" title="LeGO-LOAM源码分析"></a>LeGO-LOAM源码分析</h1><details>
+  <summary>引用一下来自google ai studio的源码分析作为大致方向上的参考</summary>
+  好的，我们来大致分析一下 LeGO-LOAM 的源代码结构和核心思想。LeGO-LOAM (Lightweight and Ground-Optimized Lidar Odometry and Mapping) 是对经典 LOAM 算法的改进，特别针对地面车辆（如自动驾驶汽车）的应用场景进行了优化。
+
+<p><strong>核心目标：</strong> 实现低计算量、实时的激光雷达里程计和建图，并特别优化地面点的处理。</p>
+<p><strong>主要代码结构 (基于常见的 ROS 实现):</strong></p>
+<p>LeGO-LOAM 通常由以下几个核心的 ROS 节点（或 Nodelet）组成，它们通过 ROS Topic 进行通信：</p>
+<ol>
+<li><p><strong><code>imageProjection</code> 节点 (预处理模块):</strong></p>
+<ul>
+<li><strong>输入:</strong> 原始激光雷达点云数据 (<code>sensor_msgs/PointCloud2</code>)，通常来自 <code>/points_raw</code> 或类似 topic。</li>
+<li><strong>核心功能:</strong><ul>
+<li><strong>点云分割 (Segmentation):</strong><ul>
+<li><strong>地面分割 (Ground Segmentation):</strong> 这是 LeGO-LOAM 的关键优化之一。它将点云投影到一个深度图（Range Image）上，然后利用点与点之间的角度关系或简单的平面拟合方法，快速地将地面点与非地面点分离。这极大地减少了后续处理的点云数量，并移除了可能不稳定的地面特征。</li>
+<li><strong>点云聚类 (Point Cloud Clustering):</strong> 对分割出的非地面点进行聚类（例如使用基于距离或连通性的方法），将点云分割成独立的物体或障碍物。小的、稀疏的聚类会被滤除，以消除噪声和不可靠的特征点。</li>
+</ul>
+</li>
+<li><strong>点云信息标记:</strong> 为每个点打上标签（地面点、分割后的聚类ID等），并计算每个点的距离、角度等信息，方便后续处理。</li>
+</ul>
+</li>
+<li><strong>输出:</strong><ul>
+<li>分割后的点云 (<code>/segmented_cloud</code>)：包含非地面点的聚类结果。</li>
+<li>地面点云 (<code>/ground_cloud</code>)：单独发布的地面点。</li>
+<li>外点&#x2F;噪声点云 (<code>/outlier_cloud</code>)。</li>
+<li>点云信息 (<code>/cloud_info</code>)：包含每个点的标签、范围、起始&#x2F;结束索引等辅助信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>featureAssociation</code> 节点 (特征提取与里程计模块):</strong></p>
+<ul>
+<li><strong>输入:</strong> <code>imageProjection</code> 节点输出的分割点云、地面点云和点云信息。</li>
+<li><strong>核心功能:</strong><ul>
+<li><strong>特征提取 (Feature Extraction):</strong><ul>
+<li>基于分割后的非地面点云，计算每个点的曲率（Curvature）。</li>
+<li>根据曲率大小，选取<strong>边缘点 (Edge Points)</strong> (曲率大的点) 和<strong>平面点 (Planar Points)</strong> (曲率小的点)。</li>
+<li>为了提高鲁棒性，会排除一些不稳定的特征点（例如，平行于激光束方向的点、被遮挡的点）。</li>
+<li>LeGO-LOAM 的一个特点是它会分别处理边缘特征和平面特征。</li>
+</ul>
+</li>
+<li><strong>激光雷达里程计 (Lidar Odometry):</strong><ul>
+<li>执行<strong>扫描到扫描 (Scan-to-Scan)</strong> 的匹配。</li>
+<li>将当前帧提取的边缘点与上一帧的边缘线进行匹配（点到线距离最小化）。</li>
+<li>将当前帧提取的平面点与上一帧的平面片进行匹配（点到面距离最小化）。</li>
+<li><strong>两步优化 (Two-Step Optimization):</strong> LeGO-LOAM 的另一个关键优化。它首先利用地面点（被视为一个大平面）和分割出的平面点进行匹配，估计车辆的 [z, roll, pitch]；然后利用边缘点匹配，估计车辆的 [x, y, yaw]。这种分离优化降低了计算复杂度，并提高了对特定运动的估计精度。</li>
+<li>使用优化算法（通常是 Levenberg-Marquardt, LM）迭代求解最小化点到线&#x2F;点到面距离的位姿变换（旋转和平移）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>输出:</strong><ul>
+<li>高频、但可能存在漂移的激光雷达里程计位姿 (<code>/laser_odom_to_init</code>)。</li>
+<li>当前帧提取的特征点云（角点 <code>/laser_cloud_corner_last</code>，平面点 <code>/laser_cloud_surf_last</code>），供建图模块使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>mapOptmization</code> 节点 (建图与位姿优化模块):</strong></p>
+<ul>
+<li><strong>输入:</strong> <code>featureAssociation</code> 节点输出的里程计位姿、特征点云。</li>
+<li><strong>核心功能:</strong><ul>
+<li><strong>地图维护 (Map Maintenance):</strong><ul>
+<li>接收来自 <code>featureAssociation</code> 的特征点云和粗略位姿。</li>
+<li>根据里程计位姿，将历史关键帧的特征点（边缘点和平面点）变换到世界坐标系下，构建一个全局的特征地图（通常用 Voxel Grid 或 K-D Tree 存储，以便快速查找）。</li>
+</ul>
+</li>
+<li><strong>扫描到地图 (Scan-to-Map) 匹配:</strong><ul>
+<li>将当前帧的特征点与全局地图中的对应特征（边缘线、平面片）进行匹配。</li>
+<li>再次使用优化算法（如 LM），最小化当前帧特征点到地图中对应特征的距离，进一步优化当前帧的位姿。</li>
+<li>这个过程频率较低（相对于 Odometry），但可以有效修正 Odometry 累积的漂移。</li>
+</ul>
+</li>
+<li><strong>(可选) 回环检测 (Loop Closure):</strong> 一些 LeGO-LOAM 的变种或后续工作会加入回环检测模块，通过识别之前访问过的场景来进一步消除累积误差，但这在原始 LeGO-LOAM 中可能不是核心部分。</li>
+</ul>
+</li>
+<li><strong>输出:</strong><ul>
+<li>经过地图优化后的、更精确的位姿 (<code>/aft_mapped_to_init</code>)。</li>
+<li>构建的全局点云地图 (<code>/map</code>) 或特征地图。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>transformFusion</code> 节点 (位姿融合与发布):</strong></p>
+<ul>
+<li><strong>输入:</strong> <code>featureAssociation</code> 输出的高频里程计位姿，<code>mapOptmization</code> 输出的低频优化位姿。</li>
+<li><strong>核心功能:</strong> 融合这两个位姿信息。通常是将低频的精确位姿作为基准，然后用高频的里程计增量来插值，得到一个平滑、连续、高频发布的最终位姿估计。</li>
+<li><strong>输出:</strong> 最终的车辆位姿 (<code>/integrated_to_init</code> 或 TF 变换)。</li>
+</ul>
+</li>
+</ol>
+<p><strong>核心算法与技术总结:</strong></p>
+<ol>
+<li><strong>范围图像 (Range Image):</strong> 高效处理结构化激光雷达数据（如 Velodyne）的基础。</li>
+<li><strong>地面分割:</strong> 关键优化，显著减少计算量，移除不稳定特征。</li>
+<li><strong>点云聚类:</strong> 过滤噪声，聚焦于有意义的物体。</li>
+<li><strong>曲率计算:</strong> 用于区分边缘点和平面点。</li>
+<li><strong>特征关联 (点到线&#x2F;点到面):</strong> LOAM 系列算法的核心匹配方式。</li>
+<li><strong>两步位姿优化:</strong> LeGO-LOAM 的特色，分离优化不同自由度，提高效率和精度。</li>
+<li><strong>迭代优化算法 (Levenberg-Marquardt):</strong> 用于求解非线性最小二乘问题（位姿估计）。</li>
+<li><strong>Scan-to-Scan &amp; Scan-to-Map 框架:</strong> LOAM 的经典框架，高频里程计+低频地图优化。</li>
+</ol>
+<p><strong>代码阅读建议:</strong></p>
+<ol>
+<li><strong>从 <code>imageProjection</code> 开始:</strong> 理解预处理流程，特别是地面分割和聚类是如何实现的。</li>
+<li><strong>接着看 <code>featureAssociation</code>:</strong> 关注特征提取（曲率计算、点选择）和两步优化（如何分别使用平面&#x2F;地面点和边缘点进行匹配和优化）。</li>
+<li><strong>然后是 <code>mapOptmization</code>:</strong> 理解地图如何构建和维护，以及 Scan-to-Map 匹配如何修正位姿。</li>
+<li><strong>最后看 <code>transformFusion</code>:</strong> 理解如何融合高频和低频位姿。</li>
+<li><strong>关注 ROS 接口:</strong> 理解各个节点之间的输入输出（订阅和发布的 Topic），以及它们传递的数据结构 (<code>sensor_msgs/PointCloud2</code>, 自定义消息如 <code>cloud_info</code>, <code>geometry_msgs/PoseStamped</code>, <code>nav_msgs/Odometry</code>, TF)。</li>
+<li><strong>查看 <code>launch</code> 文件和 <code>config</code> 文件:</strong> 这些文件定义了节点如何启动以及各种参数（如特征提取的阈值、优化迭代次数等），理解参数对算法性能的影响很重要。</li>
+<li><strong>核心库依赖:</strong> LeGO-LOAM 大量使用了 PCL (Point Cloud Library) 进行点云处理，以及 Eigen 进行线性代数运算。熟悉这两个库会对理解代码很有帮助。</li>
+</ol>
+<p>总的来说，LeGO-LOAM 的源代码体现了在经典 LOAM 基础上，针对特定应用场景（地面车辆）进行巧妙优化的思想，通过地面分割和两步优化等手段，在保证精度的同时显著降低了计算复杂度。</p>
+</details>
+
+
+<h1 id="VINS-Mono视觉slam实现"><a href="#VINS-Mono视觉slam实现" class="headerlink" title="VINS-Mono视觉slam实现"></a>VINS-Mono视觉slam实现</h1><p>数据集<a target="_blank" rel="noopener" href="https://github.com/kminoda/VIODE/tree/master">The VIODE dataset</a></p>
+<p>视觉slam算法<a target="_blank" rel="noopener" href="https://github.com/HKUST-Aerial-Robotics/VINS-Mono">VINS-Mono</a></p>
+<h1 id="使用wsl环境开发深度相机（已弃用）"><a href="#使用wsl环境开发深度相机（已弃用）" class="headerlink" title="使用wsl环境开发深度相机（已弃用）"></a>使用wsl环境开发深度相机（已弃用）</h1><div class="note danger modern"><p>此部分内容已经弃用，不打算使用深度相机了，但该过程未来仍有可能有参考价值，故保留。以及在wsl环境下即使挂载了usb设备，intel驱动程序也会报错检测不到深度相机，这一问题还没有解决。</p>
+</div>
+
+<p>目前还在寒假期间没有实物制作的条件，打算先跑跑仿真，准备好技术路线。目前打算在windows系统中使用wsl2的ubuntu20进行开发</p>
+<details>
+<summary>wsl内安装ros后无法启动roscore的问题</summary>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">triority@Triority-Desktop:~$ roscore</span><br><span class="line">... logging to /home/triority/.ros/log/499be312-e486-11ef-add2-75fb32d30971/roslaunch-Triority-Desktop-36755.log</span><br><span class="line">Checking log directory for disk usage. This may take a while.</span><br><span class="line">Press Ctrl-C to interrupt</span><br><span class="line">Done checking log file disk usage. Usage is 1GB.</span><br></pre></td></tr></table></figure>
+启动之后卡死在这里。主要原因是虚拟机内网络问题。$ROS_MASTER_URI通常是http://localhost:11311，$ROS_IP通常是WSL的IP地址，这里没有显示，指定为本机IP后问题解决：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">triority@Triority-Desktop:~$ echo $ROS_MASTER_URI</span><br><span class="line">http://localhost:11311</span><br><span class="line">triority@Triority-Desktop:~$ echo $ROS_IP</span><br><span class="line"></span><br><span class="line">triority@Triority-Desktop:~$ export ROS_IP=192.168.0.100</span><br><span class="line">triority@Triority-Desktop:~$ echo $ROS_IP</span><br><span class="line">192.168.0.100</span><br><span class="line"></span><br><span class="line">triority@Triority-Desktop:~$ roscore</span><br><span class="line">... logging to /home/triority/.ros/log/f7cd5362-e486-11ef-add2-75fb32d30971/roslaunch-Triority-Desktop-36776.log</span><br><span class="line">Checking log directory for disk usage. This may take a while.</span><br><span class="line">Press Ctrl-C to interrupt</span><br><span class="line">Done checking log file disk usage. Usage is &lt;1GB.</span><br><span class="line"></span><br><span class="line">started roslaunch server http://192.168.0.100:42277/</span><br><span class="line">ros_comm version 1.17.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SUMMARY</span><br><span class="line">========</span><br><span class="line"></span><br><span class="line">PARAMETERS</span><br><span class="line"> * /rosdistro: noetic</span><br><span class="line"> * /rosversion: 1.17.0</span><br><span class="line"></span><br><span class="line">NODES</span><br><span class="line"></span><br><span class="line">auto-starting new master</span><br><span class="line">process[master]: started with pid [36784]</span><br><span class="line">ROS_MASTER_URI=http://192.168.0.100:11311/</span><br><span class="line"></span><br><span class="line">setting /run_id to f7cd5362-e486-11ef-add2-75fb32d30971</span><br><span class="line">process[rosout-1]: started with pid [36794]</span><br><span class="line">started core service [/rosout]</span><br><span class="line">^C[rosout-1] killing on exit</span><br><span class="line">[master] killing on exit</span><br><span class="line">shutting down processing monitor...</span><br><span class="line">... shutting down processing monitor complete</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+</details>
+
+<p>创建ros的工作空间之后在src文件夹新建一个包用于试验代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">catkin_create_pkg lab roscpp rospy std_msgs</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>wsl挂载usb设备：</strong></p>
+<p>使用usb3.2连接电脑，要在wsl中使用usb设备请参考<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/connect-usb">微软的文档</a>。</p>
+<p>首先安装<a target="_blank" rel="noopener" href="https://github.com/dorssel/usbipd-win/releases">USBIPD-WIN项目</a></p>
+<p>在windows powershell中使用<code>usbipd list</code>查看usb设备列表，然后根据总线ID共享设备<code>usbipd bind --busid 4-4</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\Triority&gt; usbipd list</span><br><span class="line">Connected:</span><br><span class="line">BUSID  VID:PID    DEVICE                                                        STATE</span><br><span class="line">1-2    1462:7d42  USB 输入设备                                                  Not shared</span><br><span class="line">1-5    1ea7:0064  USB 输入设备                                                  Not shared</span><br><span class="line">1-6    1a2c:9ef4  USB 输入设备                                                  Not shared</span><br><span class="line">1-14   8087:0026  英特尔(R) 无线 Bluetooth(R)                                   Not shared</span><br><span class="line">2-1    8086:0b3a  Intel(R) RealSense(TM) Depth Camera 435i Depth, Intel(R) ...  Not shared</span><br><span class="line"></span><br><span class="line">Persisted:</span><br><span class="line">GUID                                  DEVICE</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接下来应该附加USB设备<code>usbipd attach --wsl --busid 2-1</code>，但是报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\Triority&gt; usbipd attach --wsl --busid 2-1</span><br><span class="line">usbipd: info: Using WSL distribution &#x27;Ubuntu-20.04&#x27; to attach; the device will be available in all WSL 2 distributions.</span><br><span class="line">usbipd: info: Detected networking mode &#x27;virtioproxy&#x27;.</span><br><span class="line">usbipd: error: Networking mode &#x27;virtioproxy&#x27; is not supported.</span><br></pre></td></tr></table></figure>
+<p>显然需要修改网络模式，这里改成<code>mirrored</code>，这个模式的作用在<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/wsl/networking#mirrored-mode-networking">微软的文档有介绍</a></p>
+<p>也就是配置文件<code>.wslconfig</code>内容为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">networkingMode=mirrored</span><br></pre></td></tr></table></figure>
+<p>此时将wsl重启<code>wsl --shutdown</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS C:\Users\Triority&gt; usbipd attach --wsl --busid 2-1</span><br><span class="line">usbipd: info: Using WSL distribution &#x27;Ubuntu-20.04&#x27; to attach; the device will be available in all WSL 2 distributions.</span><br><span class="line">usbipd: info: Detected networking mode &#x27;mirrored&#x27;.</span><br><span class="line">usbipd: info: Using IP address 127.0.0.1 to reach the host.</span><br><span class="line">WSL usbip: error: Attach Request for 2-1 failed - Device busy (exported)</span><br><span class="line">usbipd: warning: The device appears to be used by Windows; stop the software using the device, or bind the device using the &#x27;--force&#x27; option.</span><br><span class="line">usbipd: error: Failed to attach device with busid &#x27;2-1&#x27;.</span><br></pre></td></tr></table></figure>
+<p>按照要求强制执行<code>usbipd bind --busid 2-1 --force</code>并重启电脑</p>
+<p>此时重新<code>usbipd attach --wsl --busid 2-1</code>并在ubuntu中查看usb设备</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">triority@Triority-Desktop:~$ lsusb</span><br><span class="line">Bus 002 Device 002: ID 8086:0b3a Intel Corp. Intel(R) RealSense(TM) Depth Camera 435i</span><br><span class="line">Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub</span><br><span class="line">Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</span><br></pre></td></tr></table></figure>
+
+<p>Intel D435i相关链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.intelrealsense.com/depth-camera-d435i/">商品页面</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.intelrealsense.com/download/21345/?tmstv=1697035582">datasheet</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/releases">SDK</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/realsense-ros/tree/ros1-legacy">ros1使用</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2025/Visual-SLAM/">http://triority.cc/2025/Visual-SLAM/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ROS/">ROS</a></div><div class="post_share"><div class="social-share" data-image="/img/favicon.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/c++/" title="C++学习笔记"><img class="cover" src="/img/C_grass.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C++学习笔记</div></div></a></div><div class="next-post pull-right"><a href="/2025/watermark_removal_tool/" title="使用神经网络方法的视频水印消除"><img class="cover" src="/img/0628.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用神经网络方法的视频水印消除</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E5%88%92%E5%AE%8C%E6%88%90%E7%9A%84%E4%BB%BB%E5%8A%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">计划完成的任务目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E7%BB%B4%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE%E5%BB%BA%E5%9B%BE%E7%9A%84%E5%AE%9E%E7%8E%B0%EF%BC%88LeGO-LOAM%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">三维激光雷达建图的实现（LeGO-LOAM）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%AE%AF%E8%BF%9E%E6%8E%A5%E5%92%8C%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.</span> <span class="toc-text">通讯连接和基本配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E5%9B%BE%E6%B5%8B%E8%AF%95"><span class="toc-number">2.2.</span> <span class="toc-text">建图测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E5%9B%BE%E4%BF%9D%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E8%AE%B0%E5%BD%95"><span class="toc-number">2.3.</span> <span class="toc-text">地图保存和数据记录</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LeGO-LOAM%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">LeGO-LOAM源码分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#VINS-Mono%E8%A7%86%E8%A7%89slam%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">VINS-Mono视觉slam实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8wsl%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%B7%B1%E5%BA%A6%E7%9B%B8%E6%9C%BA%EF%BC%88%E5%B7%B2%E5%BC%83%E7%94%A8%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">使用wsl环境开发深度相机（已弃用）</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

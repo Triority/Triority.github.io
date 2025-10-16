@@ -1,0 +1,267 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>树莓派拍摄3D打印延时摄影[顺便写了个arduino电压表] | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="年初DIY的3D打印机使用12V电源电压,而拍摄延时摄影的树莓派使用5V电压,所以三月份买了一个12v转5v的降压模块,但是为了保证安全,想用电压表测量一下降压模块的输出电压,于是...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派拍摄3D打印延时摄影[顺便写了个arduino电压表]">
+<meta property="og:url" content="http://triority.cc/2022/arduino-voltmeter/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="年初DIY的3D打印机使用12V电源电压,而拍摄延时摄影的树莓派使用5V电压,所以三月份买了一个12v转5v的降压模块,但是为了保证安全,想用电压表测量一下降压模块的输出电压,于是...">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/arduino-voltmeter.jpg">
+<meta property="article:published_time" content="2022-05-17T19:32:00.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:40.360Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="arduino">
+<meta property="article:tag" content="3D打印">
+<meta property="article:tag" content="显示屏">
+<meta property="article:tag" content="树莓派">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/arduino-voltmeter.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2022/arduino-voltmeter/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '树莓派拍摄3D打印延时摄影[顺便写了个arduino电压表]',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/arduino-voltmeter.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">树莓派拍摄3D打印延时摄影[顺便写了个arduino电压表]</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-05-17T19:32:00.000Z" title="发表于 2022-05-17 19:32:00">2022-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">721</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2022/arduino-voltmeter/" data-flag-title="树莓派拍摄3D打印延时摄影[顺便写了个arduino电压表]"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="arduino电压表"><a href="#arduino电压表" class="headerlink" title="arduino电压表"></a>arduino电压表</h2><h3 id="小故事"><a href="#小故事" class="headerlink" title="小故事"></a>小故事</h3><p>年初DIY的3D打印机使用12V电源电压,而拍摄延时摄影的树莓派使用5V电压,所以三月份买了一个12v转5v的降压模块[因为沈阳疫情我们小区封控两个多月…所以才到],但是为了保证安全,想用电压表测量一下降压模块的输出电压,于是使用arduino的模拟输入接口来测量0-5V电压,为了提高量程,在淘宝risym旗舰店买了一个电压传感器模块,可以将电压降低5倍,也就是量程提高到0-25V.<br>arduino使用除法时会自动删去小数位,所以用了求余的方法求小数位,并将计算的电压结果通过串口传输给电脑以及显示在OLED屏幕</p>
+<h3 id="arduino程序"><a href="#arduino程序" class="headerlink" title="arduino程序"></a>arduino程序</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;U8glib.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">U8GLIB_SSD1306_128X64 <span class="title function_">u8g</span><span class="params">(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0)</span>;	<span class="comment">// I2C / TWI </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> val=<span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> val0;</span><br><span class="line"><span class="type">int</span> val1;</span><br><span class="line"><span class="type">char</span> str1[<span class="number">2</span>];</span><br><span class="line"><span class="type">char</span> str2[<span class="number">2</span>];</span><br><span class="line"><span class="type">char</span> str3[<span class="number">2</span>]=<span class="string">&quot;.&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">draw</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  <span class="comment">// graphic commands to redraw the complete screen should be placed here  </span></span><br><span class="line">  u8g.setFont(u8g_font_unifont);</span><br><span class="line">  <span class="comment">//u8g.setFont(u8g_font_osb21);</span></span><br><span class="line">  <span class="type">char</span> str[<span class="number">20</span>]=<span class="string">&quot;v=&quot;</span>;</span><br><span class="line">  val = analogRead(<span class="number">0</span>)*<span class="number">25</span>;</span><br><span class="line">  Serial.println(val); </span><br><span class="line">  val0 = val/<span class="number">1024</span>;</span><br><span class="line">  Serial.println(val0); </span><br><span class="line">  val1 = (val%<span class="number">1024</span>)*<span class="number">10</span>/<span class="number">1024</span>;</span><br><span class="line">  Serial.println(val1); </span><br><span class="line">  itoa(val0, str1, <span class="number">10</span>);</span><br><span class="line">  itoa(val1, str2, <span class="number">10</span>);</span><br><span class="line">  <span class="built_in">strcat</span>(str,str1);</span><br><span class="line">  <span class="built_in">strcat</span>(str,str3);</span><br><span class="line">  <span class="built_in">strcat</span>(str,str2);</span><br><span class="line">  u8g.drawStr( <span class="number">10</span>, <span class="number">35</span>, str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  Serial.begin(<span class="number">9600</span>);</span><br><span class="line">  <span class="comment">// flip screen, if required</span></span><br><span class="line">  <span class="comment">// u8g.setRot180();</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// set SPI backup if required</span></span><br><span class="line">  <span class="comment">//u8g.setHardwareBackup(u8g_backup_avr_spi);</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// assign default color value</span></span><br><span class="line">  <span class="keyword">if</span> ( u8g.getMode() == U8G_MODE_R3G3B2 ) &#123;</span><br><span class="line">    u8g.setColorIndex(<span class="number">255</span>);     <span class="comment">// white</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( u8g.getMode() == U8G_MODE_GRAY2BIT ) &#123;</span><br><span class="line">    u8g.setColorIndex(<span class="number">3</span>);         <span class="comment">// max intensity</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( u8g.getMode() == U8G_MODE_BW ) &#123;</span><br><span class="line">    u8g.setColorIndex(<span class="number">1</span>);         <span class="comment">// pixel on</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( u8g.getMode() == U8G_MODE_HICOLOR ) &#123;</span><br><span class="line">    u8g.setHiColorByRGB(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">  <span class="comment">// picture loop</span></span><br><span class="line">  u8g.firstPage();  </span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    draw();</span><br><span class="line">  &#125; <span class="keyword">while</span>( u8g.nextPage() );</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// rebuild the picture after some delay</span></span><br><span class="line">  delay(<span class="number">200</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="测量结果"><a href="#测量结果" class="headerlink" title="测量结果"></a>测量结果</h3><p>测量得知电压在5.0-5.4之间浮动,多数时间稳定在5.1V,可以给树莓派供电.</p>
+<img src="/2022/arduino-voltmeter/arduino-voltmeter.jpg" class="" title="测量照片">
+
+<h2 id="树莓派拍摄3D打印延时摄影"><a href="#树莓派拍摄3D打印延时摄影" class="headerlink" title="树莓派拍摄3D打印延时摄影"></a>树莓派拍摄3D打印延时摄影</h2><h3 id="每层拍照"><a href="#每层拍照" class="headerlink" title="每层拍照"></a>每层拍照</h3><p>使用限位开关检测打印头是否回到原点.若回到原点则触发拍照,得到每一层时候的照片</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> RPi.GPIO <span class="keyword">as</span> GPIO</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> picamera <span class="keyword">import</span> PiCamera</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line">j=<span class="number">1</span></span><br><span class="line">GPIO.setmode(GPIO.BOARD) </span><br><span class="line">GPIO.setup(<span class="number">11</span>, GPIO.IN, pull_up_down=GPIO.PUD_UP)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;begin..&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">False</span> <span class="keyword">and</span> <span class="keyword">not</span> GPIO.<span class="built_in">input</span>(<span class="number">11</span>):</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;heating...&quot;</span>+<span class="built_in">str</span>(j))</span><br><span class="line">    j=j+<span class="number">1</span></span><br><span class="line">camera = PiCamera()</span><br><span class="line">camera.start_preview()</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;start&quot;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> GPIO.<span class="built_in">input</span>(<span class="number">11</span>):</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">        camera.capture(<span class="string">&#x27;/home/pi/Desktop/cam_3D/cam_3D/image%s.jpg&#x27;</span> % i)</span><br><span class="line">        i=i+<span class="number">1</span></span><br><span class="line">        time.sleep(<span class="number">5</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="每层照片合成视频"><a href="#每层照片合成视频" class="headerlink" title="每层照片合成视频"></a>每层照片合成视频</h3><p>这一步建议电脑上完成否则可能要运行一段时间<br>记得把size改成实际照片的尺寸,另外如果照片个数多于1000也要增加for循环的次数.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">size = (<span class="number">1024</span>,<span class="number">768</span>)</span><br><span class="line">videowrite = cv2.VideoWriter(<span class="string">r&#x27;test.mp4&#x27;</span>,-<span class="number">1</span>,<span class="number">30</span>,size)</span><br><span class="line">img_array=[]</span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> [<span class="string">r&#x27;cam_3D\image&#123;0&#125;.jpg&#x27;</span>.<span class="built_in">format</span>(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">1000</span>)]:</span><br><span class="line">    img = cv2.imread(filename)</span><br><span class="line">    <span class="keyword">if</span> img <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">print</span>(filename + <span class="string">&quot; is error!&quot;</span>)</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    img_array.append(img)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    videowrite.write(img_array[i])</span><br><span class="line">videowrite.release()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;finished&#x27;</span>)</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2022/arduino-voltmeter/">http://triority.cc/2022/arduino-voltmeter/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/arduino/">arduino</a><a class="post-meta__tags" href="/tags/3D%E6%89%93%E5%8D%B0/">3D打印</a><a class="post-meta__tags" href="/tags/%E6%98%BE%E7%A4%BA%E5%B1%8F/">显示屏</a><a class="post-meta__tags" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></div><div class="post_share"><div class="social-share" data-image="/img/arduino-voltmeter.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/minecraft-13/" title="庆祝Minecraft的13周年纪念日!"><img class="cover" src="/img/minecraft-13.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">庆祝Minecraft的13周年纪念日!</div></div></a></div><div class="next-post pull-right"><a href="/2022/java-for-mc/" title="MC关于Java等配置的详细说明"><img class="cover" src="/img/java-for-mc.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MC关于Java等配置的详细说明</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#arduino%E7%94%B5%E5%8E%8B%E8%A1%A8"><span class="toc-number">1.</span> <span class="toc-text">arduino电压表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E6%95%85%E4%BA%8B"><span class="toc-number">1.1.</span> <span class="toc-text">小故事</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arduino%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">arduino程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E9%87%8F%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.</span> <span class="toc-text">测量结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E6%8B%8D%E6%91%843D%E6%89%93%E5%8D%B0%E5%BB%B6%E6%97%B6%E6%91%84%E5%BD%B1"><span class="toc-number">2.</span> <span class="toc-text">树莓派拍摄3D打印延时摄影</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E5%B1%82%E6%8B%8D%E7%85%A7"><span class="toc-number">2.1.</span> <span class="toc-text">每层拍照</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E5%B1%82%E7%85%A7%E7%89%87%E5%90%88%E6%88%90%E8%A7%86%E9%A2%91"><span class="toc-number">2.2.</span> <span class="toc-text">每层照片合成视频</span></a></li></ol></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

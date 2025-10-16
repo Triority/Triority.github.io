@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>神经网络学习：从尝试识别手写数字开始 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="神经网络入门笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络学习：从尝试识别手写数字开始">
+<meta property="og:url" content="http://triority.cc/2023/Neural-networks/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="神经网络入门笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/v2-777808fc5b00e7727df4dc835c1fc44f_1440w.jpg">
+<meta property="article:published_time" content="2023-04-24T04:53:00.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:40.909Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/v2-777808fc5b00e7727df4dc835c1fc44f_1440w.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2023/Neural-networks/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '神经网络学习：从尝试识别手写数字开始',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/v2-777808fc5b00e7727df4dc835c1fc44f_1440w.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">神经网络学习：从尝试识别手写数字开始</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-04-24T04:53:00.000Z" title="发表于 2023-04-24 04:53:00">2023-04-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E6%A1%A3-%E7%AC%94%E8%AE%B0/">文档&amp;笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/">值得一提的文章</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2023/Neural-networks/" data-flag-title="神经网络学习：从尝试识别手写数字开始"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="first"><a href="#first" class="headerlink" title="first"></a>first</h1><p>文章创建时间就很离谱：<code>2023-04-24 04:53:00</code>，晚上躺在床上感觉饿了，但是懒得下床买吃的，就一直饿的睡不着，终于在三点起床了下楼吃饱喝足了，回来毫无困意，于是开始写这篇离谱的文章</p>
+<h1 id="起点：分类任务"><a href="#起点：分类任务" class="headerlink" title="起点：分类任务"></a>起点：分类任务</h1><h2 id="任务描述"><a href="#任务描述" class="headerlink" title="任务描述"></a>任务描述</h2><p>已知四个数据点(1,1)(-1,1)(-1,-1)(1,-1)，这四个点分别对应I~IV象限，如果这时候给我们一个新的坐标点(比如(2,2))，那么它应该属于哪个象限呢？(当然是第I象限，但我们的任务是要让机器知道)</p>
+<p>“分类”是神经网络的一大应用，我们使用神经网络完成这个分类任务。</p>
+<h2 id="网络结构：理论基础"><a href="#网络结构：理论基础" class="headerlink" title="网络结构：理论基础"></a>网络结构：理论基础</h2><p>我们构建一个两层神经网络，理论上两层神经网络已经可以拟合任意函数。这个神经网络的结构如下图：<br><img src="/2023/Neural-networks/v2-7ee8cabcbd707dd4deab7155af2ba4cd_1440w.webp" alt="简化网络结构"></p>
+<h3 id="正向传播"><a href="#正向传播" class="headerlink" title="正向传播"></a>正向传播</h3><h4 id="输入层"><a href="#输入层" class="headerlink" title="输入层"></a>输入层</h4><p>在我们的例子中，输入层是坐标值，例如(1,1)，这是一个包含两个元素的数组，也可以看作是一个1<em>2的矩阵。输入层的元素维度与输入量的特征相关，如果输入的是一张32</em>32的灰度图，那么输入层就是一个32*32的矩阵</p>
+<h4 id="输入层到隐藏层"><a href="#输入层到隐藏层" class="headerlink" title="输入层到隐藏层"></a>输入层到隐藏层</h4><p>连接输入层和隐藏层的是W1和b1。由X计算得到H就是矩阵运算<code>H=X*W1+b1</code>。如上图中所示，在设定隐藏层为50维(也可以理解成50个神经元)之后，矩阵H的大小为(1*50)的矩阵</p>
+<h4 id="隐藏层到输出层"><a href="#隐藏层到输出层" class="headerlink" title="隐藏层到输出层"></a>隐藏层到输出层</h4><p>连接隐藏层和输出层的是W2和b2。同样是通过矩阵运算<code>Y=X*W2+b2</code></p>
+<h4 id="激活层"><a href="#激活层" class="headerlink" title="激活层"></a>激活层</h4><p>通过上述两个线性方程的计算，我们就能得到最终的输出Y了，但是一系列线性方程的运算最终都可以用一个线性方程表示。也就是说，上述两个式子联立后可以用一个线性方程表达。对于两次神经网络是这样，就算网络深度加到100层，也依然是这样。这样的话神经网络就失去了意义。所以这里要对网络注入灵魂：激活层。</p>
+<p>激活层是为矩阵运算的结果添加非线性的。常用的激活函数有三种，分别是阶跃函数、Sigmoid和ReLU。</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2023/Neural-networks/d000baa1cd11728b445e79fccbfcc3cec2fd2cf8.jfif"></th>
+<th align="center"><img src="/2023/Neural-networks/d009b3de9c82d158dfb4e7218a0a19d8bc3e426f.jfif"></th>
+<th align="center"><img src="/2023/Neural-networks/OIP-C.jfif"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">阶跃函数</td>
+<td align="center">Sigmoid</td>
+<td align="center">ReLU</td>
+</tr>
+<tr>
+<td align="center">当输入小于等于0时，输出0；当输入大于0时，输出1</td>
+<td align="center">当输入趋近于正无穷&#x2F;负无穷时，输出无限接近于1&#x2F;0</td>
+<td align="center">当输入小于0时，输出0；当输入大于0时，输出等于输入</td>
+</tr>
+</tbody></table>
+<p>阶跃函数输出值是跳变的，且只有二值，较少使用；Sigmoid函数在当x的绝对值较大时，曲线的斜率变化很小(梯度消失)，并且计算较复杂；ReLU是当前较为常用的激活函数。<br>每个隐藏层计算(矩阵线性运算)之后，都需要加一层激活层，要不然该层线性计算是没有意义的。</p>
+<p>此时网络结构以及变成了：<br><img src="/2023/Neural-networks/v2-0ced86f32dfa241fc9de10421edbd9b4_1440w.webp"></p>
+<h4 id="输出的正规化"><a href="#输出的正规化" class="headerlink" title="输出的正规化"></a>输出的正规化</h4><p>在上一步之后，输出Y的值可能会是(3,1,0.1,0.5)这样的矩阵，诚然我们可以找到里边的最大值“3”，从而找到对应的分类为I，但是这并不直观。我们想让最终的输出为概率，也就是说可以生成像(90%,5%,2%,3%)这样的结果，这样做不仅可以找到最大概率的分类，而且可以知道各个分类计算的概率值。</p>
+<p>计算公式如下：这样求出的结果中，所有元素的和一定为1，而每个元素可以代表概率值<br><img src="/2023/Neural-networks/v2-3ad93ae576918ff385485dab6a2e6b87_1440w.png"></p>
+<p>我们将使用这个计算公式做输出结果正规化处理的层叫做“Softmax”层。此时的神经网络将变成如下图所示：<br><img src="/2023/Neural-networks/v2-01285f87ff9d523f62d2d4f6586583c5_1440w.webp"></p>
+<h4 id="交叉熵损失-Cross-Entropy-Error"><a href="#交叉熵损失-Cross-Entropy-Error" class="headerlink" title="交叉熵损失(Cross Entropy Error)"></a>交叉熵损失(Cross Entropy Error)</h4><p>比如，Softmax输出的结果是(90%,5%,3%,2%)，真实的结果是(100%,0,0,0)。虽然输出的结果可以正确分类，但是与真实结果之间是有差距的，一个优秀的网络对结果的预测要无限接近于100%，为此，我们需要将Softmax输出结果的好坏程度做一个“量化”。常用且巧妙的方法是，求对数的负数。用90%举例，对数的负数就是：-log0.9&#x3D;0.046</p>
+<p>概率越接近100%，该计算结果值越接近于0，说明结果越准确，该输出叫做<code>交叉熵损失</code>。我们训练神经网络的目的，就是尽可能地减少这个损失。</p>
+<p>此时的网络如下图：<br><img src="/2023/Neural-networks/v2-6fac69d2abab24639943ebaab0b70bde_1440w.webp"></p>
+<h3 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h3><p>反向传播就是一个参数优化的过程，优化对象就是网络中的所有W和b。神经网络的神奇之处，就在于它可以自动做W和b的优化。使用的方法叫做梯度下降法</p>
+<h3 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h3><p>神经网络需要反复迭代。如上述例子中，第一次计算得到的概率是90%，交叉熵损失值是0.046；将该损失值反向传播，使W1,b1,W2,b2做相应微调；再做第二次运算，此时的概率可能就会提高到92%，相应地，损失值也会下降，然后再反向传播损失值，微调参数W1,b1,W2,b2。依次类推，损失值越来越小，直到我们满意为止。此时我们就得到了理想的W1,b1,W2,b2。</p>
+<p>此时如果将任意一组坐标作为输入，利用图4或图5的流程，就能得到分类结果。</p>
+<h2 id="网络实现：使用python实现分类功能"><a href="#网络实现：使用python实现分类功能" class="headerlink" title="网络实现：使用python实现分类功能"></a>网络实现：使用python实现分类功能</h2><h3 id="前置任务"><a href="#前置任务" class="headerlink" title="前置任务"></a>前置任务</h3><p>导入numpy库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br></pre></td></tr></table></figure>
+<h3 id="正向传播函数"><a href="#正向传播函数" class="headerlink" title="正向传播函数"></a>正向传播函数</h3><h4 id="函数代码"><a href="#函数代码" class="headerlink" title="函数代码"></a>函数代码</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def affine_forward(x, w, b):   </span><br><span class="line">    out = None                       # 初始化返回值为None</span><br><span class="line">    # 输入参数处理</span><br><span class="line">    n = x.shape[0]                   # 获取输入参数X的形状</span><br><span class="line">    x_row = x.reshape(n, -1)         # (N,D)</span><br><span class="line">    # 矩阵的线性运算</span><br><span class="line">    out = np.dot(x_row, w) + b       # (N,M)</span><br><span class="line">    # 缓存值，反向传播时使用</span><br><span class="line">    cache = (x, w, b)</span><br><span class="line">    return out,cache</span><br></pre></td></tr></table></figure>
+<p>affine_forward函数，用于计算公式：<code>H=X*W1+b1</code>，输入参数就是公式中的矩阵X，W1和b1，对应到程序中就是x，w和b。</p>
+<h4 id="输入参数处理"><a href="#输入参数处理" class="headerlink" title="输入参数处理"></a>输入参数处理</h4><p>程序中的输入参数x，其形状可以是(n，d_1，…，d_k).在我们这个例子中，输入参数x是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[2,1],</span><br><span class="line">[-1,1],</span><br><span class="line">[-1,-1],</span><br><span class="line">[1,-1]]</span><br></pre></td></tr></table></figure>
+<p>它是一个4行2列的二维数组，那么x的形状就是(4,2)，对应的参数n&#x3D;4，d_1&#x3D;2。这是我们用来做训练的坐标数据，分别对应了I、II、III、IV象限。</p>
+<p>在某些应用场景中，x的维度可能更高。比如对于一个20*20像素的4张灰度图，x的形状将是(4,20,20)，对应的参数就是n&#x3D;4，d_1&#x3D;20，d_2&#x3D;20。n代表的是同时用于计算前向传播的数据有几组，后边的参数d_1~d_k代表的是数据本身的形状。</p>
+<p>为了方便计算，对于这种维度大于2的x来说，需要对其进行重新塑形，也就是将(4,20,20)的高维数组变化为(4,20<em>20)这样的二位数组。<br>这样变换之后高维的向量被“拍扁”成一维向量(长度为20</em>20的一维向量)，对应的W和b也都是一维的，既统一了参数形式，又不会影响数据的正常使用。</p>
+<p><code>x.reshape(n,-1)</code>是对x重新塑形，即保留第0维，其他维度排列成1维。</p>
+<h4 id="矩阵的线性运算"><a href="#矩阵的线性运算" class="headerlink" title="矩阵的线性运算"></a>矩阵的线性运算</h4><p><code>.dot</code>就是numpy中的函数，可以实现x_row与w的矩阵相乘。x_row的形状为(N,D)，w的形状为(D,M)，得到的out的形状是(N,M)</p>
+<h3 id="反向传播函数"><a href="#反向传播函数" class="headerlink" title="反向传播函数"></a>反向传播函数</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def affine_backward(dout, cache): </span><br><span class="line">  # 读取缓存</span><br><span class="line">  x, w, b = cache</span><br><span class="line">  # 返回值初始化</span><br><span class="line">  dx, dw, db = None, None, None</span><br><span class="line">  # 仿射变换反向传播：更新参数w的值-计算流向下一个节点的数值-更新参数b的值</span><br><span class="line">  dx = np.dot(dout, w.T)                       # (N,D)    </span><br><span class="line">  dx = np.reshape(dx, x.shape)                 # (N,d1,...,d_k)   </span><br><span class="line">  x_row = x.reshape(x.shape[0], -1)            # (N,D)    </span><br><span class="line">  dw = np.dot(x_row.T, dout)                   # (D,M)    </span><br><span class="line">  db = np.sum(dout, axis=0, keepdims=True)     # (1,M)    </span><br><span class="line">  return dx, dw, db</span><br></pre></td></tr></table></figure>
+<h3 id="学习参数初始化"><a href="#学习参数初始化" class="headerlink" title="学习参数初始化"></a>学习参数初始化</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 用于训练的坐标，对应的是I、II、III、IV象限</span><br><span class="line">X = np.array([[2,1], [-1,1], [-1,-1], [1,-1]])</span><br><span class="line"># 标签，对应的是I、II、III、IV象限</span><br><span class="line">t = np.array([0,1,2,3])</span><br><span class="line"># 生成随机数保持一致</span><br><span class="line">np.random.seed(1)</span><br><span class="line"></span><br><span class="line"># 输入参数的维度，此处为2，即每个坐标用两个数表示</span><br><span class="line">input_dim = X.shape[1]</span><br><span class="line"># 输出参数的维度，此处为4，即最终分为四个象限</span><br><span class="line">num_classes = t.shape[0]</span><br><span class="line"># 隐藏层维度，可调参数</span><br><span class="line">hidden_dim = 50</span><br><span class="line"># 正则化强度，可调参数</span><br><span class="line">reg = 0.001</span><br><span class="line"># 梯度下降的学习率，为可调参数</span><br><span class="line">epsilon = 0.001</span><br><span class="line"># 初始化W1，W2，b1，b2</span><br><span class="line">W1 = np.random.randn(input_dim, hidden_dim) # 生成随机矩阵</span><br><span class="line">W2 = np.random.randn(hidden_dim, num_classes)</span><br><span class="line">b1 = np.zeros((1, hidden_dim))  # 生成以0填充的矩阵</span><br><span class="line">b2 = np.zeros((1, num_classes))</span><br></pre></td></tr></table></figure>
+<p>对一些必要的参数进行了初始化。对于训练数据以及训练模型已经确定的网络来说，为了得到更好的训练效果需要调节的参数就是上述的隐藏层维度、正则化强度和梯度下降的学习率，以及下一节中的训练循环次数。</p>
+<h3 id="训练与迭代"><a href="#训练与迭代" class="headerlink" title="训练与迭代"></a>训练与迭代</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">#训练的循环次数为10000</span><br><span class="line">for j in range(10000):</span><br><span class="line"></span><br><span class="line">  # 前向传播</span><br><span class="line">  # 第一层前向传播。调用了之前写的前向传播的函数，完成了第一层网络的矩阵线性代数运算</span><br><span class="line">  H,fc_cache = affine_forward(X,W1,b1)</span><br><span class="line">  # 激活函数。从0和H中选择较大的值赋给H，也就是实现了ReLU激活层函数。</span><br><span class="line">  H = np.maximum(0, H)</span><br><span class="line">  # 缓存第一层激活后的结果</span><br><span class="line">  relu_cache = H</span><br><span class="line">  # 第二层网络的矩阵线性代数运算</span><br><span class="line">  Y,cachey = affine_forward(H,W2,b2)     </span><br><span class="line"></span><br><span class="line">  # 输出的正规化：Softmax层计算。之前我们说过的Softmax的计算公式在实际应用中会存在一个问题，比如i的值等于1000时，e^1000在计算机中会变成无穷大的inf，后续计算将无法完成，所以程序中会对计算公式做一些修改。修改见下文说明。</span><br><span class="line">  probs = np.exp(Y - np.max(Y, axis=1, keepdims=True))    </span><br><span class="line">  probs /= np.sum(probs, axis=1, keepdims=True)</span><br><span class="line"></span><br><span class="line">  # 计算loss值</span><br><span class="line">  # 取了最终输出的维度，这个例子中为4，即四个象限</span><br><span class="line">  N = Y.shape[0]</span><br><span class="line">  # 打印各个数据的正确解标签对应的神经网络的输出</span><br><span class="line">  print(probs[np.arange(N), t])</span><br><span class="line">  # 先求了N维数据中的交叉熵损失，然后对这N个交叉熵损失求平均值，作为最终loss值</span><br><span class="line">  loss = -np.sum(np.log(probs[np.arange(N), t])) / N</span><br><span class="line">  print(loss)</span><br><span class="line"></span><br><span class="line">  # 反向传播</span><br><span class="line">  # 以Softmax输出结果作为反向输出的起点</span><br><span class="line">  dx = probs.copy()</span><br><span class="line">  # 将Softmax的输出值赋给dx， 这里dx代表反向传播的主线值</span><br><span class="line">  dx[np.arange(N), t] -= 1</span><br><span class="line">  # 反向传播到softmax前</span><br><span class="line">  dx /= N</span><br><span class="line">  # 反向传播至第二层前</span><br><span class="line">  dh1, dW2, db2 = affine_backward(dx, cachey)</span><br><span class="line">  # 反向传播至激活层前</span><br><span class="line">  dh1[relu_cache &lt;= 0] = 0</span><br><span class="line">  # 反向传播至第一层前</span><br><span class="line">  dX, dW1, db1 = affine_backward(dh1, fc_cache)</span><br><span class="line"></span><br><span class="line">  # 参数更新</span><br><span class="line">  # 引入正则化惩罚项更新dW</span><br><span class="line">  dW2 += reg * W2</span><br><span class="line">  dW1 += reg * W1</span><br><span class="line">  # 引入学习率更新W和b</span><br><span class="line">  W2 += -epsilon * dW2</span><br><span class="line">  b2 += -epsilon * db2</span><br><span class="line">  W1 += -epsilon * dW1</span><br><span class="line">  b1 += -epsilon * db1</span><br></pre></td></tr></table></figure>
+<p>修改说明：<br>原公式为<img src="/2023/Neural-networks/v2-3ad93ae576918ff385485dab6a2e6b87_1440w.png"><br>在指数上减去常数C不影响最终结果，而这个常数C通常取i中的最大值。<br><img src="/2023/Neural-networks/v2-7e7f127681085bfd26ae59511ab2c8fd_1440w.png"><br>第一句probs &#x3D; np.exp(Y - np.max(Y, axis&#x3D;1, keepdims&#x3D;True)) 就是求输出各个行的指数值，举个例子，Y的值如果是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[-4,17,20,-4],</span><br><span class="line">[10,-2,5,3],</span><br><span class="line">[-5,3,4,10],</span><br><span class="line">[-5,5,5,2]]</span><br></pre></td></tr></table></figure>
+<p>np.max(Y, axis&#x3D;1, keepdims&#x3D;True)计算得到的是<code>[[20],[10],[10],[5]]</code>，后边括号里的参数axis代表以竖轴为基准 ，在同行中取值； keepdims&#x3D;True代表保持矩阵的二维特性。<br>所以<code>np.exp(Y - np.max(Y, axis=1, keepdims=True))</code>代表：Y矩阵中每个值减掉改行最大值后再取对数。</p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">test = np.array([[2,2],[-2,2],[-2,-2],[2,-2]])</span><br><span class="line">#仿射</span><br><span class="line">H,fc_cache = affine_forward(test,W1,b1)</span><br><span class="line"># 激活</span><br><span class="line">H = np.maximum(0, H)</span><br><span class="line">relu_cache = H</span><br><span class="line"># 仿射</span><br><span class="line">Y,cachey = affine_forward(H,W2,b2)</span><br><span class="line"># Softmax</span><br><span class="line">probs = np.exp(Y - np.max(Y, axis=1, keepdims=True))    </span><br><span class="line">probs /= np.sum(probs, axis=1, keepdims=True)  # Softmax</span><br><span class="line">print(probs)</span><br><span class="line">for k in range(4):</span><br><span class="line">  print(test[k,:],&quot;所在的象限为&quot;,np.argmax(probs[k,:])+1)</span><br></pre></td></tr></table></figure>
+<p>其实验证的方法和训练时的正向传播的过程基本一致，即第一层网络线性计算→激活→第二层网络线性计算→Softmax→得到分类结果.</p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 前向传播函数</span><br><span class="line"># - x：包含输入数据的numpy数组，形状为(N，d_1，...，d_k)</span><br><span class="line"># - w：形状为(D，M)的一系列权重</span><br><span class="line"># - b：偏置，形状为(M，)</span><br><span class="line">def affine_forward(x, w, b):</span><br><span class="line">    out = None  # 初始化返回值为None</span><br><span class="line">    N = x.shape[0]  # 重置输入参数X的形状</span><br><span class="line">    x_row = x.reshape(N, -1)  # (N,D)</span><br><span class="line">    out = np.dot(x_row, w) + b  # (N,M)</span><br><span class="line">    cache = (x, w, b)  # 缓存值，反向传播时使用</span><br><span class="line">    return out, cache</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 反向传播函数</span><br><span class="line"># - x：包含输入数据的numpy数组，形状为(N，d_1，...，d_k)</span><br><span class="line"># - w：形状(D，M)的一系列权重</span><br><span class="line"># - b：偏置，形状为(M，)</span><br><span class="line">def affine_backward(dout, cache):</span><br><span class="line">    x, w, b = cache  # 读取缓存</span><br><span class="line">    dx, dw, db = None, None, None  # 返回值初始化</span><br><span class="line">    dx = np.dot(dout, w.T)  # (N,D)</span><br><span class="line">    dx = np.reshape(dx, x.shape)  # (N,d1,...,d_k)</span><br><span class="line">    x_row = x.reshape(x.shape[0], -1)  # (N,D)</span><br><span class="line">    dw = np.dot(x_row.T, dout)  # (D,M)</span><br><span class="line">    db = np.sum(dout, axis=0, keepdims=True)  # (1,M)</span><br><span class="line">    return dx, dw, db</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">X = np.array([[2, 1],</span><br><span class="line">              [-1, 1],</span><br><span class="line">              [-1, -1],</span><br><span class="line">              [1, -1]])  # 用于训练的坐标，对应的是I、II、III、IV象限</span><br><span class="line">t = np.array([0, 1, 2, 3])  # 标签，对应的是I、II、III、IV象限</span><br><span class="line"># np.random.seed(1)  # 有这行语句，你们生成的随机数就和我一样了</span><br><span class="line"></span><br><span class="line"># 一些初始化参数</span><br><span class="line">input_dim = X.shape[1]  # 输入参数的维度，此处为2，即每个坐标用两个数表示</span><br><span class="line">num_classes = t.shape[0]  # 输出参数的维度，此处为4，即最终分为四个象限</span><br><span class="line">hidden_dim = 50  # 隐藏层维度，为可调参数</span><br><span class="line">reg = 0.001  # 正则化强度，为可调参数</span><br><span class="line">epsilon = 0.001  # 梯度下降的学习率，为可调参数</span><br><span class="line"># 初始化W1，W2，b1，b2</span><br><span class="line">W1 = np.random.randn(input_dim, hidden_dim)  # (2,50)</span><br><span class="line">W2 = np.random.randn(hidden_dim, num_classes)  # (50,4)</span><br><span class="line">b1 = np.zeros((1, hidden_dim))  # (1,50)</span><br><span class="line">b2 = np.zeros((1, num_classes))  # (1,4)</span><br><span class="line"></span><br><span class="line">for j in range(10000):  # 这里设置了训练的循环次数为10000</span><br><span class="line">    # ①前向传播</span><br><span class="line">    H, fc_cache = affine_forward(X, W1, b1)  # 第一层前向传播</span><br><span class="line">    H = np.maximum(0, H)  # 激活</span><br><span class="line">    relu_cache = H  # 缓存第一层激活后的结果</span><br><span class="line">    Y, cachey = affine_forward(H, W2, b2)  # 第二层前向传播</span><br><span class="line">    # ②Softmax层计算</span><br><span class="line">    probs = np.exp(Y - np.max(Y, axis=1, keepdims=True))</span><br><span class="line">    probs /= np.sum(probs, axis=1, keepdims=True)  # Softmax算法实现</span><br><span class="line">    # ③计算loss值</span><br><span class="line">    N = Y.shape[0]  # 值为4</span><br><span class="line">    print(probs[np.arange(N), t])  # 打印各个数据的正确解标签对应的神经网络的输出</span><br><span class="line">    loss = -np.sum(np.log(probs[np.arange(N), t])) / N  # 计算loss</span><br><span class="line">    print(loss)  # 打印loss</span><br><span class="line">    # ④反向传播</span><br><span class="line">    dx = probs.copy()  # 以Softmax输出结果作为反向输出的起点</span><br><span class="line">    dx[np.arange(N), t] -= 1  #</span><br><span class="line">    dx /= N  # 到这里是反向传播到softmax前</span><br><span class="line">    dh1, dW2, db2 = affine_backward(dx, cachey)  # 反向传播至第二层前</span><br><span class="line">    dh1[relu_cache &lt;= 0] = 0  # 反向传播至激活层前</span><br><span class="line">    dX, dW1, db1 = affine_backward(dh1, fc_cache)  # 反向传播至第一层前</span><br><span class="line">    # ⑤参数更新</span><br><span class="line">    dW2 += reg * W2</span><br><span class="line">    dW1 += reg * W1</span><br><span class="line">    W2 += -epsilon * dW2</span><br><span class="line">    b2 += -epsilon * db2</span><br><span class="line">    W1 += -epsilon * dW1</span><br><span class="line">    b1 += -epsilon * db1</span><br><span class="line"></span><br><span class="line">test = np.array([[2, 2], [-2, 2], [-2, -2], [2, -1]])</span><br><span class="line">H, fc_cache = affine_forward(test, W1, b1)  # 仿射</span><br><span class="line">H = np.maximum(0, H)  # 激活</span><br><span class="line">relu_cache = H</span><br><span class="line">Y, cachey = affine_forward(H, W2, b2)  # 仿射</span><br><span class="line"># Softmax</span><br><span class="line">probs = np.exp(Y - np.max(Y, axis=1, keepdims=True))</span><br><span class="line">probs /= np.sum(probs, axis=1, keepdims=True)  # Softmax</span><br><span class="line">print(probs)</span><br><span class="line">for k in range(4):</span><br><span class="line">    print(test[k, :], &quot;所在的象限为&quot;, np.argmax(probs[k, :]) + 1)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="手写数字识别"><a href="#手写数字识别" class="headerlink" title="手写数字识别"></a>手写数字识别</h2><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><h4 id="数据集格式"><a href="#数据集格式" class="headerlink" title="数据集格式"></a>数据集格式</h4><p>每个文件有 784 个灰度值(每行 28 个，28 列)，最后一个值是预期的输出值(实际数字)<br><a target="_blank" rel="noopener" href="https://www.kaggle.com/datasets/jcprogjava/kaggle-digit-recognition-dataset-reformatted?resource=download">文本数据集</a></p>
+<h4 id="数据集解析"><a href="#数据集解析" class="headerlink" title="数据集解析"></a>数据集解析</h4><p>这个程序可以用来对文本文件做图片的可视化</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import cv2</span><br><span class="line">txt_path = r&#x27;C:\Users\Triority\Desktop\kaggle data\00001.txt&#x27;</span><br><span class="line">f = open(txt_path)</span><br><span class="line">data_lists = f.readlines()</span><br><span class="line">dataset = []</span><br><span class="line">for data in data_lists:</span><br><span class="line">    if len(data) == 1:</span><br><span class="line">        print(&#x27;数字：&#x27;+data[0])</span><br><span class="line">        break</span><br><span class="line">    data1 = data.strip(&#x27;\n&#x27;)</span><br><span class="line">    data2 = data1.split(&#x27;\t&#x27;)</span><br><span class="line">    data3 = []</span><br><span class="line">    for i in range(len(data2)):</span><br><span class="line">        if data2[i]==&#x27;&#x27;:</span><br><span class="line">            break</span><br><span class="line">        data3.append(int(data2[i]))</span><br><span class="line">    dataset.append(data3)</span><br><span class="line">dataset = np.array(dataset, dtype=np.uint8)</span><br><span class="line">cv2.imshow(&#x27;name&#x27;, dataset)</span><br><span class="line">if cv2.waitKey(0) == 27:</span><br><span class="line">    cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h1 id="使用pytorch"><a href="#使用pytorch" class="headerlink" title="使用pytorch"></a>使用pytorch</h1><p>该说不说，前面写的都是原理解释，实际上写的很麻烦(而且很屎)，而使用pytorch可以极大简化细节。</p>
+<p>pytorch的安装就不说了，不过可以安装使用cuda的版本加速计算。这个具体安装方法可以参考之前的文章：<a href="https://triority.cc/2022/nanodet-train/">pytorch环境配置及使用nanodet进行模型训练和识别</a>。当然没有nvidia显卡的设备就没那么多麻烦了。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/65472471">https://zhuanlan.zhihu.com/p/65472471</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/67682601">https://zhuanlan.zhihu.com/p/67682601</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66534632">https://zhuanlan.zhihu.com/p/66534632</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2023/Neural-networks/">http://triority.cc/2023/Neural-networks/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a><a class="post-meta__tags" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a></div><div class="post_share"><div class="social-share" data-image="/img/v2-777808fc5b00e7727df4dc835c1fc44f_1440w.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/project-github/" title="在工程中将代码提交至github"><img class="cover" src="/img/v2-4dccef85028e88d0d69f082d03dc2d09_1440w.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">在工程中将代码提交至github</div></div></a></div><div class="next-post pull-right"><a href="/2023/ardupilot/" title="使用ardupilot的四轴飞行器"><img class="cover" src="/img/slides_01_Ardupilot42.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用ardupilot的四轴飞行器</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#first"><span class="toc-number">1.</span> <span class="toc-text">first</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%B7%E7%82%B9%EF%BC%9A%E5%88%86%E7%B1%BB%E4%BB%BB%E5%8A%A1"><span class="toc-number">2.</span> <span class="toc-text">起点：分类任务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">任务描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%EF%BC%9A%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number">2.2.</span> <span class="toc-text">网络结构：理论基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-number">2.2.1.</span> <span class="toc-text">正向传播</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E5%B1%82"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">输入层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E5%B1%82%E5%88%B0%E9%9A%90%E8%97%8F%E5%B1%82"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">输入层到隐藏层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E5%B1%82%E5%88%B0%E8%BE%93%E5%87%BA%E5%B1%82"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">隐藏层到输出层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BF%80%E6%B4%BB%E5%B1%82"><span class="toc-number">2.2.1.4.</span> <span class="toc-text">激活层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%9A%84%E6%AD%A3%E8%A7%84%E5%8C%96"><span class="toc-number">2.2.1.5.</span> <span class="toc-text">输出的正规化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5%E6%8D%9F%E5%A4%B1-Cross-Entropy-Error"><span class="toc-number">2.2.1.6.</span> <span class="toc-text">交叉熵损失(Cross Entropy Error)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-number">2.2.2.</span> <span class="toc-text">反向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3"><span class="toc-number">2.2.3.</span> <span class="toc-text">迭代</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%9E%E7%8E%B0%EF%BC%9A%E4%BD%BF%E7%94%A8python%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB%E5%8A%9F%E8%83%BD"><span class="toc-number">2.3.</span> <span class="toc-text">网络实现：使用python实现分类功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E4%BB%BB%E5%8A%A1"><span class="toc-number">2.3.1.</span> <span class="toc-text">前置任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E4%BC%A0%E6%92%AD%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.2.</span> <span class="toc-text">正向传播函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">函数代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0%E5%A4%84%E7%90%86"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">输入参数处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E7%BA%BF%E6%80%A7%E8%BF%90%E7%AE%97"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">矩阵的线性运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.3.</span> <span class="toc-text">反向传播函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">2.3.4.</span> <span class="toc-text">学习参数初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%AD%E7%BB%83%E4%B8%8E%E8%BF%AD%E4%BB%A3"><span class="toc-number">2.3.5.</span> <span class="toc-text">训练与迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">2.3.6.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-number">2.3.7.</span> <span class="toc-text">源码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB"><span class="toc-number">2.4.</span> <span class="toc-text">手写数字识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">2.4.1.</span> <span class="toc-text">数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.4.1.1.</span> <span class="toc-text">数据集格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E8%A7%A3%E6%9E%90"><span class="toc-number">2.4.1.2.</span> <span class="toc-text">数据集解析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8pytorch"><span class="toc-number">3.</span> <span class="toc-text">使用pytorch</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

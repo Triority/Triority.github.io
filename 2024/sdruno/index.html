@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>sdruno使用说明 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="sdruno简明教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sdruno使用说明">
+<meta property="og:url" content="http://triority.cc/2024/sdruno/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="sdruno简明教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/8df36049471386e523f41dbefb70d8d.jpg">
+<meta property="article:published_time" content="2024-03-16T12:51:14.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.519Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="无线电">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/8df36049471386e523f41dbefb70d8d.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2024/sdruno/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'sdruno使用说明',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/8df36049471386e523f41dbefb70d8d.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">sdruno使用说明</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-03-16T12:51:14.000Z" title="发表于 2024-03-16 12:51:14">2024-03-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E6%A1%A3-%E7%AC%94%E8%AE%B0/">文档&amp;笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E6%A1%A3-%E7%AC%94%E8%AE%B0/%E6%97%A0%E7%BA%BF%E7%94%B5/">无线电</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">918</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2024/sdruno/" data-flag-title="sdruno使用说明"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="sdr-Software-Defined-Radio-设备"><a href="#sdr-Software-Defined-Radio-设备" class="headerlink" title="sdr(Software Defined Radio)设备"></a>sdr(Software Defined Radio)设备</h1><p>前段时间买了RSP1接收机，搭配天线是直径大概在40cm的小环有源天线(用于短波段)挂在我宿舍的衣柜上，然后从<code>BI1PTK</code>那里白嫖了一根大概45cm的中心频率在u段和v段玻璃钢天线，架设在宿舍阳台上。</p>
+<h1 id="sdr软件"><a href="#sdr软件" class="headerlink" title="sdr软件"></a>sdr软件</h1><p>sdr常用软件一般是<code>sdr#</code>(sdrsharp)和<code>sdruno</code>，sdr#有汉化版本，但是由于某些未知原因我的电脑使用sdr#无法读取到sdr设备，因此只能使用sdruno。</p>
+<p><code>sdruno</code>是<code>sdrplay</code>官方支持的接收软件，但是没有中文版本，而且功能按钮众多难以记忆，广泛流传的中文说明明显是机器翻译难以使用，因此写一篇常用功能的使用说明。</p>
+<p><code>sdruno</code>的GUI：</p>
+<p><img src="/2024/sdruno/8ee1a3e43724e841907bb7aff58b8b2.png"></p>
+<h1 id="操作面板"><a href="#操作面板" class="headerlink" title="操作面板"></a>操作面板</h1><h2 id="main-主控面板"><a href="#main-主控面板" class="headerlink" title="main(主控面板)"></a>main(主控面板)</h2><p><img src="/2024/sdruno/main.png"></p>
+<p>最上面的<code>PLUGINS</code>可以打开<a href="#plugins%E6%8F%92%E4%BB%B6%E5%B7%B2%E5%8A%A0%E8%BD%BDrec%E6%8F%92%E4%BB%B6">插件面板</a></p>
+<p>左上角的<code>OPT</code>可以修改操作面板设置，例如将窗口恢复默认排布。当你调整好了窗口之后可以按<code>ctrl+w</code>保存你当前的窗口设置。<code>SCAN``SCHEDULER``SP1``SP2``RX</code>分别可以打开其他几个窗口，分别是扫描器大小瀑布和接收控制面板</p>
+<p>右侧<code>ADD VRX</code>和<code>DEL VRX</code>可以在同频段内设置多个收听频率。<br><code>LO LOCK</code>可以锁定瀑布中的频率选择线。开关可以选择是移动频率选择线还是水平频率坐标轴。</p>
+<p><code>IF MODE</code>设置为<code>ZIF</code>时可以在右侧调节总频宽(图中为10M宽度)</p>
+<p><code>PLAY</code>和<code>STOP</code>可以打开必应翻译查看按键功能。</p>
+<h2 id="rx-control-接收控制"><a href="#rx-control-接收控制" class="headerlink" title="rx control(接收控制)"></a>rx control(接收控制)</h2><p><img src="/2024/sdruno/rx.png"></p>
+<p>上面最显眼的就是频率，可以鼠标滚轮调节每一位数字。下面可以选择各种接收模式，<code>AM</code>调幅，<code>SAM</code>，<code>FM</code>调频，<code>CW</code>短幅报，<code>DSB</code>双边带<code>LSB</code>下边带<code>USB</code>上边带，<code>DIGTIAL</code>数字模式</p>
+<p>如果选择<code>FM</code>下面需要选择<code>NFM</code>还是<code>WFM</code>等，每种模式都有自己的滤波器设置和宽度</p>
+<p>如果选择<code>CW</code>下面的<code>CW OP</code>可以设置</p>
+<p>右侧<code>FILTER</code>可以设置信号宽度</p>
+<p><code>NB</code>可以选择</p>
+<p>最右侧<code>NORCH</code>陷波器可以添加最多四个陷波器</p>
+<p>左下侧<code>MUTE</code>可以一键静音</p>
+<p><code>SQLC</code>可以设置静噪，<code>VOLUME</code>设置音量</p>
+<p>右下侧<code>AGC</code>是自动增益控制</p>
+<p>面板最右侧可以快捷调整接收波段</p>
+<h2 id="rx-ex-其他接收控制选项"><a href="#rx-ex-其他接收控制选项" class="headerlink" title="rx ex(其他接收控制选项)"></a>rx ex(其他接收控制选项)</h2><p><img src="/2024/sdruno/rx_ex.png"></p>
+<p>中间几个滑块，<code>AGC</code>,<code>NB</code>一般保持默认即可，<code>NR</code>降噪效果取决于信号强度</p>
+<p><code>DEEM</code>是去重控制，除美国外一般设置<code>50us</code></p>
+<p><code>AFC</code>是自动频率控制，可以追踪中心频点</p>
+<p><code>MONO</code>是在SFM模式中关闭立体声接收</p>
+<p><code>FMS-NR</code>是FM立体声降噪</p>
+<p><code>PDBPF</code>带通滤波器可以设置音频输出频率范围到<code>LC</code>和<code>HC</code>，可以用于去除模拟哑音信号</p>
+<h2 id="main-sp-大瀑布"><a href="#main-sp-大瀑布" class="headerlink" title="main sp(大瀑布)"></a>main sp(大瀑布)</h2><p><img src="/2024/sdruno/main_sp.png"></p>
+<p>左上的<code>sett</code>可以设置瀑布图的对比度增益刷新速度等，下面的<code>SP</code>,<code>WF</code>,<code>SP+WF</code>设置显示频谱或者瀑布图或二者都显示，<code>COMBO</code>是叠加显示</p>
+<p>放大时点击<code>VFO</code>可以将中心频点设置为屏幕中央</p>
+<h2 id="aux-sp-小瀑布"><a href="#aux-sp-小瀑布" class="headerlink" title="aux sp(小瀑布)"></a>aux sp(小瀑布)</h2><p><img src="/aux.png"></p>
+<p>这里显示的是音频频谱，与大瀑布非常相似</p>
+<p>点击<code>F</code>只显示过滤后的音频信号，点击<code>FMAF</code>将显示FM信号</p>
+<h2 id="plugins-插件-已加载rec插件"><a href="#plugins-插件-已加载rec插件" class="headerlink" title="plugins(插件,已加载rec插件)"></a>plugins(插件,已加载rec插件)</h2><p><img src="/2024/sdruno/plugins_rec.png"></p>
+<p>插件就没什么好说的了用哪个就去安装然后load，图片右边是录音插件，只有一项提一嘴，<code>Use Squesch</code>开关控制静噪录音，勾选后信号只有高于静噪强度之后才会开启录音</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2024/sdruno/">http://triority.cc/2024/sdruno/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%97%A0%E7%BA%BF%E7%94%B5/">无线电</a></div><div class="post_share"><div class="social-share" data-image="/img/8df36049471386e523f41dbefb70d8d.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/gravitational-slingshot-try/" title="KSP引力弹弓"><img class="cover" src="/img/62e4fa302f27ac7d1292d0c36a11364.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">KSP引力弹弓</div></div></a></div><div class="next-post pull-right"><a href="/2024/orangepi5plus-openwrt/" title="Orange pi 5 plus开发板在ubuntu系统下使用docker安装openwrt"><img class="cover" src="/img/pi5-plus-5.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Orange pi 5 plus开发板在ubuntu系统下使用docker安装openwrt</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sdr-Software-Defined-Radio-%E8%AE%BE%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">sdr(Software Defined Radio)设备</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sdr%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">sdr软件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E9%9D%A2%E6%9D%BF"><span class="toc-number">3.</span> <span class="toc-text">操作面板</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#main-%E4%B8%BB%E6%8E%A7%E9%9D%A2%E6%9D%BF"><span class="toc-number">3.1.</span> <span class="toc-text">main(主控面板)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rx-control-%E6%8E%A5%E6%94%B6%E6%8E%A7%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">rx control(接收控制)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rx-ex-%E5%85%B6%E4%BB%96%E6%8E%A5%E6%94%B6%E6%8E%A7%E5%88%B6%E9%80%89%E9%A1%B9"><span class="toc-number">3.3.</span> <span class="toc-text">rx ex(其他接收控制选项)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#main-sp-%E5%A4%A7%E7%80%91%E5%B8%83"><span class="toc-number">3.4.</span> <span class="toc-text">main sp(大瀑布)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aux-sp-%E5%B0%8F%E7%80%91%E5%B8%83"><span class="toc-number">3.5.</span> <span class="toc-text">aux sp(小瀑布)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#plugins-%E6%8F%92%E4%BB%B6-%E5%B7%B2%E5%8A%A0%E8%BD%BDrec%E6%8F%92%E4%BB%B6"><span class="toc-number">3.6.</span> <span class="toc-text">plugins(插件,已加载rec插件)</span></a></li></ol></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

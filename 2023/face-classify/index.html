@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>人脸识别图像分类 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="人脸识别图像分类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人脸识别图像分类">
+<meta property="og:url" content="http://triority.cc/2023/face-classify/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="人脸识别图像分类">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/syk3.jpg">
+<meta property="article:published_time" content="2023-01-07T11:15:27.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:40.940Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/syk3.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2023/face-classify/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '人脸识别图像分类',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/syk3.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">人脸识别图像分类</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-01-07T11:15:27.000Z" title="发表于 2023-01-07 11:15:27">2023-01-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2023/face-classify/" data-flag-title="人脸识别图像分类"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h2><h3 id="人脸识别的基本过程"><a href="#人脸识别的基本过程" class="headerlink" title="人脸识别的基本过程"></a>人脸识别的基本过程</h3><ul>
+<li>人脸的 68 个基本特征点位置以及顺序。判断 68 个特征点在图像上面是否存在、是否完整；</li>
+<li>人脸 detect，这一步主要就是定位人脸在图像中的位置，利用目标检测算法输出人脸位置矩形框；</li>
+<li>人脸 shape predictor，这一步就是要找出眼睛眉毛鼻子嘴巴具体的点位；</li>
+<li>人脸对齐 alignment，这一步主要是通过投影几何变换出一张标准脸；</li>
+<li>人脸识别，这一步就是在对挤的人脸图像上提取 128 维的特征向量，根据特征向量间的距离来进行判断识别。</li>
+</ul>
+<p>python 中最常用的人脸识别库是基于 C++ 开发的 <code>dlib</code> 库。</p>
+<p><code>face_recognition</code> 库是基于 <code>dlib</code> 进行了二次封装，号称世界上最简洁的人脸识别库</p>
+<h3 id="库的安装"><a href="#库的安装" class="headerlink" title="库的安装"></a>库的安装</h3><p><code>dlib</code>库目前已经编译好的安装版本只支持 python 3.6 的版本，由于我安装的环境是 python 3.8，因此这里提供一个网络上找到的<a href="dlib-19.19.0-cp38-cp38-win_amd64.whl">编译好的whl文件</a></p>
+<p><code>face_recognition</code> 库：</p>
+<blockquote>
+<p>pip install -i <a target="_blank" rel="noopener" href="https://pypi.douban.com/simple">https://pypi.douban.com/simple</a> face_recognition</p>
+</blockquote>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><h4 id="定位人脸位置"><a href="#定位人脸位置" class="headerlink" title="定位人脸位置"></a>定位人脸位置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># -*-coding:GBK -*-</span><br><span class="line">import face_recognition</span><br><span class="line">from PIL import Image</span><br><span class="line">import cv2</span><br><span class="line"> </span><br><span class="line"># 通过 load_image_file 方法加载待识别图片</span><br><span class="line">image = image = cv2.imread(&#x27;girls.jpg&#x27;)</span><br><span class="line"> </span><br><span class="line"># 通过 face_locations 得到图像中所有人脸位置</span><br><span class="line">face_locations = face_recognition.face_locations(image)</span><br><span class="line"> </span><br><span class="line">for face_location in face_locations:</span><br><span class="line">    top, right, bottom, left = face_location   # 结报操作，得到每张人脸的四个位置信息</span><br><span class="line">    print(&quot;已识别到人脸部位，限速区域为：top&#123;&#125;, right&#123;&#125;, bottom&#123;&#125;, left&#123;&#125;&quot;.format(top, right, bottom, left))</span><br><span class="line">    # face_image = image[top:bottom, left:right]</span><br><span class="line">    # pil_image = Image.fromarray(face_image)</span><br><span class="line">    # pil_image.show()</span><br><span class="line">    start = (left, top)</span><br><span class="line">    end = (right, bottom)</span><br><span class="line"> </span><br><span class="line">    # 在图片上绘制矩形框</span><br><span class="line">    cv2.rectangle(image, start, end, (0,0,255), thickness=2)</span><br><span class="line"> </span><br><span class="line">cv2.imshow(&#x27;window&#x27;, image)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/face-classify/face_range.png" alt="face_range"></p>
+<h4 id="人脸关键特征点识别"><a href="#人脸关键特征点识别" class="headerlink" title="人脸关键特征点识别"></a>人脸关键特征点识别</h4><p><code>face_landmarks</code> 识别人脸关键特征点。返回值是包含面部特征点字典的列表，列表长度就是图像中的人脸数。</p>
+<p>面部特征包括以下几个部分：nose_bridge (鼻梁)、right _eyebrow (右眼眉)、left_eyebrow (左眼眉)、right_eye（右眼)、left_eye（左眼)、chin(下巴)、 nose_tip（下鼻部） 、bottom_lip (下嘴唇) </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># -*-coding:GBK -*-</span><br><span class="line">import face_recognition</span><br><span class="line">from PIL import Image, ImageDraw</span><br><span class="line"> </span><br><span class="line">image = face_recognition.load_image_file(&#x27;E:/boys.jpg&#x27;)</span><br><span class="line"> </span><br><span class="line">face_landmarks_list = face_recognition.face_landmarks(image)</span><br><span class="line"> </span><br><span class="line">pil_image = Image.fromarray(image)</span><br><span class="line">d = ImageDraw.Draw(pil_image)   # 生成一张PIL图像</span><br><span class="line"> </span><br><span class="line">for face_landmarks in face_landmarks_list:</span><br><span class="line">    facial_features = [</span><br><span class="line">        &#x27;chin&#x27;,</span><br><span class="line">        &#x27;left_eyebrow&#x27;,</span><br><span class="line">        &#x27;right_eyebrow&#x27;,</span><br><span class="line">        &#x27;nose_bridge&#x27;,</span><br><span class="line">        &#x27;nose_tip&#x27;,</span><br><span class="line">        &#x27;left_eye&#x27;,</span><br><span class="line">        &#x27;right_eye&#x27;,</span><br><span class="line">        &#x27;bottom_lip&#x27;</span><br><span class="line">    ]</span><br><span class="line">    for facial_feature in facial_features:</span><br><span class="line">        # print(&quot;每个人的面部特征显示在以下为位置：&#123;&#125;&quot;.format(facial_feature))</span><br><span class="line">        d.line(face_landmarks[facial_feature], width=5)   # 直接调用PIL中的line方法在PIL图像中绘制线条，帮助我们观察特征点</span><br><span class="line"> </span><br><span class="line">pil_image.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/face-classify/face_landmarks.png" alt="face_landmarks"></p>
+<h4 id="面部信息识别与匹配"><a href="#面部信息识别与匹配" class="headerlink" title="面部信息识别与匹配"></a>面部信息识别与匹配</h4><p><code>face_encodings</code> 获取图像文件中所有面部编码信息。</p>
+<p>返回值是一个编码列表，参数仍然是要识别的图像对象。如果后续访问时，需要注意加上索引或遍历来进行访问。每张人脸的编码信息是一个 128 维向量。<br>面部编码信息是进行人像对比的重要参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># -*-coding:GBK -*-</span><br><span class="line">import face_recognition</span><br><span class="line"> </span><br><span class="line">image = face_recognition.load_image_file(&#x27;E:/boys.jpg&#x27;)</span><br><span class="line"> </span><br><span class="line"># 返回值是一个列表</span><br><span class="line">face_encodings = face_recognition.face_encodings(image)</span><br><span class="line">for face_encoding in face_encodings:</span><br><span class="line">    print(&quot;信息编码长度为：&#123;&#125;\n编码信息为：&#123;&#125;&quot;.format(len(face_encoding), face_encoding))</span><br></pre></td></tr></table></figure>
+
+<p><code>compare_faces</code> 由面部编码信息进行面部识别匹配。</p>
+<p>主要用于匹配两个面部特征编码，利用这两个特征向量的内积来衡量相似度，根据阈值确认是否是同一个人。<br>第一个参数就是一个面部编码列表， 第二个参数就是给出单个面部编码， compare_faces 会将第二个参数中的编码信息与第一个参数中的所有编码信息依次匹配，返回值是一个布尔列表，匹配成功则返回 True，匹配失败则返回 False，顺序与第一个参数中脸部编码顺序一致。<br>参数里有一个 <code>tolerance = 0.6</code>，可以根据实际的效果进行调整，一般经验值是 <code>0.39</code>。<code>tolerance</code> 值越小，匹配越严格。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># -*-coding:GBK -*-</span><br><span class="line">import face_recognition</span><br><span class="line"> </span><br><span class="line"># 加载一张合照</span><br><span class="line">image1 = face_recognition.load_image_file(&#x27;2.jpeg&#x27;)</span><br><span class="line"># 加载一张单人照</span><br><span class="line">image2 = face_recognition.load_image_file(&#x27;1.jpg&#x27;)</span><br><span class="line"></span><br><span class="line">known_face_encodings = face_recognition.face_encodings(image1)</span><br><span class="line"></span><br><span class="line">compare_face_encodings = face_recognition.face_encodings(image2)[0]</span><br><span class="line"></span><br><span class="line">matches = face_recognition.compare_faces(known_face_encodings, compare_face_encodings)</span><br><span class="line">print(matches)</span><br></pre></td></tr></table></figure>
+<h2 id="图像分类"><a href="#图像分类" class="headerlink" title="图像分类"></a>图像分类</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2023/face-classify/">http://triority.cc/2023/face-classify/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="/img/syk3.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/syncthing-server/" title="syncthing发现和中继服务器的搭建"><img class="cover" src="/img/syncthing.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">syncthing发现和中继服务器的搭建</div></div></a></div><div class="next-post pull-right"><a href="/2023/fluid-index-hide/" title="hexo的fluid主题设置文章首页隐藏"><img class="cover" src="/img/lyk2.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">hexo的fluid主题设置文章首页隐藏</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">人脸识别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">人脸识别的基本过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">库的安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D%E4%BA%BA%E8%84%B8%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">定位人脸位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%BA%E8%84%B8%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81%E7%82%B9%E8%AF%86%E5%88%AB"><span class="toc-number">1.3.2.</span> <span class="toc-text">人脸关键特征点识别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%A2%E9%83%A8%E4%BF%A1%E6%81%AF%E8%AF%86%E5%88%AB%E4%B8%8E%E5%8C%B9%E9%85%8D"><span class="toc-number">1.3.3.</span> <span class="toc-text">面部信息识别与匹配</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">图像分类</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

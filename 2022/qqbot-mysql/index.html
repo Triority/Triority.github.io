@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统">
+<meta property="og:url" content="http://triority.cc/2022/qqbot-mysql/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/nonebot.png">
+<meta property="article:published_time" content="2022-12-30T21:24:55.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:40.623Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="QQ机器人">
+<meta property="article:tag" content="mySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/nonebot.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2022/qqbot-mysql/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/nonebot.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-12-30T21:24:55.000Z" title="发表于 2022-12-30 21:24:55">2022-12-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2022/qqbot-mysql/" data-flag-title="基于nonebot2+cqhttp的QQ机器人以及使用mySQL的记分系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章主要讲nonebot的使用，如果内容不多的话整个机器人的制作都写在这吧。</p>
+<h2 id="记分系统数据库结构"><a href="#记分系统数据库结构" class="headerlink" title="记分系统数据库结构"></a>记分系统数据库结构</h2><p>先从简单的讲起。</p>
+<p>结构不算复杂，需要一个数据表<code>scores</code>，主键为<code>bigint</code>类型的QQ号<code>qq_id</code>。</p>
+<p>表中记录的数据有<code>int</code>型的权限级别<code>op</code>，<code>int</code>型的当前分数<code>total_score</code>，<code>bigint</code>类型的上一次记分的管理员<code>last_op</code>，<code>int</code>的上一次的记分<code>last_score</code>，<code>varchar</code>型都上一次记分的理由<code>last_reason</code>，<code>varchar</code>型都上一次记分的时间<code>last_time</code>。</p>
+<h2 id="使用nonebot2-cqhttp的插件编写"><a href="#使用nonebot2-cqhttp的插件编写" class="headerlink" title="使用nonebot2+cqhttp的插件编写"></a>使用nonebot2+cqhttp的插件编写</h2><p><a target="_blank" rel="noopener" href="https://github.com/Well2333/NoneBot2_NoobGuide">有一篇不错的但是不完整的文档</a>，文档的作者写一半被nonebot开发者叫去写官方文档了，不过已经写完的这些也有很大帮助。这里我把会用到的整理出来。<br><a target="_blank" rel="noopener" href="https://github.com/nonebot/awesome-nonebot">这里还有一些不错的资源汇总</a></p>
+<h3 id="插件的位置"><a href="#插件的位置" class="headerlink" title="插件的位置"></a>插件的位置</h3><p><code>src/plugins</code>可以在<code>bot.py</code>使用 <code>nonebot.load_plugins(&quot;src/plugins&quot;)</code> 来加载该文件夹中的插件。</p>
+<blockquote>
+<p>注意！ 如果插件的名字首个字符是 _ 的话，那么这个插件将不会被 “自动加载” ，但仍可以使用单独加载的方式进行载入。</p>
+</blockquote>
+<h3 id="插件的结构"><a href="#插件的结构" class="headerlink" title="插件的结构"></a>插件的结构</h3><h5 id="模块-module"><a href="#模块-module" class="headerlink" title="模块(module)"></a>模块(module)</h5><p>也就是单文件形式的python脚本，例如下方展示的名为 my_plugin 的插件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NoneBot</span><br><span class="line">├── src</span><br><span class="line">│   └── plugins</span><br><span class="line">|      └── my_plugin.py</span><br><span class="line">|......</span><br></pre></td></tr></table></figure>
+<p>相对于包形式的插件，模块形式的插件更简单，但相对的只能在一个文件中塞下全部代码</p>
+<h5 id="包-package"><a href="#包-package" class="headerlink" title="包(package)"></a>包(package)</h5><p>以一个文件夹形式存在的包，例如下方展示的名为 my_plugin 的插件。</p>
+<p>值得注意的是，在python中，一个合法的包中必须含有一个 <strong>init</strong>.py ，即便其中一个字都没有也不能省略。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AweSome-Bot</span><br><span class="line">├── src</span><br><span class="line">│   └── plugins</span><br><span class="line">|      └── my_plugin</span><br><span class="line">|         └── __init__.py</span><br><span class="line">|         └── function.py</span><br><span class="line">|......</span><br></pre></td></tr></table></figure>
+<h3 id="事件响应器与事件处理"><a href="#事件响应器与事件处理" class="headerlink" title="事件响应器与事件处理"></a>事件响应器与事件处理</h3><p>一个小例子：<br>检测用户发送的“jrrp”或“今日人品”，然后随机生成一个1-100的数字作为人品值发回给用户，并@用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import random</span><br><span class="line">from datetime import date</span><br><span class="line">from nonebot.plugin import on_keyword</span><br><span class="line">from nonebot.adapters.onebot.v11 import Bot, Event</span><br><span class="line">from nonebot.adapters.onebot.v11.message import Message</span><br><span class="line"></span><br><span class="line">def luck_simple(num):</span><br><span class="line">    if num &lt; 18:</span><br><span class="line">        return &#x27;吉&#x27;</span><br><span class="line">    else:</span><br><span class="line">        return &#x27;凶&#x27;</span><br><span class="line"></span><br><span class="line"># 注册事件响应器</span><br><span class="line">jrrp = on_keyword([&#x27;jrrp&#x27;,&#x27;今日人品&#x27;],priority=50)</span><br><span class="line"># 事件处理</span><br><span class="line">@jrrp.handle()</span><br><span class="line">async def jrrp_handle(bot: Bot, event: Event):</span><br><span class="line">    rnd = random.Random()</span><br><span class="line">    rnd.seed(int(date.today().strftime(&quot;%y%m%d&quot;)) + int(event.get_user_id()))</span><br><span class="line">    lucknum = rnd.randint(1,100)</span><br><span class="line">    await jrrp.finish(Message(f&#x27;[CQ:at,qq=&#123;event.get_user_id()&#125;]您今日的幸运指数为&quot;&#123;luck_simple(lucknum)&#125;&quot;&#x27;))</span><br></pre></td></tr></table></figure>
+<p>因为这个插件需要检测多个关键词，因此我们可以选择 <code>on_keyword()</code> 这个事件响应器， <code>jrrp = on_keyword([&#39;jrrp&#39;,&#39;今日人品&#39;],priority=50)</code> 我们就注册好了对这两个关键词进行响应的事件响应器，不过要注意的的是，这个响应器在用户发送的消息中，只要找到了这个关键词就会触发.</p>
+<p>其中<code>priority=50</code>是指这个事件响应器的优先度为50，优先度的数字越低，则优先度越高，在nonebot中，这个字段的默认值是优先度能设置的最小值<code>1</code>。<br>nonebot的事件处理中有事件阻断机制，在事件向优先度较低的响应器传递的过程中，一旦被匹配到并且被阻断了，那么后续的事件响应器将不会再接收到这个事件。</p>
+<p>我们使用了 <code>event.get_user_id()</code> 来获取用户的qq号，和 <code>jrrp.finish()</code> 来发送消息并结束这个事件。 事件处理的方法有很多，无法一一展示，仅能列出一些常用的方法</p>
+<h5 id="event"><a href="#event" class="headerlink" title="event"></a>event</h5><p><code>event.get_message()</code><br>获取用户发送的消息，包含文字和图片的cq码，返回值是Message类（做解析之前别忘了转义）</p>
+<p><code>event.get_plaintext()</code><br>获取用户发送的消息，但仅包含文字部分，返回值是str类</p>
+<p><code>event.get_user_id()</code><br>获取用户qq号，返回值是str类</p>
+<p><code>event.get_session_id()</code><br>私聊：获取用户qq号，返回值是str类 群聊：获取群号和用户qq号的组合，例如 group_群号_qq号 ，返回值是str类</p>
+<p><code>event.is_tome()</code><br>私聊：返回True，返回值bool类 群聊：如果用户@机器人，或者使用了预设的昵称，则返回True，否则False，返回值bool类</p>
+<h5 id="matcher"><a href="#matcher" class="headerlink" title="matcher"></a>matcher</h5><p><code>matcher.send()</code><br>用于发送一条消息，发送的对象是触发事件响应器的私聊或群，用法为:<br><code>await matcher.send(&#39;123&#39;)</code><br>其中matcher就是这个事件处理函数对应的事件响应器，例如 <code>await jrrp.send(&#39;123&#39;)</code> </p>
+<p><code>matcher.finish()</code><br>方法同上，只不过这个方法会结束这个事件，类似于一个函数里的 return （但不完全相同）。</p>
+<h3 id="Message-CQ码的基本用法"><a href="#Message-CQ码的基本用法" class="headerlink" title="Message CQ码的基本用法"></a>Message CQ码的基本用法</h3><h4 id="Message"><a href="#Message" class="headerlink" title="Message"></a>Message</h4><p>Message不光可以对上述内容进行转义或表达，也可以对其进行拼接，例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from nonebot.adapters.onebot.v11 import Message, MessageSegment</span><br><span class="line">msg1 = Message(&#x27;快来看涩图&#x27;)</span><br><span class="line">msg2 = MessageSegment.image(&#x27;http://xxx.com/&#x27;)</span><br><span class="line">msg3 = Message(&#x27;[CQ:at,qq=114514]&#x27;)</span><br><span class="line">msg  = msg3 + msg1 + msg2</span><br><span class="line"></span><br><span class="line"># msg的内容发到QQ里就是：@114514 快来看涩图【假装这是个涩图】</span><br></pre></td></tr></table></figure>
+<h4 id="CQ码"><a href="#CQ码" class="headerlink" title="CQ码"></a>CQ码</h4><p>cq码的构造方法一般情况下是 [CQ:type,key&#x3D;value] 这种构造形式，具体的某个CQ码我们可以在gocqhttp的官方文档的 CQ code 板块进行查询。</p>
+<p>同时，由于cq码中存在例如 []、:、&#x3D; 等符号，因此需要对其进行转义才能够正常使用，方法也很简单，只需要用 Message() 即可转义，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from nonebot.adapters.onebot.v11 import Message</span><br><span class="line">raw_cqcode = &#x27;[CQ:at,qq=114514]&#x27;</span><br><span class="line">cqcode = Message(raw_cqcode)</span><br></pre></td></tr></table></figure>
+<p>这样就可以是这个CQ码正常的被解析成一个@，而不是直接把CQ码原文发出去了。</p>
+<h3 id="API使用方法"><a href="#API使用方法" class="headerlink" title="API使用方法"></a>API使用方法</h3><p>我们使用的<a target="_blank" rel="noopener" href="https://docs.go-cqhttp.org/api">gocqhttp的官方文档</a>中对API有详细的介绍。</p>
+<p>call_api的写法目前有两种，<code>bot.call_api(&#39;xxx&#39;, **&#123;key:value&#125;)</code>和<code>bot.xxx(key=value)</code>两种仅写法不同，实质并无影响。</p>
+<p>以“获取群信息”为例进行写法一的演示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from nonebot.adapters.onebot.v11 import Bot</span><br><span class="line">from nonebot import on_message</span><br><span class="line"></span><br><span class="line">test = on_command(&#x27;test&#x27;)</span><br><span class="line">@test.handle()</span><br><span class="line">async def _(bot: Bot):</span><br><span class="line">    # call_api的写法一</span><br><span class="line">    data = await bot.call_api(&#x27;get_group_info&#x27;,**&#123;</span><br><span class="line">        &#x27;group_id&#x27; : 123456</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<p>这样我们就获得了data这个json格式的返回值，然后进行简单的转义就可以读取了。 这里我们再演示一下和“发送消息”，并使用第二种方法进行演示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">from nonebot.adapters.onebot.v11 import Bot, Event</span><br><span class="line">from nonebot import on_message</span><br><span class="line">import ast</span><br><span class="line"></span><br><span class="line">test = on_command(&#x27;test&#x27;)</span><br><span class="line">@test.handle()</span><br><span class="line">async def _(bot: Bot, event: Event):</span><br><span class="line">    # call_api的写法一</span><br><span class="line">    data = await bot.call_api(&#x27;get_group_info&#x27;,**&#123;</span><br><span class="line">        &#x27;group_id&#x27; : 123456</span><br><span class="line">    &#125;)</span><br><span class="line">    # 对json进行转义</span><br><span class="line">    data = ast.literal_eval(str(data))</span><br><span class="line">    msg = f&quot;群号  ：&#123;data[&#x27;group_id&#x27;]&#125;\</span><br><span class="line">          \n群名称：&#123;data[&#x27;group_name&#x27;]&#125;\</span><br><span class="line">          \n成员数：&#123;data[&#x27;member_count&#x27;]&#125;&quot;</span><br><span class="line">    # call_api的写法二</span><br><span class="line">    await bot.send(</span><br><span class="line">        event   = event,</span><br><span class="line">        message = msg</span><br><span class="line">    )</span><br><span class="line">    # 不过，这里更推荐直接用响应器的send方法</span><br><span class="line">    # await test.send(msg)</span><br></pre></td></tr></table></figure>
+<h3 id="事件阻断"><a href="#事件阻断" class="headerlink" title="事件阻断"></a>事件阻断</h3><p>我们可以通过在事件响应器中添加 <code>block</code> 参数来指定该事件响应器是否会在执行完成后进行阻断，也可以在事件处理函数中使用 <code>matcher.stop_propagation()</code> 来直接阻断该事件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from nonebot import on_message</span><br><span class="line">from nonebot.matcher import Matcher</span><br><span class="line"></span><br><span class="line">foo = on_message(priority=1, block=False)</span><br><span class="line">@foo.handle()</span><br><span class="line">async def handle(matcher: Matcher):</span><br><span class="line">    matcher.stop_propagation()</span><br></pre></td></tr></table></figure>
+<h3 id="permission"><a href="#permission" class="headerlink" title="permission"></a>permission</h3><p><code>Permission</code> 的作用就是对用户身份进行辨认和过滤，仅允许通过判断的用户触发其所属的事件响应器。</p>
+<table>
+<thead>
+<tr>
+<th>权限类型</th>
+<th>匹配范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PRIVATE</td>
+<td>全部私聊</td>
+</tr>
+<tr>
+<td>PRIVATE_FRIEND</td>
+<td>私聊好友</td>
+</tr>
+<tr>
+<td>PRIVATE_GROUP</td>
+<td>群临时私聊</td>
+</tr>
+<tr>
+<td>PRIVATE_OTHER</td>
+<td>其他临时私聊</td>
+</tr>
+<tr>
+<td>GROUP</td>
+<td>全部群聊</td>
+</tr>
+<tr>
+<td>GROUP_MEMBER</td>
+<td>任意群员</td>
+</tr>
+<tr>
+<td>GROUP_ADMIN</td>
+<td>群管理</td>
+</tr>
+<tr>
+<td>GROUP_OWNER</td>
+<td>群主</td>
+</tr>
+</tbody></table>
+<p>只需其中一个返回 <code>True</code> 时就会匹配成功</p>
+<p>例如，我们想要匹配私聊或群管理时：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN,PRIVATE</span><br><span class="line">from nonebot import on_command</span><br><span class="line"></span><br><span class="line">matcher = on_command(&quot;setu&quot;, permission=PRIVATE|GROUP_ADMIN)</span><br></pre></td></tr></table></figure>
+<p>这个响应器将会对任意私聊或群聊中的管理员进行响应。</p>
+<h3 id="事件响应与处理"><a href="#事件响应与处理" class="headerlink" title="事件响应与处理"></a>事件响应与处理</h3><h4 id="事件的类型"><a href="#事件的类型" class="headerlink" title="事件的类型"></a>事件的类型</h4><h5 id="元事件-metaevent"><a href="#元事件-metaevent" class="headerlink" title="元事件-metaevent"></a>元事件-metaevent</h5><p>对应的事件响应器为 <code>on_metaevent()</code></p>
+<p>一类特殊的事件，与nonebot2的运行相关，例如心跳事件、ws连接等。 由于该类事件我们一般来说不会做响应，因此我不做过多解释</p>
+<h5 id="通知事件-notice"><a href="#通知事件-notice" class="headerlink" title="通知事件-notice"></a>通知事件-notice</h5><p>对应的事件响应器为 <code>on_notice()</code></p>
+<p>一些较为特殊的事件，且无需管理员的批准即可主动完成的操作，例如上传文件、被禁言、戳一戳这种消息会被归为通知事件。</p>
+<p>在nonebot2的运行日志中，通知事件会按照 <code>[notice.xxx.xxx]: &#123;xxx&#125;</code> 的形式显现。</p>
+<p>其中，<code>&#123;xxx&#125;</code>是一个json格式的数据，具体内容可以详见<a target="_blank" rel="noopener" href="https://docs.go-cqhttp.org/cqcode/">go-cqhttp的文档</a>。</p>
+<h5 id="请求事件-request"><a href="#请求事件-request" class="headerlink" title="请求事件-request"></a>请求事件-request</h5><p>对应的事件响应器为<code>on_request()</code></p>
+<p>一些较为特殊的事件，且需要管理员（或你）的批才能完成的操作，例如好友申请、加群申请等。 在nonebot2的运行日志中，请求事件会按照 <code>[request.xxx]: &#123;xxx&#125;</code> 的形式显现。</p>
+<p>其中，{xxx}是一个json格式的数据，具体内容可以详见<a target="_blank" rel="noopener" href="https://docs.go-cqhttp.org/cqcode/">go-cqhttp的文档</a>。</p>
+<h5 id="消息事件-message"><a href="#消息事件-message" class="headerlink" title="消息事件-message"></a>消息事件-message</h5><p>对应的事件响应器为 <code>on_message()</code></p>
+<p>是最基本的事件，仅通过聊天框和历史记录进行显示的的绝大多数都是消息类型，例如我们日常聊天的内容、发的图片等。 在nonebot2的运行日志中，消息事件会按照<code>[message.xxx.xxx]: Message xxx from xxx &quot;xxx&quot;</code>的形式显现。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2022/qqbot-mysql/">http://triority.cc/2022/qqbot-mysql/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a><a class="post-meta__tags" href="/tags/QQ%E6%9C%BA%E5%99%A8%E4%BA%BA/">QQ机器人</a><a class="post-meta__tags" href="/tags/mySQL/">mySQL</a></div><div class="post_share"><div class="social-share" data-image="/img/nonebot.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/mySQL-python/" title="mySQL数据库的基本操作以及使用python连接数据库"><img class="cover" src="/img/mySQL.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">mySQL数据库的基本操作以及使用python连接数据库</div></div></a></div><div class="next-post pull-right"><a href="/2022/cqhttp-qqbot/" title="直接使用python做后端连接go-cqhttp的qqbot"><img class="cover" src="/img/go-cqhttp.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">直接使用python做后端连接go-cqhttp的qqbot</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%88%86%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">记分系统数据库结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8nonebot2-cqhttp%E7%9A%84%E6%8F%92%E4%BB%B6%E7%BC%96%E5%86%99"><span class="toc-number">3.</span> <span class="toc-text">使用nonebot2+cqhttp的插件编写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text">插件的位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-number">3.2.</span> <span class="toc-text">插件的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97-module"><span class="toc-number">3.2.0.1.</span> <span class="toc-text">模块(module)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8C%85-package"><span class="toc-number">3.2.0.2.</span> <span class="toc-text">包(package)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E5%99%A8%E4%B8%8E%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">事件响应器与事件处理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#event"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">event</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#matcher"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">matcher</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Message-CQ%E7%A0%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">3.4.</span> <span class="toc-text">Message CQ码的基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Message"><span class="toc-number">3.4.1.</span> <span class="toc-text">Message</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CQ%E7%A0%81"><span class="toc-number">3.4.2.</span> <span class="toc-text">CQ码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.5.</span> <span class="toc-text">API使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E9%98%BB%E6%96%AD"><span class="toc-number">3.6.</span> <span class="toc-text">事件阻断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#permission"><span class="toc-number">3.7.</span> <span class="toc-text">permission</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E4%B8%8E%E5%A4%84%E7%90%86"><span class="toc-number">3.8.</span> <span class="toc-text">事件响应与处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.8.1.</span> <span class="toc-text">事件的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%83%E4%BA%8B%E4%BB%B6-metaevent"><span class="toc-number">3.8.1.1.</span> <span class="toc-text">元事件-metaevent</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%9A%E7%9F%A5%E4%BA%8B%E4%BB%B6-notice"><span class="toc-number">3.8.1.2.</span> <span class="toc-text">通知事件-notice</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E4%BA%8B%E4%BB%B6-request"><span class="toc-number">3.8.1.3.</span> <span class="toc-text">请求事件-request</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E4%BA%8B%E4%BB%B6-message"><span class="toc-number">3.8.1.4.</span> <span class="toc-text">消息事件-message</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

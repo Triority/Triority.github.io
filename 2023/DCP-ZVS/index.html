@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>电磁炉：电源部分-ZVS升压电路和稳压输出 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="控制zvs充电电压">
+<meta property="og:type" content="article">
+<meta property="og:title" content="电磁炉：电源部分-ZVS升压电路和稳压输出">
+<meta property="og:url" content="http://triority.cc/2023/DCP-ZVS/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="控制zvs充电电压">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/v2-100f3b14743b9c8fe3e58536acaa072c_r.png">
+<meta property="article:published_time" content="2023-09-20T13:09:19.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:40.641Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="PCB设计">
+<meta property="article:tag" content="电力电子">
+<meta property="article:tag" content="电磁炉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/v2-100f3b14743b9c8fe3e58536acaa072c_r.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2023/DCP-ZVS/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '电磁炉：电源部分-ZVS升压电路和稳压输出',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+<script src="/assets/js/DPlayer.min.js"></script></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/v2-100f3b14743b9c8fe3e58536acaa072c_r.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">电磁炉：电源部分-ZVS升压电路和稳压输出</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-09-20T13:09:19.000Z" title="发表于 2023-09-20 13:09:19">2023-09-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2023/DCP-ZVS/" data-flag-title="电磁炉：电源部分-ZVS升压电路和稳压输出"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>一般充电电路采用的都是zvs电路，直流逆变到高频交流，然后变压器升压，整流逆变之后给电容充电</p>
+<p>具体的充电电压，一般使用电容耐压450V，充电到400V可以初速最大化，但是充电时间更长，而且效率更低，综合考虑充电时间等因素，250V或300V最合理</p>
+<p>如果希望弹道稳定，那就需要精准控制电容充电电压，看其他人的方案一般上下浮动5V就可以大致控制落点。</p>
+<p>可以使用继电器控制zvs升压的开关，之后也可以改成mos管控制(原理上其实没啥区别)，就是继电器延迟更大可能不够精准</p>
+<h1 id="zvs"><a href="#zvs" class="headerlink" title="zvs"></a>zvs</h1><p>b站上有个up详细讲解了无抽头zvs的原理：</p>
+
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;">
+<iframe src="//player.bilibili.com/player.html?aid=683950620&bvid=BV1UU4y127Gt&cid=717467029&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; height: 100%; Left: 0; top: 0;" ></iframe></div>
+
+
+<p>这个视频已经讲的很详细了，但是这个电路输出的是高频交流，我们需要高压直流，而且绝对不能高于电容的耐压。高压直流好办，zvs输出的高频交流经过变压器升压，得到高压交流，再经过整流桥得到高压直流。但是如何限制最高电压好久没找到可信的方案。</p>
+<p>之前电磁炮原件是在tb的电磁爱好家买的，我去问了升压模块原理图，他给我发了个这个：<br><img src="/2023/DCP-ZVS/8de9584e18cd329317822012d20e009b.jpg" alt="zvs升压电路"></p>
+<p>显然没有我想要的变压器右边的内容，不过可以留着将来自己做元件选型时候用。<br>今天在科创网上看见一些范例看起来还可行：</p>
+<p><a target="_blank" rel="noopener" href="https://www.kechuang.org/t/53017">简单的电容充电限压电路</a></p>
+<p><img src="/2023/DCP-ZVS/%E7%94%B5%E5%AE%B9%E5%85%85%E7%94%B5%E9%99%90%E5%8E%8B.png" alt="电容充电限压"></p>
+<blockquote>
+<p>主要是LM393P电压比较器，对分压后的电容电压进行检测，达到指定值（通过R3调节）后驱动8550来控制ZVS的开启与关闭（这个控制端怎么接就不用细说了吧~）；<br>通过R7的正反馈使LM393P产生迟滞效应，实际效果如：电容充至405V关，降到395V开，以此循环；<br>调节R7可以调整迟滞的范围，不加此电阻的话会导致ZVS不停的开启关闭，此时ZVS中的MOS管会较大的损耗发热</p>
+</blockquote>
+<p>大草在网上看见一个没有迟滞效应的，输出这样的：</p>
+<p><img src="/2023/DCP-ZVS/SDS2502XPlus_PNG_6.png" alt="示波器"></p>
+<p>这要是直接接进去mos死得惨啊hhhhc</p>
+<p>到这里直流升压电路理论上基本完成，有空画个电路图，然后等到开学去再选型制作等。</p>
+<h1 id="开始制作：2023-10-19"><a href="#开始制作：2023-10-19" class="headerlink" title="开始制作：2023.10.19"></a>开始制作：2023.10.19</h1><p>虽然前面写的是无抽头的，但是我选用的变压器的初级是有抽头的所以改成这个方案(而且省下一个电感钱捏)</p>
+<h2 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h2><p>整流桥是KBU810，8A，1000V，整流桥价格差的不多，电流余量留大一点给未来1000W的用</p>
+<p>安规电容x2做谐振电容，275V，0.68uf，以及次级输出的滤波电容是cbb电容，630v100nf</p>
+<p>电感大部分人推荐的是50A的电感，但是我觉得200W的功率下30A的电感其实也足够了(主要是便宜一半多的价钱)<br><img src="/2023/DCP-ZVS/80744d6641f6b1eeb3cd457683ebc8e.jpg"></p>
+<p>变压器是高频升压3+3:110功率200W，但是未来可能换成更大的1000W的另一个型号，大概是长这样：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2023/DCP-ZVS/055435e79723270fdaf48b5150b58e2.jpg"></th>
+<th align="center"><img src="/2023/DCP-ZVS/11fc579bfb3f5c95989dac205c9dcf4.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">200W(3+3:110)</td>
+<td align="center">1000W(3+3:85)</td>
+</tr>
+</tbody></table>
+<p>mos管用手头一大堆的nce6080a</p>
+<h2 id="洞洞板实验成功2023-10-22"><a href="#洞洞板实验成功2023-10-22" class="headerlink" title="洞洞板实验成功2023.10.22"></a>洞洞板实验成功2023.10.22</h2><p>在洞洞板上成功实现，输入12V，空载逆变得到峰值大约40V，21.7kHz的正弦波，电源电流0.2A，变压器升压并逆变之后得到552V直流</p>
+<p><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_1.jpg"><br><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839.jpg"><br><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_2.jpg"><br><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_3.jpg"></p>
+<p>但是这个电路升压完成后不可以直接连接电容，输出电流过大导致zvs震荡无法维持，必须加限流电阻。我目前用的一个470欧5瓦水泥电阻，没有尝试过更小阻值，但是470目前表现良好。目前认为可能和我用的可调电源有关，最大输出电流只有6.4A，电源因为过流限压到4V左右应该是无法起振的原因，之后用电池试一试</p>
+<p>在加上限流电阻的情况下，给一个900V3000uf的电解电容组充电到500V仅需几秒(因为没有足够大功率电源没详细测过)，充电显然是越来越慢的因为压差降低，因此建议电源输入更高，比如电源16V就很不错</p>
+<p>附赠学弟用焊锡丝短路充电400V的3000uf电容组的视频(真正的实验室安全教育)</p>
+<div id="dplayer27" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer27"),"video":{"url":"/2023/DCP-ZVS/d4e4da8173750bf5b3e040a3b433aab0.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+
+<p>我觉得我还是很需要一个大功率可调电源的hhh应该尽快开始做</p>
+<h2 id="200W版本PCB设计"><a href="#200W版本PCB设计" class="headerlink" title="200W版本PCB设计"></a>200W版本PCB设计</h2><table>
+<thead>
+<tr>
+<th align="center"><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20231110092432.png"></th>
+<th align="center"><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20231110092456.png"></th>
+<th align="center"><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20231110092513.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">原理图</td>
+<td align="center">PCB</td>
+<td align="center">3D</td>
+</tr>
+</tbody></table>
+<p>输出限流其实可以用更小的电阻，实测220也能正常工作，更小还没试过</p>
+<blockquote>
+<p>WARNING:<br>已知严重bug:电路输出滤波电容没有加放电电阻，断电后触摸有触电风险！<br>但是100nf电容的能量只会让你麻一下hhhc<br>务必注意用后短路一下输出端进行放电，或者并联放电电阻，推荐1M欧1W电阻<br><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231113160735.jpg"></p>
+</blockquote>
+<h2 id="200W版本改进"><a href="#200W版本改进" class="headerlink" title="200W版本改进"></a>200W版本改进</h2><p>首先删掉了输出限流电阻换成了电容限流，LC震荡频率为19.3kHz，每个680nf电容容抗约为11.88Ω，因为很难计算需要的限流量因此保留了几个电容位，同时删除了输出电容避免了电人情况hhh</p>
+<p><img src="/2023/DCP-ZVS/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20231227143801.png"></p>
+<h2 id="1000W版本设计"><a href="#1000W版本设计" class="headerlink" title="1000W版本设计"></a>1000W版本设计</h2><p>首先是ZVS震荡的电路改为双管并联增大电流，然后加入了输入电流电压检测避免停震导致的过热损坏，</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2023/DCP-ZVS/">http://triority.cc/2023/DCP-ZVS/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PCB%E8%AE%BE%E8%AE%A1/">PCB设计</a><a class="post-meta__tags" href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">电力电子</a><a class="post-meta__tags" href="/tags/%E7%94%B5%E7%A3%81%E7%82%89/">电磁炉</a></div><div class="post_share"><div class="social-share" data-image="/img/v2-100f3b14743b9c8fe3e58536acaa072c_r.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/matlab-simulink-electronics/" title="matlab的simulink进行简单的电力电子仿真：Buck电路"><img class="cover" src="/img/QQ%E6%88%AA%E5%9B%BE20230912211748.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">matlab的simulink进行简单的电力电子仿真：Buck电路</div></div></a></div><div class="next-post pull-right"><a href="/2023/pytorch-learning/" title="使用pytorch设计神经网络"><img class="cover" src="/img/QQ%E6%88%AA%E5%9B%BE20230920192636.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用pytorch设计神经网络</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zvs"><span class="toc-number">2.</span> <span class="toc-text">zvs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%EF%BC%9A2023-10-19"><span class="toc-number">3.</span> <span class="toc-text">开始制作：2023.10.19</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E5%9E%8B"><span class="toc-number">3.1.</span> <span class="toc-text">选型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B4%9E%E6%B4%9E%E6%9D%BF%E5%AE%9E%E9%AA%8C%E6%88%90%E5%8A%9F2023-10-22"><span class="toc-number">3.2.</span> <span class="toc-text">洞洞板实验成功2023.10.22</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#200W%E7%89%88%E6%9C%ACPCB%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.3.</span> <span class="toc-text">200W版本PCB设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#200W%E7%89%88%E6%9C%AC%E6%94%B9%E8%BF%9B"><span class="toc-number">3.4.</span> <span class="toc-text">200W版本改进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1000W%E7%89%88%E6%9C%AC%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.5.</span> <span class="toc-text">1000W版本设计</span></a></li></ol></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

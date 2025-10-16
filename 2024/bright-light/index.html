@@ -1,0 +1,408 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一个“比较”亮的手电 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="手电筒，但是500W，50000lm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个“比较”亮的手电">
+<meta property="og:url" content="http://triority.cc/2024/bright-light/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="手电筒，但是500W，50000lm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/favicon.png">
+<meta property="article:published_time" content="2024-12-10T13:13:13.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.367Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="PCB设计">
+<meta property="article:tag" content="电力电子">
+<meta property="article:tag" content="stm32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/favicon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2024/bright-light/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一个“比较”亮的手电',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('https://api.aqcoder.cn/today')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">一个“比较”亮的手电</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-12-10T13:13:13.000Z" title="发表于 2024-12-10 13:13:13">2024-12-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2024/bright-light/" data-flag-title="一个“比较”亮的手电"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="想法"><a href="#想法" class="headerlink" title="想法"></a>想法</h1><p>做这个的想法大部分来源于有一天晚上，走G6辅路从昌平骑车回市内，一堆解限速横冲直撞的逆行远光电动车给我整破防了，想做个小手电制裁一下。起因只是这么简单但是考虑到其他无辜的人我也不会真的这样去做，但是发现这个东西好像确实需要，用来摄影打光，以及夜间外出徒步这类活动都可以用，所以还是决定做出来</p>
+<p>另一方面，关于这个手电的电源。绝大部分的设计方案都是使用一颗升压芯片来做电源控制，但是我这里有些别的想法。我以后会做一个大功率自动升降压可调电源，正好可以在这里复用，就当提前踩个坑了，所以虽然会更贵一点，我决定供电方案采用buck-boost自动升降压的恒定电流控制，顺便兼容一下各种电压的电池。（来自2025年的补充：考虑到复刻可行性和成本因素还是决定用boost恒流）</p>
+<p>至于控制芯片，考虑到这个功能不算复杂，以及我想拿stm32但是用的机会不多，就用stm32f103c8t6做主控吧</p>
+<h1 id="设计方案"><a href="#设计方案" class="headerlink" title="设计方案"></a>设计方案</h1><h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><h3 id="LED"><a href="#LED" class="headerlink" title="LED"></a>LED</h3><details>
+  <summary>隐藏内容：已被抛弃的大力转飞但是高效率方案（很难想象这两个形容词放在了一起）</summary>
+  这部分没啥技术含量，找个光效高功率大的灯就完了，这里我选择了立德达的5050贴片LED，光效250lm/w，显色指数70，电压选择了6V。随手画一个2串50并的铝基板灯板。按照规格书的功率最大值，单个功率3W，光通量700lm，总计12V 25A 300W功率，70000流明。
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20241210150050.png"></th>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20241210150036.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><a href="ProDoc_P1_2024-12-10.epro">原理图</a></td>
+<td align="center"><a href="ProDoc_PCB1_(6V)_2024-12-10.epro">PCB</a></td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>  但是这样有个问题，发光面积过大导致光强过低，因此后来没有采用这一方案。关于冷却方案，原计划<del>直接上水冷！冷头使用60x60mm的铝制水冷头，搭配150x40x40的服务器冷排，在手电筒的体积内散热400W已经完全足够了。为了体积也不打算要水箱了，水泵随手买了个5V供电的微型水泵</del> 但是考虑到体积因素还是风冷了</p>
+<p>  这一方案需要电压为12V，考虑到电池为3s电压因此供电采用buck-boost拓扑，这一部分也进行了matlab仿真设计，可惜在这里用不到了。仿真条件：电阻1Ω，输入电压12V，输出电容110uf，ESR10mΩ，电感33uH，开关频率100kHz，半桥PWM占空比最大值95%。<a href="buckboost.slx">matlab simulink仿真文件</a></p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250222224440.png"></th>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250222224225.png"></th>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250222224422.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">5A恒流输出</td>
+<td align="center">10A恒流输出</td>
+<td align="center">20A恒流输出</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>  甚至还画了一个boost电路但是WDDQQX把mos橄榄了没有用得上</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250222223801.png"></th>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250222223834.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">原理图</td>
+<td align="center">3D-PCB</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+</details>
+
+<p>综合发光面积、价格、效率等，最终选择SFY55灯珠，参数如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/69bd46e38601a5c39a4775097e952c4.jpg"></th>
+<th align="center"><img src="/2024/bright-light/9e2aa0a23079d13a982fd5dbf028188.jpg"></th>
+<th align="center"><img src="/2024/bright-light/357dc85888bb8805679a9b63933a9be.jpg"></th>
+<th align="center"><img src="/2024/bright-light/49928d9e79ca2d41cbe7b6165ae1758.jpg"></th>
+<th align="center"><img src="/2024/bright-light/617e2a1d9a860104e65897fc72a1f42.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">外形尺寸</td>
+<td align="center">光通量-电功率</td>
+<td align="center">光通量-电流</td>
+<td align="center">伏安特性曲线</td>
+<td align="center">CCT色温-电流</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>这款灯珠为国产型号，虽然光效较低（但考虑人眼对数感知特性这点效率也问题不大）但是价格便宜，而且功率密度足够。上面加上反光杯进一步增加光强。</p>
+<h3 id="制冷"><a href="#制冷" class="headerlink" title="制冷"></a>制冷</h3><p>散热方案极其重要，工作温度直接影响到灯珠功率效率和寿命。考虑体积没有采用水冷，而是使用了下压式风冷CPU散热器。虽然远超出了此类散热器的标称功率，但是更换风扇为台达9cm 12V 4.32A暴力风扇后完美解决（别问噪音，问就没有）</p>
+<p><img src="/2024/bright-light/535a78305d36408756ae3cecb5cfe69.jpg"></p>
+<h3 id="供电"><a href="#供电" class="headerlink" title="供电"></a>供电</h3><p>灯珠供电需要恒流控制下的大约24V电压，正常情况下电流需要20A.以及最高12V可调供电给散热风扇，3.3V给主控电路，外围这部分直接用buck降压电路和LDO芯片解决了没啥可说的。</p>
+<h4 id="恒流boost电路"><a href="#恒流boost电路" class="headerlink" title="恒流boost电路"></a>恒流boost电路</h4><h5 id="v3驱动板设计"><a href="#v3驱动板设计" class="headerlink" title="v3驱动板设计"></a>v3驱动板设计</h5><h5 id="v2驱动板设计"><a href="#v2驱动板设计" class="headerlink" title="v2驱动板设计"></a>v2驱动板设计</h5><table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250730214721.png"></th>
+<th align="center"><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250730214705.png"></th>
+<th align="center"><img src="/2024/bright-light/fe65e89473042650ebb57acb621e241.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><a href="ProDoc_P1_2025-07-30.epro">原理图</a></td>
+<td align="center"><a href="ProDoc_PCB3_2025-07-30.epro">PCB</a></td>
+<td align="center">实物</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>实验效果较好：信号线路工作正常，无电磁干扰影响，实现恒流控制。</p>
+<p>存在的问题：风扇未知原因无法启动，断开信号线连接仅接入电源可以启动；逐渐加大电流过程中mos烧毁(200w+)；芯片短路保护控制引脚电压过低，短接后级放大电路强行上拉mos栅极才能工作。</p>
+<p>增大功率过程中mos发热严重，换用TO-220封装的并联折角加散热片焊上去测试可以正常工作到30%电流：</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/bright-light/8a17e114a10a43199fff09d865ebc15.jpg"></th>
+<th align="center"><img src="/2024/bright-light/751b88d810fcca3590ff2f78bb0068c.jpg"></th>
+<th align="center"><img src="/2024/bright-light/c0fa337e340a19501c9705a8f6f66f8.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">20%电流工作情况</td>
+<td align="center">Vgs波形</td>
+<td align="center">Vds波形</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>综上，下一个版本要做的改进:</p>
+<ol>
+<li>散热风扇测速信号导致错误</li>
+<li>更换电感值同时降低mosfet开关频率</li>
+<li>stm32的电流检测分辨率不足，要加个运算放大器</li>
+<li>更换mosfet封装和散热</li>
+<li>风扇电源应内部稳压而非直连电源以满足宽电压要求</li>
+<li>栅极电阻改用3.3欧</li>
+<li>芯片ldo电容改用1uf</li>
+</ol>
+<h5 id="v1驱动板设计"><a href="#v1驱动板设计" class="headerlink" title="v1驱动板设计"></a>v1驱动板设计</h5><p>基本无法正常工作，信号反馈回路遭遇严重电磁干扰。设计就不在这放了，主要是PCB设计的问题</p>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><p><img src="/2024/bright-light/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20250730222639.png"><br><a href="Light.zip">cubemx设计</a></p>
+<p>stm32:keil main.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN Header */</span></span><br><span class="line"><span class="comment">/* USER CODE END Header */</span></span><br><span class="line"><span class="comment">/* Includes ------------------------------------------------------------------*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;main.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;adc.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;dma.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;i2c.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;tim.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;usart.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;gpio.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private includes ----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN Includes */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ssd1306.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;stdio.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Delay.h&quot;</span></span></span><br><span class="line"><span class="comment">/* USER CODE END Includes */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private typedef -----------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PTD */</span></span><br><span class="line"><span class="comment">/* USER CODE END PTD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private define ------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PD */</span></span><br><span class="line"><span class="comment">/* USER CODE END PD */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private macro -------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PM */</span></span><br><span class="line"><span class="comment">/* USER CODE END PM */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private variables ---------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN PV */</span></span><br><span class="line"><span class="comment">/* USER CODE END PV */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private function prototypes -----------------------------------------------*/</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SystemClock_Config</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="comment">/* USER CODE BEGIN PFP */</span></span><br><span class="line"><span class="comment">/* USER CODE END PFP */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Private user code ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"><span class="type">int</span> ERR = <span class="number">0</span>;</span><br><span class="line"><span class="type">char</span> bufnum[<span class="number">7</span>];</span><br><span class="line"><span class="keyword">volatile</span> <span class="type">uint16_t</span> ADC_Value[<span class="number">9</span>];</span><br><span class="line"><span class="type">uint16_t</span> ADC_Vout,ADC_Fb,ADC_Vin,ADC_TEMP0,ADC_TEMP1,ADC_KNOB0,ADC_KNOB1,ADC_SW,ADC_TEMPSTM;</span><br><span class="line"><span class="type">float</span> Vout,Iout,Vin,TEMP0,TEMP1,KNOB0,KNOB1,SW,TEMPSTM;</span><br><span class="line"><span class="type">int</span> status_SW,status_KNOB;</span><br><span class="line"><span class="type">int</span> DIM_9209;</span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  The application entry point.</span></span><br><span class="line"><span class="comment">  * @retval int</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 1 */</span></span><br><span class="line">  <span class="comment">/* USER CODE END 1 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* MCU Configuration--------------------------------------------------------*/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Reset of all peripherals, Initializes the Flash interface and the Systick. */</span></span><br><span class="line">  HAL_Init();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Init */</span></span><br><span class="line">  <span class="comment">/* USER CODE END Init */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Configure the system clock */</span></span><br><span class="line">  SystemClock_Config();</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN SysInit */</span></span><br><span class="line">  <span class="comment">/* USER CODE END SysInit */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Initialize all configured peripherals */</span></span><br><span class="line">  MX_GPIO_Init();</span><br><span class="line">  MX_DMA_Init();</span><br><span class="line">  MX_ADC1_Init();</span><br><span class="line">  MX_I2C1_Init();</span><br><span class="line">  MX_USART1_UART_Init();</span><br><span class="line">  MX_TIM2_Init();</span><br><span class="line">  MX_TIM3_Init();</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">	HAL_TIM_Base_Start_IT(&amp;htim3);</span><br><span class="line">	HAL_TIM_PWM_Start (&amp;htim2,TIM_CHANNEL_1);</span><br><span class="line">	HAL_TIM_PWM_Start (&amp;htim2,TIM_CHANNEL_2);</span><br><span class="line">	HAL_ADC_Start_DMA(&amp;hadc1, (<span class="type">uint32_t</span>*)&amp;ADC_Value, <span class="number">9</span>);</span><br><span class="line">	</span><br><span class="line">	SSD1306_Init ();</span><br><span class="line">  <span class="comment">/* USER CODE END 2 */</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* Infinite loop */</span></span><br><span class="line">  <span class="comment">/* USER CODE BEGIN WHILE */</span></span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">		<span class="comment">//EN</span></span><br><span class="line">		<span class="keyword">if</span>(ERR||status_SW==<span class="number">1</span>)&#123;</span><br><span class="line">			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//ADC</span></span><br><span class="line">		ADC_Vout=ADC_Value[<span class="number">0</span>];</span><br><span class="line">		ADC_Fb=ADC_Value[<span class="number">1</span>];</span><br><span class="line">		ADC_Vin=ADC_Value[<span class="number">2</span>];</span><br><span class="line">		ADC_TEMP0=ADC_Value[<span class="number">3</span>];</span><br><span class="line">		ADC_TEMP1=ADC_Value[<span class="number">4</span>];</span><br><span class="line">		ADC_KNOB0=ADC_Value[<span class="number">5</span>];</span><br><span class="line">		ADC_KNOB1=ADC_Value[<span class="number">6</span>];</span><br><span class="line">		ADC_SW=ADC_Value[<span class="number">7</span>];</span><br><span class="line">		ADC_TEMPSTM=ADC_Value[<span class="number">8</span>];</span><br><span class="line">		Vout=(<span class="type">float</span>)ADC_Vout * <span class="number">3.3f</span> * <span class="number">11.0f</span>/ <span class="number">4095.0f</span>;</span><br><span class="line">		Iout=(<span class="type">float</span>)ADC_Fb * <span class="number">3.3f</span> / <span class="number">0.0125f</span> / <span class="number">4095.0f</span>;</span><br><span class="line">		Vin=(<span class="type">float</span>)ADC_Vin * <span class="number">3.3f</span> * <span class="number">11.0f</span> / <span class="number">4095.0f</span>;</span><br><span class="line">		TEMP0=(<span class="type">float</span>)ADC_TEMP0 * <span class="number">3.3f</span> / <span class="number">4095.0f</span>;</span><br><span class="line">		TEMP1=(<span class="type">float</span>)ADC_TEMP1 * <span class="number">3.3f</span> / <span class="number">4095.0f</span>;</span><br><span class="line">		KNOB0=(<span class="type">float</span>)ADC_KNOB0 / <span class="number">4095.0f</span>;</span><br><span class="line">		KNOB1=(<span class="type">float</span>)ADC_KNOB1 / <span class="number">4095.0f</span>;</span><br><span class="line">		SW=(<span class="type">float</span>)ADC_SW / <span class="number">4095.0f</span>;</span><br><span class="line">		TEMPSTM=(<span class="number">1.43f</span> - ((<span class="type">float</span>)ADC_TEMPSTM * <span class="number">3.3f</span> / <span class="number">4095.0f</span>))/<span class="number">0.0043f</span> + <span class="number">25.0f</span>;</span><br><span class="line">		<span class="comment">//status</span></span><br><span class="line">		status_KNOB = (<span class="type">int</span>)(KNOB0*<span class="number">20</span>)*<span class="number">10</span>+(<span class="type">int</span>)(KNOB1*<span class="number">20.0f</span>);</span><br><span class="line">		<span class="keyword">if</span>(status_KNOB&gt;<span class="number">100</span>)status_KNOB=<span class="number">100</span>;</span><br><span class="line">		<span class="keyword">if</span>(SW&gt;<span class="number">0.66f</span>)&#123;status_SW=<span class="number">2</span>;&#125;<span class="keyword">else</span> <span class="keyword">if</span>(SW&gt;<span class="number">0.33f</span>)&#123;status_SW=<span class="number">1</span>;&#125;<span class="keyword">else</span>&#123;status_SW=<span class="number">0</span>;&#125;</span><br><span class="line">		<span class="comment">//DIM pwm</span></span><br><span class="line">		DIM_9209 = <span class="number">10</span> + status_KNOB*<span class="number">989</span>/<span class="number">100</span>;</span><br><span class="line">		__HAL_TIM_SET_COMPARE(&amp;htim2, TIM_CHANNEL_2, DIM_9209);</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">/* USER CODE END WHILE */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* USER CODE BEGIN 3 */</span></span><br><span class="line">  <span class="comment">/* USER CODE END 3 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief System Clock Configuration</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SystemClock_Config</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  RCC_OscInitTypeDef RCC_OscInitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  RCC_ClkInitTypeDef RCC_ClkInitStruct = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">  RCC_PeriphCLKInitTypeDef PeriphClkInit = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Initializes the RCC Oscillators according to the specified parameters</span></span><br><span class="line"><span class="comment">  * in the RCC_OscInitTypeDef structure.</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;</span><br><span class="line">  RCC_OscInitStruct.HSEState = RCC_HSE_ON;</span><br><span class="line">  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;</span><br><span class="line">  RCC_OscInitStruct.HSIState = RCC_HSI_ON;</span><br><span class="line">  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;</span><br><span class="line">  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;</span><br><span class="line">  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;</span><br><span class="line">  <span class="keyword">if</span> (HAL_RCC_OscConfig(&amp;RCC_OscInitStruct) != HAL_OK)</span><br><span class="line">  &#123;</span><br><span class="line">    Error_Handler();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Initializes the CPU, AHB and APB buses clocks</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK</span><br><span class="line">                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;</span><br><span class="line">  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;</span><br><span class="line">  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;</span><br><span class="line">  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;</span><br><span class="line">  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (HAL_RCC_ClockConfig(&amp;RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)</span><br><span class="line">  &#123;</span><br><span class="line">    Error_Handler();</span><br><span class="line">  &#125;</span><br><span class="line">  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;</span><br><span class="line">  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;</span><br><span class="line">  <span class="keyword">if</span> (HAL_RCCEx_PeriphCLKConfig(&amp;PeriphClkInit) != HAL_OK)</span><br><span class="line">  &#123;</span><br><span class="line">    Error_Handler();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 4 */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span>&#123;</span><br><span class="line">	  <span class="keyword">if</span>(htim == &amp;htim3)</span><br><span class="line">	 &#123;</span><br><span class="line">	    HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);</span><br><span class="line">		 <span class="comment">//oled</span></span><br><span class="line">		  SSD1306_GotoXY (<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">			<span class="built_in">sprintf</span> (bufnum, <span class="string">&quot;PWM%03d&quot;</span>, DIM_9209);</span><br><span class="line">			SSD1306_Puts (bufnum, &amp;Font_11x18, <span class="number">1</span>);</span><br><span class="line">			SSD1306_GotoXY (<span class="number">0</span>,<span class="number">20</span>);</span><br><span class="line">			<span class="built_in">sprintf</span> (bufnum, <span class="string">&quot;Vo:%03.1f&quot;</span>, Vout);</span><br><span class="line">			SSD1306_Puts (bufnum, &amp;Font_11x18, <span class="number">1</span>);</span><br><span class="line">			SSD1306_GotoXY (<span class="number">0</span>,<span class="number">40</span>);</span><br><span class="line">			<span class="built_in">sprintf</span> (bufnum, <span class="string">&quot;Io:%03.1f&quot;</span>, Iout);</span><br><span class="line">			SSD1306_Puts (bufnum, &amp;Font_11x18, <span class="number">1</span>);</span><br><span class="line">			SSD1306_UpdateScreen();</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* USER CODE END 4 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  This function is executed in case of error occurrence.</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Error_Handler</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN Error_Handler_Debug */</span></span><br><span class="line">  <span class="comment">/* USER CODE END Error_Handler_Debug */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  USE_FULL_ASSERT</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * @brief  Reports the name of the source file and the source line number</span></span><br><span class="line"><span class="comment">  *         where the assert_param error has occurred.</span></span><br><span class="line"><span class="comment">  * @param  file: pointer to the source file name</span></span><br><span class="line"><span class="comment">  * @param  line: assert_param error line source number</span></span><br><span class="line"><span class="comment">  * @retval None</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">assert_failed</span><span class="params">(<span class="type">uint8_t</span> *file, <span class="type">uint32_t</span> line)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* USER CODE BEGIN 6 */</span></span><br><span class="line">  <span class="comment">/* USER CODE END 6 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">/* USE_FULL_ASSERT */</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="成品"><a href="#成品" class="headerlink" title="成品"></a>成品</h1></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2024/bright-light/">http://triority.cc/2024/bright-light/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PCB%E8%AE%BE%E8%AE%A1/">PCB设计</a><a class="post-meta__tags" href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">电力电子</a><a class="post-meta__tags" href="/tags/stm32/">stm32</a></div><div class="post_share"><div class="social-share" data-image="/img/favicon.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/ARISS-SSTV-REWARD/" title="ARISS SSTV REWARD"><img class="cover" src="/img/b3ffe28b0a16749b9126c52008a3653.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ARISS SSTV REWARD</div></div></a></div><div class="next-post pull-right"><a href="/2025/SHE/" title="沈阳桃仙机场SHE拍摄活动"><img class="cover" src="/img/DSC1396.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">沈阳桃仙机场SHE拍摄活动</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%83%B3%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">想法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-number">2.</span> <span class="toc-text">设计方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">硬件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#LED"><span class="toc-number">2.1.1.</span> <span class="toc-text">LED</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B6%E5%86%B7"><span class="toc-number">2.1.2.</span> <span class="toc-text">制冷</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9B%E7%94%B5"><span class="toc-number">2.1.3.</span> <span class="toc-text">供电</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%92%E6%B5%81boost%E7%94%B5%E8%B7%AF"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">恒流boost电路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#v3%E9%A9%B1%E5%8A%A8%E6%9D%BF%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.3.1.1.</span> <span class="toc-text">v3驱动板设计</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#v2%E9%A9%B1%E5%8A%A8%E6%9D%BF%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.3.1.2.</span> <span class="toc-text">v2驱动板设计</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#v1%E9%A9%B1%E5%8A%A8%E6%9D%BF%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.3.1.3.</span> <span class="toc-text">v1驱动板设计</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">软件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%90%E5%93%81"><span class="toc-number">3.</span> <span class="toc-text">成品</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

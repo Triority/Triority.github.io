@@ -1,0 +1,475 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>超高速直线电机 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="高功率高压高速直线电机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="超高速直线电机">
+<meta property="og:url" content="http://triority.cc/2024/Ultra-high-speed-linear-motor/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="高功率高压高速直线电机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240720191614.png">
+<meta property="article:published_time" content="2024-07-02T21:37:22.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.210Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="PCB设计">
+<meta property="article:tag" content="电力电子">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240720191614.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2024/Ultra-high-speed-linear-motor/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '超高速直线电机',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+<script src="/assets/js/DPlayer.min.js"></script></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240720191614.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">超高速直线电机</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-07-02T21:37:22.000Z" title="发表于 2024-07-02 21:37:22">2024-07-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/">值得一提的文章</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/%E4%BD%9C%E5%93%81-%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">作品&amp;项目总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2024/Ultra-high-speed-linear-motor/" data-flag-title="超高速直线电机"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>这个项目是我大学本科四年做的最复杂的一个，从大一下学期到大三结束一路磕磕绊绊走走停停终于到了可以写总结的时候，现在这个仅剩下一点无关紧要的收尾工作了。</p>
+<div class="note danger modern"><p>警告：本文设计内容具有危险性，不提供任何制造文件资料，仅供科研交流使用，装置测试后已经拆除，严禁仿造用于其他用途。</p>
+</div>
+
+<p>说一下我的最终设计路线和目标：</p>
+<ul>
+<li>高压方案(&gt;300V)</li>
+<li>快速连续工作(&lt;1s)</li>
+<li>速度快(&gt;100m&#x2F;s)</li>
+<li>效率有追求但不很重要(&gt;10%)</li>
+</ul>
+<h1 id="Maxwell电磁力运动仿真"><a href="#Maxwell电磁力运动仿真" class="headerlink" title="Maxwell电磁力运动仿真"></a>Maxwell电磁力运动仿真</h1><p>之前写的教程比较简略（晦涩难懂），步骤太多文字写起来很麻烦，直接录下来操作视频发b站了</p>
+<p>视频中演示的结构为高压方案的单路boost拓扑，位置触发的时序控制，外电路激励源</p>
+
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113007065564118&bvid=BV168WEeBEmV&cid=500001658823200&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; height: 100%; Left: 0; top: 0;" ></iframe></div>
+
+
+<h1 id="4-LEVELS"><a href="#4-LEVELS" class="headerlink" title="4 LEVELS"></a>4 LEVELS</h1><h2 id="基本参数"><a href="#基本参数" class="headerlink" title="基本参数"></a>基本参数</h2><ul>
+<li>加速体：A3材质M8x20圆柱定位销</li>
+<li>轨道：内8.5外9.5钢管</li>
+<li>电压：350V</li>
+<li>拓扑：boost</li>
+<li>IGBT：IRGPS4067d</li>
+<li>线圈：0.45mm漆包铜线</li>
+</ul>
+<h2 id="Ansys-Maxwell仿真"><a href="#Ansys-Maxwell仿真" class="headerlink" title="Ansys Maxwell仿真"></a>Ansys Maxwell仿真</h2><div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"video":{"url":"/2024/Ultra-high-speed-linear-motor/baaf983f8c3aca6c53c2238da466f09d.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/a39d70ac42f5250a742b76c01ecb0b3.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/16358072e8a10c489cf6da88cacde99.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/a77a7f8f7a4bb36dd2e99821d910b03.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/69911deecbd0ee65e2049c05d23a9d8.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/86de12335351f9e49a989d161d67152.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">实体模型</td>
+<td align="center">电路模型</td>
+<td align="center">电流</td>
+<td align="center">拉力</td>
+<td align="center">速度</td>
+</tr>
+</tbody></table>
+<p><a href="DCP_maxwell.zip">仿真工程文件</a></p>
+<p>我还找到了一个maxwell的使用教程文档，不知道有没有用，因为太长了我没看，但是万一有人需要呢？</p>
+
+
+	<div class="row">
+    <embed src="MAXWELL基础教程电子版.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+
+<h2 id="功率电路"><a href="#功率电路" class="headerlink" title="功率电路"></a>功率电路</h2><table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240719201740.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240719202048.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/f6e19e7d493377e57490c1ba6c95cbc.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/fb16ed462e5e7065995940dd605b93f.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">功率板原理图</td>
+<td align="center">驱动板原理图</td>
+<td align="center">照片</td>
+<td align="center">效果</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>线圈设计参数：</p>
+<p><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240719202940.png"></p>
+<p>实测速度基本稳定在45m&#x2F;s，如果连续使用线圈发热增加的电阻率会降低电流导致速度降低，实测温度到40度时速度会降低到40左右，因此未来的设计将会关注热管理问题。</p>
+<h2 id="时序控制"><a href="#时序控制" class="headerlink" title="时序控制"></a>时序控制</h2><p>外接自制那个esp32开发板，代码在这里，时序使用循环计算，不再需要手动考虑高低电平切换顺序了，以及做了串口调参，节省一下flash的烧录寿命hhh</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//cxx: control[just a str], level, 0:duration/1:start time//2:end time</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// start time</span></span><br><span class="line"><span class="type">int</span> c11_time = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> c21_time = <span class="number">1650</span>;</span><br><span class="line"><span class="type">int</span> c31_time = <span class="number">2400</span>;</span><br><span class="line"><span class="type">int</span> c41_time = <span class="number">2950</span>;</span><br><span class="line"><span class="comment">// duration</span></span><br><span class="line"><span class="type">int</span> c10_time = <span class="number">1460</span>;</span><br><span class="line"><span class="type">int</span> c20_time = <span class="number">840</span>;</span><br><span class="line"><span class="type">int</span> c30_time = <span class="number">670</span>;</span><br><span class="line"><span class="type">int</span> c40_time = <span class="number">580</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// trigger status</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c1 = <span class="number">26</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c2 = <span class="number">27</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c3 = <span class="number">14</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c4 = <span class="number">12</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c5 = <span class="number">13</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> sw = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> pulseStartTime = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> pulseNowTime = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">String inData=<span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123;</span><br><span class="line">  Serial.begin(<span class="number">115200</span>);</span><br><span class="line">  pinMode(c1, OUTPUT);</span><br><span class="line">  pinMode(c2, OUTPUT);</span><br><span class="line">  pinMode(c3, OUTPUT);</span><br><span class="line">  pinMode(c4, OUTPUT);</span><br><span class="line">  pinMode(c5, OUTPUT);</span><br><span class="line">  digitalWrite(c1, LOW);</span><br><span class="line">  digitalWrite(c2, LOW);</span><br><span class="line">  digitalWrite(c3, LOW);</span><br><span class="line">  digitalWrite(c4, LOW);</span><br><span class="line">  digitalWrite(c5, LOW);</span><br><span class="line"></span><br><span class="line">  pinMode(sw, INPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="comment">// serial</span></span><br><span class="line">  <span class="keyword">while</span>(Serial.available()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="type">char</span> recieved = Serial.read();</span><br><span class="line">    inData += recieved;</span><br><span class="line">    <span class="keyword">if</span>(recieved == <span class="string">&#x27;\n&#x27;</span>)&#123;</span><br><span class="line">      <span class="keyword">if</span> (inData.length()&lt;<span class="number">4</span>)&#123;</span><br><span class="line">        Serial.println(<span class="string">&quot;Too short&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      String function = inData.substring(<span class="number">0</span>, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (function==<span class="string">&quot;c11 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c11_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c11 = &quot;</span>);</span><br><span class="line">        Serial.println(c11_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c10 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c10_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c10 = &quot;</span>);</span><br><span class="line">        Serial.println(c10_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c21 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c21_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c21 = &quot;</span>);</span><br><span class="line">        Serial.println(c21_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c20 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c20_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c20 = &quot;</span>);</span><br><span class="line">        Serial.println(c20_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c31 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c31_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c31 = &quot;</span>);</span><br><span class="line">        Serial.println(c31_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c30 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c30_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c30 = &quot;</span>);</span><br><span class="line">        Serial.println(c30_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c41 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c41_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c41 = &quot;</span>);</span><br><span class="line">        Serial.println(c41_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c40 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c40_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c40 = &quot;</span>);</span><br><span class="line">        Serial.println(c40_time);</span><br><span class="line">      &#125;</span><br><span class="line">      inData=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// switch</span></span><br><span class="line">  <span class="keyword">if</span> (digitalRead(sw)==LOW)&#123;</span><br><span class="line">    <span class="comment">// reset</span></span><br><span class="line">    <span class="type">int</span> c11 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c21 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c31 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c41 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c12 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c22 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c32 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c42 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c12_time = c11_time + c10_time;</span><br><span class="line">    <span class="type">int</span> c22_time = c21_time + c20_time;</span><br><span class="line">    <span class="type">int</span> c32_time = c31_time + c30_time;</span><br><span class="line">    <span class="type">int</span> c42_time = c41_time + c40_time;</span><br><span class="line">    Serial.println(<span class="string">&quot;starting&quot;</span>);</span><br><span class="line">    pulseStartTime = micros();</span><br><span class="line">    pulseNowTime = micros();</span><br><span class="line">    <span class="keyword">while</span>(c11||c12||c21||c22||c31||c32||c41||c42)&#123;</span><br><span class="line">      pulseNowTime = micros();</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c11_time &amp;&amp; c11)&#123;</span><br><span class="line">        digitalWrite(c1, HIGH);</span><br><span class="line">        c11 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c12_time &amp;&amp; c12)&#123;</span><br><span class="line">        digitalWrite(c1, LOW);</span><br><span class="line">        c12 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c21_time &amp;&amp; c21)&#123;</span><br><span class="line">        digitalWrite(c2, HIGH);</span><br><span class="line">        c21 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c22_time &amp;&amp; c22)&#123;</span><br><span class="line">        digitalWrite(c2, LOW);</span><br><span class="line">        c22 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c31_time &amp;&amp; c31)&#123;</span><br><span class="line">        digitalWrite(c3, HIGH);</span><br><span class="line">        c31 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c32_time &amp;&amp; c32)&#123;</span><br><span class="line">        digitalWrite(c3, LOW);</span><br><span class="line">        c32 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c41_time &amp;&amp; c41)&#123;</span><br><span class="line">        digitalWrite(c4, HIGH);</span><br><span class="line">        c41 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c42_time &amp;&amp; c42)&#123;</span><br><span class="line">        digitalWrite(c4, LOW);</span><br><span class="line">        c42 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;<span class="number">1000000</span>)&#123;</span><br><span class="line">        Serial.print(<span class="string">&quot;ERROR, time out&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Serial.println(<span class="string">&quot;releasing&quot;</span>);</span><br><span class="line"></span><br><span class="line">    digitalWrite(c5, HIGH);</span><br><span class="line">    delay(<span class="number">2000</span>);</span><br><span class="line">    digitalWrite(c5, LOW);</span><br><span class="line">    Serial.println(<span class="string">&quot;finished&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="ZVS升压电源"><a href="#ZVS升压电源" class="headerlink" title="ZVS升压电源"></a>ZVS升压电源</h2><p>电源有多种方案，最简单的ZVS谐振逆变升压，十分简单但是不够可控可靠，无法控制工作状态，而且在负载过流情况下一旦停止谐振就会直接在电源上短路，如果使用电池供电十分危险，不过只要重新接入电源重新进入谐振状态就可以继续正常工作。另一种使用开关电路逆变升压，较为复杂但是可控。当然我们的需求是给电容充电，使用恒流源更合适，具体实现参考论文《一种谐振型推挽式直流变换器》</p>
+<p>不知道为什么这个电路被称为ZVS(零电压开关)电路，这只是一个恰好工作在零电压开关状态的谐振电路，不过这个名称和电路十分经典广为流传和使用，甚至淘宝所售套件的电源全都是这个方案，而且也足够简单，非常容易做</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_1.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_2.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231022221839_3.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">洞洞板试验</td>
+<td align="center">输入</td>
+<td align="center">波形</td>
+<td align="center">输出</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240704130314.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240704130544.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231113160735.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">原理图</td>
+<td align="center">3D模型</td>
+<td align="center">照片</td>
+</tr>
+</tbody></table>
+<p>缺失模型的元件是电感和变压器。电感一定要电流足够大，分享一下我的电感和变压器选型吧</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/80744d6641f6b1eeb3cd457683ebc8e.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/055435e79723270fdaf48b5150b58e2.jpg"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/11fc579bfb3f5c95989dac205c9dcf4.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">电感</td>
+<td align="center">现在用的电容</td>
+<td align="center">打算以后换的电容</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>这个电路的问题我也说过了，就是一旦过载停振就会短路，所以我在前面加了一个PMos控制电源开关，短路可以及时关闭和重启。</p>
+<h1 id="n-5-LEVELS"><a href="#n-5-LEVELS" class="headerlink" title="n*5 LEVELS"></a>n*5 LEVELS</h1><h2 id="电路设计"><a href="#电路设计" class="headerlink" title="电路设计"></a>电路设计</h2><p>这次采用了模块化设计，每个板子是5级功率回路，可以直接串联使用</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134109.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134138.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134204.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134123.png"></td>
+<td align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134148.png"></td>
+<td align="center"><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134215.png"></td>
+</tr>
+<tr>
+<td align="center">放电电路</td>
+<td align="center">驱动电路</td>
+<td align="center">供电主板</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>线圈设计参数：<br><img src="/2024/Ultra-high-speed-linear-motor/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240910134526.png"></p>
+<h2 id="时序控制-1"><a href="#时序控制-1" class="headerlink" title="时序控制"></a>时序控制</h2><h3 id="控制程序"><a href="#控制程序" class="headerlink" title="控制程序"></a>控制程序</h3><p>考虑到esp32引脚数量不足，主控芯片更换为stm32。以及这次可以进行电压测量和充电电流监控并主动控制，加入了这部分控制代码</p>
+<details>
+  <summary>一些吐槽</summary>
+  这段代码实在是太不优雅了，真受不了这一堆if else，但是又一直懒得重构。。。至少暂时不耽误用。以及现在电压主动控制还没写，等写完了就删掉这句话
+</details>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//cxx: control[just a str], level, 0:duration/1:start time//2:end time</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// start time</span></span><br><span class="line"><span class="type">int</span> c11_time = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> c21_time = <span class="number">1350</span>;</span><br><span class="line"><span class="type">int</span> c31_time = <span class="number">2000</span>;</span><br><span class="line"><span class="type">int</span> c41_time = <span class="number">2630</span>;</span><br><span class="line"><span class="type">int</span> c51_time = <span class="number">3100</span>;</span><br><span class="line"><span class="type">int</span> c61_time = <span class="number">3490</span>;</span><br><span class="line"><span class="type">int</span> c71_time = <span class="number">3830</span>;</span><br><span class="line"><span class="type">int</span> c81_time = <span class="number">4140</span>;</span><br><span class="line"><span class="type">int</span> c91_time = <span class="number">4410</span>;</span><br><span class="line"><span class="comment">// duration</span></span><br><span class="line"><span class="type">int</span> c10_time = <span class="number">1340</span>;</span><br><span class="line"><span class="type">int</span> c20_time = <span class="number">880</span>;</span><br><span class="line"><span class="type">int</span> c30_time = <span class="number">770</span>;</span><br><span class="line"><span class="type">int</span> c40_time = <span class="number">590</span>;</span><br><span class="line"><span class="type">int</span> c50_time = <span class="number">500</span>;</span><br><span class="line"><span class="type">int</span> c60_time = <span class="number">470</span>;</span><br><span class="line"><span class="type">int</span> c70_time = <span class="number">400</span>;</span><br><span class="line"><span class="type">int</span> c80_time = <span class="number">360</span>;</span><br><span class="line"><span class="type">int</span> c90_time = <span class="number">340</span>;</span><br><span class="line"><span class="comment">// trigger status</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c1 = <span class="number">13</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c2 = <span class="number">12</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c3 = <span class="number">14</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c4 = <span class="number">27</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c5 = <span class="number">26</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c6 = <span class="number">25</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c7 = <span class="number">33</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c8 = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> c9 = <span class="number">23</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> sw = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> serial_sw = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> pulseStartTime = <span class="number">0</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> pulseNowTime = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">String inData=<span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123;</span><br><span class="line">  Serial.begin(<span class="number">115200</span>);</span><br><span class="line">  pinMode(c1, OUTPUT);</span><br><span class="line">  pinMode(c2, OUTPUT);</span><br><span class="line">  pinMode(c3, OUTPUT);</span><br><span class="line">  pinMode(c4, OUTPUT);</span><br><span class="line">  pinMode(c5, OUTPUT);</span><br><span class="line">  pinMode(c6, OUTPUT);</span><br><span class="line">  pinMode(c7, OUTPUT);</span><br><span class="line">  pinMode(c8, OUTPUT);</span><br><span class="line">  pinMode(c9, OUTPUT);</span><br><span class="line">  digitalWrite(c1, LOW);</span><br><span class="line">  digitalWrite(c2, LOW);</span><br><span class="line">  digitalWrite(c3, LOW);</span><br><span class="line">  digitalWrite(c4, LOW);</span><br><span class="line">  digitalWrite(c5, LOW);</span><br><span class="line">  digitalWrite(c6, LOW);</span><br><span class="line">  digitalWrite(c7, LOW);</span><br><span class="line">  digitalWrite(c8, LOW);</span><br><span class="line">  digitalWrite(c9, LOW);</span><br><span class="line"></span><br><span class="line">  pinMode(sw, INPUT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="comment">// serial</span></span><br><span class="line">  <span class="keyword">while</span>(Serial.available()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">    delay(<span class="number">5</span>);</span><br><span class="line">    <span class="type">char</span> recieved = Serial.read();</span><br><span class="line">    inData += recieved;</span><br><span class="line">    <span class="keyword">if</span>(recieved == <span class="string">&#x27;\n&#x27;</span>)&#123;</span><br><span class="line">      <span class="keyword">if</span> (inData.length()&lt;<span class="number">4</span>)&#123;</span><br><span class="line">        Serial.println(<span class="string">&quot;Too short&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      String function = inData.substring(<span class="number">0</span>, <span class="number">4</span>);</span><br><span class="line">      <span class="keyword">if</span> (function==<span class="string">&quot;shot&quot;</span>)&#123;</span><br><span class="line">        serial_sw = <span class="number">1</span>;</span><br><span class="line">        Serial.println(<span class="string">&quot;Shot after 1 second!&quot;</span>);</span><br><span class="line">        delay(<span class="number">1000</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (function==<span class="string">&quot;c11 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c11_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c11 = &quot;</span>);</span><br><span class="line">        Serial.println(c11_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c10 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c10_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c10 = &quot;</span>);</span><br><span class="line">        Serial.println(c10_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c21 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c21_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c21 = &quot;</span>);</span><br><span class="line">        Serial.println(c21_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c20 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c20_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c20 = &quot;</span>);</span><br><span class="line">        Serial.println(c20_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c31 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c31_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c31 = &quot;</span>);</span><br><span class="line">        Serial.println(c31_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c30 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c30_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c30 = &quot;</span>);</span><br><span class="line">        Serial.println(c30_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c41 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c41_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c41 = &quot;</span>);</span><br><span class="line">        Serial.println(c41_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c40 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c40_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c40 = &quot;</span>);</span><br><span class="line">        Serial.println(c40_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c51 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c51_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c51 = &quot;</span>);</span><br><span class="line">        Serial.println(c51_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c50 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c50_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c50 = &quot;</span>);</span><br><span class="line">        Serial.println(c50_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c61 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c61_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c61 = &quot;</span>);</span><br><span class="line">        Serial.println(c61_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c60 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c60_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c60 = &quot;</span>);</span><br><span class="line">        Serial.println(c60_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c71 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c71_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c71 = &quot;</span>);</span><br><span class="line">        Serial.println(c71_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c70 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c70_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c70 = &quot;</span>);</span><br><span class="line">        Serial.println(c70_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c81 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c81_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c81 = &quot;</span>);</span><br><span class="line">        Serial.println(c81_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c80 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c80_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c80 = &quot;</span>);</span><br><span class="line">        Serial.println(c80_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c91 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c91_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c91 = &quot;</span>);</span><br><span class="line">        Serial.println(c91_time);</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> (function==<span class="string">&quot;c90 &quot;</span>)&#123;</span><br><span class="line">        String value_str = inData.substring(<span class="number">4</span>, inData.length());</span><br><span class="line">        c90_time = value_str.toInt();</span><br><span class="line">        Serial.<span class="built_in">printf</span>(<span class="string">&quot;Now c90 = &quot;</span>);</span><br><span class="line">        Serial.println(c90_time);</span><br><span class="line">      &#125;</span><br><span class="line">      inData=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// switch</span></span><br><span class="line">  <span class="keyword">if</span> (digitalRead(sw)==LOW||serial_sw)&#123;</span><br><span class="line">    <span class="comment">// reset</span></span><br><span class="line">    serial_sw = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> c11 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c21 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c31 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c41 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c51 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c61 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c71 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c81 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c91 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c12 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c22 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c32 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c42 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c52 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c62 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c72 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c82 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c92 = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> c12_time = c11_time + c10_time;</span><br><span class="line">    <span class="type">int</span> c22_time = c21_time + c20_time;</span><br><span class="line">    <span class="type">int</span> c32_time = c31_time + c30_time;</span><br><span class="line">    <span class="type">int</span> c42_time = c41_time + c40_time;</span><br><span class="line">    <span class="type">int</span> c52_time = c51_time + c50_time;</span><br><span class="line">    <span class="type">int</span> c62_time = c61_time + c60_time;</span><br><span class="line">    <span class="type">int</span> c72_time = c71_time + c70_time;</span><br><span class="line">    <span class="type">int</span> c82_time = c81_time + c80_time;</span><br><span class="line">    <span class="type">int</span> c92_time = c91_time + c90_time;</span><br><span class="line">    Serial.println(<span class="string">&quot;starting&quot;</span>);</span><br><span class="line">    pulseStartTime = micros();</span><br><span class="line">    pulseNowTime = micros();</span><br><span class="line">    <span class="keyword">while</span>(c11||c12||c21||c22||c31||c32||c41||c42||c51||c52||c61||c62||c71||c72||c81||c82||c91||c92)&#123;</span><br><span class="line">      pulseNowTime = micros();</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c11_time &amp;&amp; c11)&#123;</span><br><span class="line">        digitalWrite(c1, HIGH);</span><br><span class="line">        c11 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c12_time &amp;&amp; c12)&#123;</span><br><span class="line">        digitalWrite(c1, LOW);</span><br><span class="line">        c12 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c21_time &amp;&amp; c21)&#123;</span><br><span class="line">        digitalWrite(c2, HIGH);</span><br><span class="line">        c21 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c22_time &amp;&amp; c22)&#123;</span><br><span class="line">        digitalWrite(c2, LOW);</span><br><span class="line">        c22 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c31_time &amp;&amp; c31)&#123;</span><br><span class="line">        digitalWrite(c3, HIGH);</span><br><span class="line">        c31 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c32_time &amp;&amp; c32)&#123;</span><br><span class="line">        digitalWrite(c3, LOW);</span><br><span class="line">        c32 = <span class="number">0</span>;&#125;</span><br><span class="line">        </span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c41_time &amp;&amp; c41)&#123;</span><br><span class="line">        digitalWrite(c4, HIGH);</span><br><span class="line">        c41 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c42_time &amp;&amp; c42)&#123;</span><br><span class="line">        digitalWrite(c4, LOW);</span><br><span class="line">        c42 = <span class="number">0</span>;&#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c51_time &amp;&amp; c51)&#123;</span><br><span class="line">        digitalWrite(c5, HIGH);</span><br><span class="line">        c51 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c52_time &amp;&amp; c52)&#123;</span><br><span class="line">        digitalWrite(c5, LOW);</span><br><span class="line">        c52 = <span class="number">0</span>;&#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c61_time &amp;&amp; c61)&#123;</span><br><span class="line">        digitalWrite(c6, HIGH);</span><br><span class="line">        c61 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c72_time &amp;&amp; c62)&#123;</span><br><span class="line">        digitalWrite(c6, LOW);</span><br><span class="line">        c62 = <span class="number">0</span>;&#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c71_time &amp;&amp; c71)&#123;</span><br><span class="line">        digitalWrite(c7, HIGH);</span><br><span class="line">        c71 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c72_time &amp;&amp; c72)&#123;</span><br><span class="line">        digitalWrite(c7, LOW);</span><br><span class="line">        c72 = <span class="number">0</span>;&#125;</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c81_time &amp;&amp; c81)&#123;</span><br><span class="line">        digitalWrite(c8, HIGH);</span><br><span class="line">        c81 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c82_time &amp;&amp; c82)&#123;</span><br><span class="line">        digitalWrite(c8, LOW);</span><br><span class="line">        c82 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c91_time &amp;&amp; c91)&#123;</span><br><span class="line">        digitalWrite(c9, HIGH);</span><br><span class="line">        c91 = <span class="number">0</span>;&#125;</span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;c92_time &amp;&amp; c92)&#123;</span><br><span class="line">        digitalWrite(c9, LOW);</span><br><span class="line">        c92 = <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(pulseNowTime-pulseStartTime&gt;<span class="number">1000000</span>)&#123;</span><br><span class="line">        Serial.print(<span class="string">&quot;ERROR, time out&quot;</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// not release</span></span><br><span class="line">    <span class="comment">//Serial.println(&quot;releasing&quot;);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//digitalWrite(c5, HIGH);</span></span><br><span class="line">    delay(<span class="number">2000</span>);</span><br><span class="line">    <span class="comment">//digitalWrite(c5, LOW);</span></span><br><span class="line">    Serial.println(<span class="string">&quot;finished&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="电磁运动仿真计算"><a href="#电磁运动仿真计算" class="headerlink" title="电磁运动仿真计算"></a>电磁运动仿真计算</h3><p>maxwell计算结果和coilgun RLC基本一致，但是出现了一些新的问题，由于线圈电流的巨大变化率，会在相邻线圈产生感生电流，可能导致IGBT过压击穿，因此本来计划做15级破百，由于11-15级匝数更少电流更大产生的感生电流过大，因此打算只做10级，速度只能达到70-80。解决这个问题需要改成多路boost，需要重新设计PCB，所以等下一版本再说吧</p>
+<p>经过计算发现，最佳的开启和关断位置是固定的，这一次仿真已经是完全由位置触发得到的了，效果非常好，甚至可以用于估算代码设置的延迟时间</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/Speed.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/Winding.png"></th>
+<th align="center"><img src="/2024/Ultra-high-speed-linear-motor/NodeVoltage.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">运动参数</td>
+<td align="center">线圈电流</td>
+<td align="center">电容电压</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<p>但是线圈电流仿真结果显示线圈匝数的设计还有优化空间，关断时的电流过大，降低了效率和IGBT可靠性</p>
+<p><a href="DCP_maxwell.7z">Maxwell仿真文件</a></p>
+<h3 id="设计优化"><a href="#设计优化" class="headerlink" title="设计优化"></a>设计优化</h3><p>对于线圈，首先应该用较大的匝数进行初始的加速，然后随着速度增加，线圈导通的时间越来越短，因此需要减少电感量来提高响应速度，即减少匝数。因此后级最佳的匝数应逐级减少。</p>
+<p>当IGBT关断时，线圈的电流应该已经过了峰值，并且降低的足够低，这样可以降低电容剩余电压，提高加速度。因此可以根据关断时的电流值确定合适的匝数。如果刚过峰值就关断，就减少线圈的匝数。应该比较好的关断时机是电流峰值的2&#x2F;3到1&#x2F;2</p>
+<p>当速度达到接近100时，由于匝数很小可能导致电感过小电流过大，此时可以降低电容容量，降低峰值电流避免IGBT出现故障</p>
+<p>对于磁阻结构，能量的损耗在于电阻发热和磁场加速损耗，线圈使用更大的线径可以降低电阻，进一步提高效率。实际制造中，更粗的线圈会极大提高手工绕制难度，因此我自己的方案仍然使用0.45mm直径</p>
+<p>线圈直径越大，在缝隙处的损耗就会占比更小，因此拥有更高的效率，我也因此把定位销尺寸从m6改为m8。为了减少缝隙的磁场损耗，缝隙处从1mm厚度的abs和1mm厚度线轴改为0.5mm的不锈钢缠绕高温胶带绝缘。减少缝隙可以极大提高效率。</p>
+<p>根据其他人的实验，AUIRGPS4067D的峰值电流在驱动电压正20负5时，520V560uf100uh大概每隔30s放电一次，800A450us关断，极限测试了50次没有问题。不过保守使用3-500A应该不会有问题</p>
+<h3 id="推挽升压电源"><a href="#推挽升压电源" class="headerlink" title="推挽升压电源"></a>推挽升压电源</h3><p>这种方案使用芯片产生的指定频率的互补的PWM波形控制MOS推挽升压，至少不会停振短路了。我用的是SG3525产生信号然后UCC27324驱动MOS，经过变压器升压，整流后输出高压直流。为了及时关断，使用单片机采集电压控制开关</p>
+<h3 id="全桥恒流谐振"><a href="#全桥恒流谐振" class="headerlink" title="全桥恒流谐振"></a>全桥恒流谐振</h3><p>直接上论文：</p>
+
+
+	<div class="row">
+    <embed src="一种谐振型推挽式直流变换器_袁义生.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+
+<h1 id="特别感谢"><a href="#特别感谢" class="headerlink" title="特别感谢"></a>特别感谢</h1><p><a target="_blank" rel="noopener" href="https://www.kechuang.org/f/367">科创网</a><br><a target="_blank" rel="noopener" href="https://www.jlc.com/">JLC</a><br><strong>QQX</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2024/Ultra-high-speed-linear-motor/">http://triority.cc/2024/Ultra-high-speed-linear-motor/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PCB%E8%AE%BE%E8%AE%A1/">PCB设计</a><a class="post-meta__tags" href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">电力电子</a></div><div class="post_share"><div class="social-share" data-image="/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240720191614.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/foc-driver-finally/" title="FOC电机驱动器项目总结"><img class="cover" src="/img/3ff5fd67c30ac14c014e009861d6d0e.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">FOC电机驱动器项目总结</div></div></a></div><div class="next-post pull-right"><a href="/2024/hexo-post-guide/" title="博客文章编辑发布指南"><img class="cover" src="/img/d7534a8ee77467263a270461f030945.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">博客文章编辑发布指南</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Maxwell%E7%94%B5%E7%A3%81%E5%8A%9B%E8%BF%90%E5%8A%A8%E4%BB%BF%E7%9C%9F"><span class="toc-number">2.</span> <span class="toc-text">Maxwell电磁力运动仿真</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-LEVELS"><span class="toc-number">3.</span> <span class="toc-text">4 LEVELS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8F%82%E6%95%B0"><span class="toc-number">3.1.</span> <span class="toc-text">基本参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ansys-Maxwell%E4%BB%BF%E7%9C%9F"><span class="toc-number">3.2.</span> <span class="toc-text">Ansys Maxwell仿真</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E7%8E%87%E7%94%B5%E8%B7%AF"><span class="toc-number">3.3.</span> <span class="toc-text">功率电路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E5%BA%8F%E6%8E%A7%E5%88%B6"><span class="toc-number">3.4.</span> <span class="toc-text">时序控制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZVS%E5%8D%87%E5%8E%8B%E7%94%B5%E6%BA%90"><span class="toc-number">3.5.</span> <span class="toc-text">ZVS升压电源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#n-5-LEVELS"><span class="toc-number">4.</span> <span class="toc-text">n*5 LEVELS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%B5%E8%B7%AF%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.1.</span> <span class="toc-text">电路设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E5%BA%8F%E6%8E%A7%E5%88%B6-1"><span class="toc-number">4.2.</span> <span class="toc-text">时序控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E7%A8%8B%E5%BA%8F"><span class="toc-number">4.2.1.</span> <span class="toc-text">控制程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B5%E7%A3%81%E8%BF%90%E5%8A%A8%E4%BB%BF%E7%9C%9F%E8%AE%A1%E7%AE%97"><span class="toc-number">4.2.2.</span> <span class="toc-text">电磁运动仿真计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E4%BC%98%E5%8C%96"><span class="toc-number">4.2.3.</span> <span class="toc-text">设计优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E6%8C%BD%E5%8D%87%E5%8E%8B%E7%94%B5%E6%BA%90"><span class="toc-number">4.2.4.</span> <span class="toc-text">推挽升压电源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E6%A1%A5%E6%81%92%E6%B5%81%E8%B0%90%E6%8C%AF"><span class="toc-number">4.2.5.</span> <span class="toc-text">全桥恒流谐振</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%B9%E5%88%AB%E6%84%9F%E8%B0%A2"><span class="toc-number">5.</span> <span class="toc-text">特别感谢</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

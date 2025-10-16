@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>3D打印机加装摄像头并自动合成延时摄影 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="3D打印机加摄像头">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3D打印机加装摄像头并自动合成延时摄影">
+<meta property="og:url" content="http://triority.cc/2023/klipper-camera/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="3D打印机加摄像头">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/klipper.png">
+<meta property="article:published_time" content="2023-08-01T01:08:02.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.004Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="3D打印">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/klipper.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2023/klipper-camera/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '3D打印机加装摄像头并自动合成延时摄影',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/klipper.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">3D打印机加装摄像头并自动合成延时摄影</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2023-08-01T01:08:02.000Z" title="发表于 2023-08-01 01:08:02">2023-08-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2023/klipper-camera/" data-flag-title="3D打印机加装摄像头并自动合成延时摄影"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="网络摄像头程序"><a href="#网络摄像头程序" class="headerlink" title="网络摄像头程序"></a>网络摄像头程序</h1><h2 id="安装mjpg-streamer"><a href="#安装mjpg-streamer" class="headerlink" title="安装mjpg-streamer"></a>安装mjpg-streamer</h2><p>新版kiauh脚本中已包含crowsnest插件，但是我用的上位机是香橙派zero2，实测安装报错，所以改用经典的mjpg-streamer。这个项目没有实现声音传输，而且已经停止了维护(但是关我拍延时摄影有什么关系)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">git clone https://github.com/jacksonliam/mjpg-streamer.git</span><br><span class="line">cd ~/mjpg-streamer/mjpg-streamer-experimental</span><br><span class="line">sudo make all</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在项目目录内有一个<code>start.sh</code>，作为启动脚本，修改其中的启动参数</p>
+<p>以我的为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./mjpg_streamer -i &quot;./input_uvc.so -d /dev/v4l/by-id/usb-SN0002_2K_USB_Camera_46435000_P020300_SN0002-video-index0&quot; -o &quot;./output_http.so -w ./www&quot;</span><br></pre></td></tr></table></figure>
+<p>其实要改的就是摄像头id</p>
+<p>这个命令也可以直接在终端输入，然后打开浏览器查看8080端口网页</p>
+<h2 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h2><p>在<code>/etc/rc.local</code>中，在<code>exit 0</code>前写入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /home/orangepi/mjpg-streamer/</span><br><span class="line">sh start.sh &amp;</span><br><span class="line">cd -</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装Moonraker-timelapse："><a href="#安装Moonraker-timelapse：" class="headerlink" title="安装Moonraker-timelapse："></a>安装Moonraker-timelapse：</h1><p>英文安装参考：<a target="_blank" rel="noopener" href="https://www.obico.io/blog/klipper-timelapse/">https://www.obico.io/blog/klipper-timelapse/</a></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd ~/ </span><br><span class="line">git clone https://github.com/mainsail-crew/moonraker-timelapse.git </span><br><span class="line">cd ~/moonraker-timelapse </span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>在monraker.conf 中最后面加入以下配置(其实不加无所谓)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[update_manager timelapse]</span><br><span class="line">type: git_repo</span><br><span class="line">primary_branch: main</span><br><span class="line">path: ~/moonraker-timelapse</span><br><span class="line">origin: https://github.com/mainsail-crew/moonraker-timelapse.git managed_services: klipper moonraker</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h2><p>配置参考：<a target="_blank" rel="noopener" href="https://github.com/mainsail-crew/moonraker-timelapse/blob/main/docs/configuration.md">https://github.com/mainsail-crew/moonraker-timelapse/blob/main/docs/configuration.md</a></p>
+<h3 id="在printer-cfg中引用timelapse-cfg文件"><a href="#在printer-cfg中引用timelapse-cfg文件" class="headerlink" title="在printer.cfg中引用timelapse.cfg文件"></a>在printer.cfg中引用timelapse.cfg文件</h3><p>打开<code>printer.cfg</code>文件在文件开始的地方加入以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[include timelapse.cfg]</span><br></pre></td></tr></table></figure>
+<p>如果打印机因为找不到这个文件而报错，可以直接在<code>printer.cfg</code>的文件夹内创建新文件写入以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br></pre></td><td class="code"><pre><span class="line"># MKS Gen l V2.1</span><br><span class="line"></span><br><span class="line">[stepper_x]</span><br><span class="line">step_pin: PF0</span><br><span class="line">dir_pin: PF1</span><br><span class="line">enable_pin: !PD7</span><br><span class="line">microsteps: 16</span><br><span class="line">rotation_distance: 40   ##rotation_distance = ((360°/1.8°) * microsteps) / 80 # # 旋转距离 = （圆周360°/步距角）*细分/每MM脉冲值</span><br><span class="line">endstop_pin:^!PE5 #X-Min, PE4:X-Max</span><br><span class="line">position_endstop: 0</span><br><span class="line">position_max: 290</span><br><span class="line">homing_speed: 60</span><br><span class="line"></span><br><span class="line">[stepper_y]</span><br><span class="line">step_pin: PF6</span><br><span class="line">dir_pin: PF7</span><br><span class="line">enable_pin: !PF2</span><br><span class="line">microsteps: 16</span><br><span class="line">rotation_distance: 40</span><br><span class="line">endstop_pin:^!PJ1  #Y-Min, PJ0:Y-Max</span><br><span class="line">position_endstop: 0</span><br><span class="line">position_max: 190</span><br><span class="line">homing_speed: 60</span><br><span class="line"></span><br><span class="line">[stepper_z]</span><br><span class="line">step_pin: PL3</span><br><span class="line">dir_pin: !PL1</span><br><span class="line">enable_pin: !PK0</span><br><span class="line">microsteps: 16</span><br><span class="line">rotation_distance: 8</span><br><span class="line">endstop_pin: probe:z_virtual_endstop  #Z-Min, PD2:Z-Max</span><br><span class="line">position_max: 285</span><br><span class="line">position_min: -3</span><br><span class="line">homing_speed: 20</span><br><span class="line"></span><br><span class="line">[extruder]</span><br><span class="line">step_pin: PA4</span><br><span class="line">dir_pin: PA6</span><br><span class="line">enable_pin: !PA2</span><br><span class="line">microsteps: 16</span><br><span class="line">rotation_distance: 7.85</span><br><span class="line">nozzle_diameter: 0.4</span><br><span class="line">filament_diameter: 1.750</span><br><span class="line">heater_pin: PB4</span><br><span class="line">sensor_type: ATC Semitec 104GT-2</span><br><span class="line">sensor_pin: PK5</span><br><span class="line">min_temp: 0</span><br><span class="line">max_temp: 270</span><br><span class="line">#control: pid</span><br><span class="line">#pid_Kp: 21.438</span><br><span class="line">#pid_Ki: 0.888</span><br><span class="line">#pid_Kd: 129.435</span><br><span class="line">max_extrude_only_distance: 50000.0</span><br><span class="line">max_extrude_only_velocity: 40</span><br><span class="line"></span><br><span class="line">[verify_heater extruder]</span><br><span class="line">max_error: 120</span><br><span class="line">hysteresis: 10</span><br><span class="line">check_gain_time: 20</span><br><span class="line">heating_gain: 1</span><br><span class="line"></span><br><span class="line">[led LED]</span><br><span class="line">white_pin: PH4</span><br><span class="line">hardware_pwm: True</span><br><span class="line"></span><br><span class="line">#[extruder_stepper extra_stepper]</span><br><span class="line">#step_pin: PC1</span><br><span class="line">#dir_pin: !PC3</span><br><span class="line">#enable_pin: !PC7</span><br><span class="line">#microsteps: 16</span><br><span class="line">#rotation_distance: 8</span><br><span class="line">#endstop_pin: ^!PE4</span><br><span class="line">#position_endstop: 0</span><br><span class="line">#position_max: 250</span><br><span class="line">#position_min: -3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[heater_bed]</span><br><span class="line">heater_pin: PH5</span><br><span class="line">sensor_type: ATC Semitec 104GT-2</span><br><span class="line">sensor_pin: PK6</span><br><span class="line">min_temp: -100</span><br><span class="line">max_temp: 180</span><br><span class="line">#control: pid</span><br><span class="line">#pid_kp = 74.551</span><br><span class="line">#pid_ki = 1.053</span><br><span class="line">#pid_kd = 1319.559</span><br><span class="line"></span><br><span class="line">[verify_heater heater_bed]</span><br><span class="line">max_error: 12000</span><br><span class="line">hysteresis: 30</span><br><span class="line">check_gain_time: 300</span><br><span class="line">heating_gain: 1</span><br><span class="line"></span><br><span class="line">[fan]</span><br><span class="line">pin: PH6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[mcu]</span><br><span class="line">serial:/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[printer]</span><br><span class="line">kinematics: corexy</span><br><span class="line">max_velocity: 180</span><br><span class="line">max_accel: 3000</span><br><span class="line">max_z_velocity: 20</span><br><span class="line">max_z_accel: 300</span><br><span class="line">square_corner_velocity: 10.0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[virtual_sdcard]</span><br><span class="line">path: ~/gcode_files</span><br><span class="line"></span><br><span class="line">[pause_resume]</span><br><span class="line"></span><br><span class="line">[gcode_macro CANCEL_PRINT]</span><br><span class="line">description: Cancel the actual running print</span><br><span class="line">rename_existing: CANCEL_PRINT_BASE</span><br><span class="line">gcode:</span><br><span class="line">  TURN_OFF_HEATERS</span><br><span class="line">  CANCEL_PRINT_BASE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[display_status]</span><br><span class="line"></span><br><span class="line">[bltouch]</span><br><span class="line">sensor_pin: ^PD2</span><br><span class="line">control_pin: PB5</span><br><span class="line">x_offset: -9</span><br><span class="line">y_offset: -51</span><br><span class="line">z_offset: 1.6</span><br><span class="line">speed: 5.0</span><br><span class="line">samples: 2</span><br><span class="line">samples_result: median</span><br><span class="line">sample_retract_dist: 3.0</span><br><span class="line">samples_tolerance: 0.1</span><br><span class="line">samples_tolerance_retries: 1</span><br><span class="line"></span><br><span class="line">[safe_z_home]</span><br><span class="line">home_xy_position: 150,100 # Change coordinates to the center of your print bed</span><br><span class="line">speed: 60</span><br><span class="line">z_hop: 20                 # Move up 10mm</span><br><span class="line">z_hop_speed: 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[gcode_macro G29]</span><br><span class="line">gcode:</span><br><span class="line">    BED_MESH_CLEAR</span><br><span class="line">    G28</span><br><span class="line">    BED_MESH_CALIBRATE</span><br><span class="line">    BED_MESH_PROFILE SAVE=name</span><br><span class="line">    SAVE_CONFIG</span><br><span class="line">    BED_MESH_PROFILE LOAD=name</span><br><span class="line"></span><br><span class="line">[bed_mesh]</span><br><span class="line">speed: 120</span><br><span class="line">horizontal_move_z: 10</span><br><span class="line">mesh_min:60,30</span><br><span class="line">mesh_max:240,130</span><br><span class="line">probe_count: 4,3</span><br><span class="line"></span><br><span class="line">[include timelapse.cfg]</span><br><span class="line"></span><br><span class="line">#*# &lt;---------------------- SAVE_CONFIG ----------------------&gt;</span><br><span class="line">#*# DO NOT EDIT THIS BLOCK OR BELOW. The contents are auto-generated.</span><br><span class="line">#*#</span><br><span class="line">#*# [bed_mesh default]</span><br><span class="line">#*# version = 1</span><br><span class="line">#*# points =</span><br><span class="line">#*# 	  0.193750, 0.031250, -0.095000, -0.193750</span><br><span class="line">#*# 	  0.285000, 0.115000, -0.023750, -0.127500</span><br><span class="line">#*# 	  0.388750, 0.185000, 0.052500, -0.026250</span><br><span class="line">#*# tension = 0.2</span><br><span class="line">#*# min_x = 60.0</span><br><span class="line">#*# algo = lagrange</span><br><span class="line">#*# y_count = 3</span><br><span class="line">#*# mesh_y_pps = 2</span><br><span class="line">#*# min_y = 30.0</span><br><span class="line">#*# x_count = 4</span><br><span class="line">#*# max_y = 130.0</span><br><span class="line">#*# mesh_x_pps = 2</span><br><span class="line">#*# max_x = 240.0</span><br><span class="line">#*#</span><br><span class="line">#*# [extruder]</span><br><span class="line">#*# control = pid</span><br><span class="line">#*# pid_kp = 18.922</span><br><span class="line">#*# pid_ki = 1.078</span><br><span class="line">#*# pid_kd = 83.021</span><br><span class="line">#*#</span><br><span class="line">#*# [heater_bed]</span><br><span class="line">#*# control = pid</span><br><span class="line">#*# pid_kp = 10000000</span><br><span class="line">#*# pid_ki = 0</span><br><span class="line">#*# pid_kd = 0</span><br><span class="line">#*#</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="设定切片软件"><a href="#设定切片软件" class="headerlink" title="设定切片软件"></a>设定切片软件</h3><p>打印机设定-&gt;自定义G-code -&gt; 图层更改后 G-Code,框中加入：TIMELAPSE_TAKE_FRAME</p>
+<h3 id="moonraker-conf文件中配置："><a href="#moonraker-conf文件中配置：" class="headerlink" title="moonraker.conf文件中配置："></a>moonraker.conf文件中配置：</h3><p>打开moonraker.conf文件中添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">[timelapse]</span><br><span class="line">##   Following basic configuration is default to most images and don&#x27;t need</span><br><span class="line">##   to be changed in most scenarios. Only uncomment and change it if your</span><br><span class="line">##   Image differ from standart installations. In most common scenarios</span><br><span class="line">##   a User only need [timelapse] in there configuration.</span><br><span class="line">#output_path: ~/timelapse/      #文件输出路径 </span><br><span class="line">##   Directory where the generated video will be saved</span><br><span class="line">#frame_path: /tmp/timelapse/   #项目临时存放路径 </span><br><span class="line">##   Directory where the temporary frames are saved</span><br><span class="line">#ffmpeg_binary_path: /usr/bin/ffmpeg</span><br><span class="line">##   Directory where ffmpeg is installed #编译器路径 </span><br><span class="line">########配置选项说明########</span><br><span class="line">#enabled: True #是否启用时间延时摄影</span><br><span class="line">#mode: layermacro #此模式使用宏来触发抓取帧，但需要设置切片器才能在图层更改时添加GCODE</span><br><span class="line">#snapshoturl: http://localhost:8080/?action=snapshot #摄像头调用地址</span><br><span class="line">#gcode_verbose: True # “true”启用或“false”禁用宏的详细程度 </span><br><span class="line">#parkhead: False # “true”启用或“false”禁用在拍摄帧之前移动打印头。 </span><br><span class="line">#parkpos: back_left  #这定义了在拍摄相框之前将打印头停放的位置。可能的配置是[center, front_left, front_right, back_left, back_right, custom]</span><br><span class="line">#如果选择了custom想要自定义打印头驻留的位置可以设置下面的参数</span><br><span class="line">#park_custom_pos_x: 0.0  #自定义打印头驻留的绝对 X 坐标（单位 mm） </span><br><span class="line">#park_custom_pos_y: 0.0 #自定义打印头驻留的绝对 Y 坐标（单位 mm）</span><br><span class="line">#park_custom_pos_dz: 0.0 # 自定义打印头驻留的相对 Y 坐标（单位 mm） </span><br><span class="line">#park_travel_speed: 100 #驻留时打印头移动速度（单位毫米/秒</span><br><span class="line">#park_retract_speed: 15  #驻留时缩回速度（单位毫米/秒） </span><br><span class="line">#park_extrude_speed: 15 # 恢复打印时挤出的速度（单位毫米/秒） </span><br><span class="line">#park_retract_distance: 1.0 # 回抽来以防止渗出的距离（单位毫米） </span><br><span class="line">#park_extrude_distance: 1.0 # 恢复打印之前挤出以填充喷嘴的距离（单位 mm） </span><br><span class="line">#hyperlapse_cycle: 30 #定义在超延时模式下拍摄帧的时间间隔</span><br><span class="line">#autorender: True # “true”启用或“false”禁用打印结束时渲染过程的自动触发。或者，您可以使用最终 gcode 中的“TIMELAPSE_RENDER”或渲染 http 终端节点（可能集成到前端）来触发渲染过程。 </span><br><span class="line">#constant_rate_factor: 23 # 这将配置渲染视频的质量与文件大小。CRF 刻度的范围是 0–51，其中 0 表示无损，23 表示默认值，51 表示质量最差。较低的值通常会导致较高的质量，主观上合理的范围为17-28。将 17 或 18 视为视觉上无损。更多信息：  https://trac.ffmpeg.org/wiki/Encode/H.264 F</span><br><span class="line">#output_framerate: 30 # 定义视频的帧速率。（每秒单位帧数）注意：如果启用了variable_fps，这将被忽略。 </span><br><span class="line">#pixelformat: yuv420p # 定义输出视频的像素格式。一些较旧的h264设备，如手机和其他设备需要“ yuv420p”，这是默认的延时组件。要获取哪些像素格式可用的更多信息，请在系统控制台中运行“ffmpeg -pix_fmts”或参考 ffmpeg 文档：  https://ffmpeg.org/ffmpeg.html </span><br><span class="line">#time_format_code: %Y%m%d_%H%M # 这定义了应如何命名呈现的视频。它使用 python 日期时间格式。默认值为“%Y%m%d_%H%M”。有关日期时间格式的更多信息，请参阅  此处 https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes </span><br><span class="line">#extraoutputparams:   定义FFMPEG的额外输出参数 更多信息：   https://ffmpeg.org/ffmpeg.html   注意：在这里指定任何内容可能会禁用其他功能！（ffmpeg 限制） </span><br><span class="line">#variable_fps: False # “true”启用或“false”禁用输出帧速率的变量计算。这使用拍摄的帧数和“目标长度”，但受“variable_fps_min”和“variable_fps_max”设置的限制。</span><br><span class="line">#targetlength: 10 定义视频的目标长度（单位秒）</span><br><span class="line">#variable_fps_min: 5  variable_fps的最小 fps（每秒帧数）。 </span><br><span class="line">#variable_fps_max: 60 variable_fps的最大 fps（每秒帧数）。</span><br><span class="line">#flip_x: False</span><br><span class="line">#flip_y: False</span><br><span class="line">#duplicatelastframe: 0 #将最后一帧复制到输出视频的末尾。</span><br><span class="line">#previewimage: True #“true”启用或“false”禁用最后一帧来生成预览缩略图</span><br><span class="line">#saveframes: False #“True”启用或“False”禁用将帧打包到 zip 文件以供外部使用或呈现。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其实大部分设置都用不到，这是我的配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[timelapse]</span><br><span class="line">parkhead: True</span><br><span class="line">parkpos: custom</span><br><span class="line">park_custom_pos_x: 2.0</span><br><span class="line">park_custom_pos_y: 2.0</span><br><span class="line">park_custom_pos_dz: 0.0</span><br><span class="line">park_travel_speed: 90</span><br><span class="line">park_retract_speed: 25</span><br><span class="line">park_extrude_speed: 25</span><br><span class="line">park_retract_distance: 3.0</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2023/klipper-camera/">http://triority.cc/2023/klipper-camera/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/3D%E6%89%93%E5%8D%B0/">3D打印</a></div><div class="post_share"><div class="social-share" data-image="/img/klipper.png" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/minecraft-server-guide/" title="Java版Minecraft服务器搭建指南ALL In One"><img class="cover" src="/img/RUN.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java版Minecraft服务器搭建指南ALL In One</div></div></a></div><div class="next-post pull-right"><a href="/2023/n2n-vlan/" title="使用n2n搭建私有vlan"><img class="cover" src="/img/RUN.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用n2n搭建私有vlan</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%91%84%E5%83%8F%E5%A4%B4%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">网络摄像头程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85mjpg-streamer"><span class="toc-number">1.1.</span> <span class="toc-text">安装mjpg-streamer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">设置开机启动</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Moonraker-timelapse%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">安装Moonraker-timelapse：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="toc-number">2.2.</span> <span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8printer-cfg%E4%B8%AD%E5%BC%95%E7%94%A8timelapse-cfg%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.1.</span> <span class="toc-text">在printer.cfg中引用timelapse.cfg文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A%E5%88%87%E7%89%87%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.2.2.</span> <span class="toc-text">设定切片软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#moonraker-conf%E6%96%87%E4%BB%B6%E4%B8%AD%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">2.2.3.</span> <span class="toc-text">moonraker.conf文件中配置：</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

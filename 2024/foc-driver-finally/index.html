@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>FOC电机驱动器项目总结 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="simplefoc驱动all in one">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FOC电机驱动器项目总结">
+<meta property="og:url" content="http://triority.cc/2024/foc-driver-finally/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="simplefoc驱动all in one">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/3ff5fd67c30ac14c014e009861d6d0e.jpg">
+<meta property="article:published_time" content="2024-07-02T14:05:33.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.463Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="PCB设计">
+<meta property="article:tag" content="电力电子">
+<meta property="article:tag" content="esp32">
+<meta property="article:tag" content="单片机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/3ff5fd67c30ac14c014e009861d6d0e.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2024/foc-driver-finally/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'FOC电机驱动器项目总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/3ff5fd67c30ac14c014e009861d6d0e.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">FOC电机驱动器项目总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-07-02T14:05:33.000Z" title="发表于 2024-07-02 14:05:33">2024-07-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/">值得一提的文章</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%80%BC%E5%BE%97%E4%B8%80%E6%8F%90%E7%9A%84%E6%96%87%E7%AB%A0/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/%E4%BD%9C%E5%93%81-%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">作品&amp;项目总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2024/foc-driver-finally/" data-flag-title="FOC电机驱动器项目总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="小功率主控驱动集成设计"><a href="#小功率主控驱动集成设计" class="headerlink" title="小功率主控驱动集成设计"></a>小功率主控驱动集成设计</h1><p>PCB专为4010&#x2F;4008无刷云台电机设计，集成了esp32主控，drv8313驱动，as5600磁编码器，can总线通讯控制，ina240在线三相电流采样放大(这部分独立出来可选插装，因为这个芯片太贵了而且不是每个板子都用)</p>
+<h2 id="硬件设计"><a href="#硬件设计" class="headerlink" title="硬件设计"></a>硬件设计</h2><h3 id="原理图下载"><a href="#原理图下载" class="headerlink" title="原理图下载"></a>原理图<a href="ProDoc_P1_2024-07-02.epro">下载</a></h3>
+
+	<div class="row">
+    <embed src="SCH_Schematic1_1_2024-07-02.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+
+<h3 id="PCB下载"><a href="#PCB下载" class="headerlink" title="PCB下载"></a>PCB<a href="ProDoc_PCB5_2024-07-02.epro">下载</a></h3><p><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702154730.png"></p>
+<h3 id="3D及实物"><a href="#3D及实物" class="headerlink" title="3D及实物"></a>3D及实物</h3><h4 id="底板"><a href="#底板" class="headerlink" title="底板"></a>底板</h4><table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702155112.png"></th>
+<th align="center"><img src="/2024/foc-driver-finally/3ff5fd67c30ac14c014e009861d6d0e.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">3D</td>
+<td align="center">照片</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<h4 id="电流检测插件"><a href="#电流检测插件" class="headerlink" title="电流检测插件"></a>电流检测插件</h4><table>
+<thead>
+<tr>
+<th align="center">原理图</th>
+<th align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702160102.png"></th>
+<th align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702160152.png"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">PCB</td>
+<td align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702155918.png"></td>
+<td align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702155932.png"></td>
+</tr>
+<tr>
+<td align="center">说明</td>
+<td align="center"><a href="ProDoc_PCB2_2024-07-02.epro">SOIC8封装的INA240A2DR</a></td>
+<td align="center"><a href="ProDoc_PCB2_1_2024-07-02.epro">TSSOP8封装的INA240A2PWR</a></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<h2 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h2><div class="note info modern"><p>这部分使用simplefoc，对硬件进行简单测试用。实际项目中使用的代码可以在项目的文章中找到</p>
+</div>
+
+<h3 id="位置闭环控制"><a href="#位置闭环控制" class="headerlink" title="位置闭环控制"></a>位置闭环控制</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SimpleFOC.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MagneticSensorI2C sensor = MagneticSensorI2C(AS5600_I2C);</span><br><span class="line"></span><br><span class="line"><span class="comment">// BLDC motor &amp; driver instance</span></span><br><span class="line">BLDCMotor motor = BLDCMotor(<span class="number">11</span>);</span><br><span class="line">BLDCDriver3PWM driver = BLDCDriver3PWM(<span class="number">25</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">14</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// angle set point variable</span></span><br><span class="line"><span class="type">float</span> target_angle = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// instantiate the commander</span></span><br><span class="line">Commander command = Commander(Serial);</span><br><span class="line"><span class="type">void</span> <span class="title function_">doTarget</span><span class="params">(<span class="type">char</span>* cmd)</span> &#123; command.scalar(&amp;target_angle, cmd); &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialise magnetic sensor hardware</span></span><br><span class="line">  sensor.init();</span><br><span class="line">  <span class="comment">// link the motor to the sensor</span></span><br><span class="line">  motor.linkSensor(&amp;sensor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// driver config</span></span><br><span class="line">  <span class="comment">// power supply voltage [V]</span></span><br><span class="line">  driver.voltage_power_supply = <span class="number">12</span>;</span><br><span class="line">  driver.init();</span><br><span class="line">  <span class="comment">// link the motor and the driver</span></span><br><span class="line">  motor.linkDriver(&amp;driver);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// choose FOC modulation (optional)</span></span><br><span class="line">  motor.foc_modulation = FOCModulationType::SpaceVectorPWM;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set motion control loop to be used</span></span><br><span class="line">  motor.controller = MotionControlType::angle;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// contoller configuration</span></span><br><span class="line">  <span class="comment">// default parameters in defaults.h</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// velocity PI controller parameters</span></span><br><span class="line">  motor.PID_velocity.P = <span class="number">0.2f</span>;</span><br><span class="line">  motor.PID_velocity.I = <span class="number">20</span>;</span><br><span class="line">  motor.PID_velocity.D = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// maximal voltage to be set to the motor</span></span><br><span class="line">  motor.voltage_limit = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// velocity low pass filtering time constant</span></span><br><span class="line">  <span class="comment">// the lower the less filtered</span></span><br><span class="line">  motor.LPF_velocity.Tf = <span class="number">0.01f</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// angle P controller</span></span><br><span class="line">  motor.P_angle.P = <span class="number">20</span>;</span><br><span class="line">  <span class="comment">// maximal velocity of the position control</span></span><br><span class="line">  motor.velocity_limit = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// use monitoring with serial</span></span><br><span class="line">  Serial.begin(<span class="number">115200</span>);</span><br><span class="line">  <span class="comment">// comment out if not needed</span></span><br><span class="line">  motor.useMonitoring(Serial);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialize motor</span></span><br><span class="line">  motor.init();</span><br><span class="line">  <span class="comment">// align sensor and start FOC</span></span><br><span class="line">  motor.initFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add target command T</span></span><br><span class="line">  command.add(<span class="string">&#x27;T&#x27;</span>, doTarget, <span class="string">&quot;target angle&quot;</span>);</span><br><span class="line"></span><br><span class="line">  Serial.println(F(<span class="string">&quot;Motor ready.&quot;</span>));</span><br><span class="line">  Serial.println(F(<span class="string">&quot;Set the target angle using serial terminal:&quot;</span>));</span><br><span class="line">  _delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// main FOC algorithm function</span></span><br><span class="line">  <span class="comment">// the faster you run this function the better</span></span><br><span class="line">  <span class="comment">// Arduino UNO loop  ~1kHz</span></span><br><span class="line">  <span class="comment">// Bluepill loop ~10kHz</span></span><br><span class="line">  motor.loopFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Motion control function</span></span><br><span class="line">  <span class="comment">// velocity, position or voltage (defined in motor.controller)</span></span><br><span class="line">  <span class="comment">// this function can be run at much lower frequency than loopFOC() function</span></span><br><span class="line">  <span class="comment">// You can also use motor.move() and set the motor.target in the code</span></span><br><span class="line">  motor.move(target_angle);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment">// function intended to be used with serial plotter to monitor motor variables</span></span><br><span class="line">  <span class="comment">// significantly slowing the execution down!!!!</span></span><br><span class="line">  <span class="comment">// motor.monitor();</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// user communication</span></span><br><span class="line">  command.run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="速度闭环控制"><a href="#速度闭环控制" class="headerlink" title="速度闭环控制"></a>速度闭环控制</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SimpleFOC.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">MagneticSensorI2C sensor = MagneticSensorI2C(AS5600_I2C);</span><br><span class="line"></span><br><span class="line"><span class="comment">// BLDC motor &amp; driver instance</span></span><br><span class="line">BLDCMotor motor = BLDCMotor(<span class="number">11</span>);</span><br><span class="line">BLDCDriver3PWM driver = BLDCDriver3PWM(<span class="number">25</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">14</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// velocity set point variable</span></span><br><span class="line"><span class="type">float</span> target_velocity = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// instantiate the commander</span></span><br><span class="line">Commander command = Commander(Serial);</span><br><span class="line"><span class="type">void</span> <span class="title function_">doTarget</span><span class="params">(<span class="type">char</span>* cmd)</span> &#123; command.scalar(&amp;target_velocity, cmd); &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialise magnetic sensor hardware</span></span><br><span class="line">  sensor.init();</span><br><span class="line">  <span class="comment">// link the motor to the sensor</span></span><br><span class="line">  motor.linkSensor(&amp;sensor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// driver config</span></span><br><span class="line">  <span class="comment">// power supply voltage [V]</span></span><br><span class="line">  driver.voltage_power_supply = <span class="number">12</span>;</span><br><span class="line">  driver.init();</span><br><span class="line">  <span class="comment">// link the motor and the driver</span></span><br><span class="line">  motor.linkDriver(&amp;driver);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set motion control loop to be used</span></span><br><span class="line">  motor.controller = MotionControlType::velocity;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// contoller configuration</span></span><br><span class="line">  <span class="comment">// default parameters in defaults.h</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// velocity PI controller parameters</span></span><br><span class="line">  motor.PID_velocity.P = <span class="number">0.2f</span>;</span><br><span class="line">  motor.PID_velocity.I = <span class="number">20</span>;</span><br><span class="line">  motor.PID_velocity.D = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// default voltage_power_supply</span></span><br><span class="line">  motor.voltage_limit = <span class="number">6</span>;</span><br><span class="line">  <span class="comment">// jerk control using voltage voltage ramp</span></span><br><span class="line">  <span class="comment">// default value is 300 volts per sec  ~ 0.3V per millisecond</span></span><br><span class="line">  motor.PID_velocity.output_ramp = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// velocity low pass filtering</span></span><br><span class="line">  <span class="comment">// default 5ms - try different values to see what is the best.</span></span><br><span class="line">  <span class="comment">// the lower the less filtered</span></span><br><span class="line">  motor.LPF_velocity.Tf = <span class="number">0.01f</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// use monitoring with serial</span></span><br><span class="line">  Serial.begin(<span class="number">115200</span>);</span><br><span class="line">  <span class="comment">// comment out if not needed</span></span><br><span class="line">  motor.useMonitoring(Serial);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialize motor</span></span><br><span class="line">  motor.init();</span><br><span class="line">  <span class="comment">// align sensor and start FOC</span></span><br><span class="line">  motor.initFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add target command T</span></span><br><span class="line">  command.add(<span class="string">&#x27;T&#x27;</span>, doTarget, <span class="string">&quot;target velocity&quot;</span>);</span><br><span class="line"></span><br><span class="line">  Serial.println(F(<span class="string">&quot;Motor ready.&quot;</span>));</span><br><span class="line">  Serial.println(F(<span class="string">&quot;Set the target velocity using serial terminal:&quot;</span>));</span><br><span class="line">  _delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="comment">// main FOC algorithm function</span></span><br><span class="line">  <span class="comment">// the faster you run this function the better</span></span><br><span class="line">  <span class="comment">// Arduino UNO loop  ~1kHz</span></span><br><span class="line">  <span class="comment">// Bluepill loop ~10kHz</span></span><br><span class="line">  motor.loopFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Motion control function</span></span><br><span class="line">  <span class="comment">// velocity, position or voltage (defined in motor.controller)</span></span><br><span class="line">  <span class="comment">// this function can be run at much lower frequency than loopFOC() function</span></span><br><span class="line">  <span class="comment">// You can also use motor.move() and set the motor.target in the code</span></span><br><span class="line">  motor.move(target_velocity);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// function intended to be used with serial plotter to monitor motor variables</span></span><br><span class="line">  <span class="comment">// significantly slowing the execution down!!!!</span></span><br><span class="line">  <span class="comment">// motor.monitor();</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// user communication</span></span><br><span class="line">  command.run();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="力矩-foc电流-闭环控制"><a href="#力矩-foc电流-闭环控制" class="headerlink" title="力矩(foc电流)闭环控制"></a>力矩(foc电流)闭环控制</h3><p><img src="https://docs.simplefoc.com/extras/Images/foc_current_mode.png"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SimpleFOC.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// BLDC motor &amp; driver instance</span></span><br><span class="line">BLDCMotor motor = BLDCMotor(<span class="number">11</span>);</span><br><span class="line">BLDCDriver3PWM driver = BLDCDriver3PWM(<span class="number">25</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">14</span>);</span><br><span class="line"></span><br><span class="line">MagneticSensorI2C sensor = MagneticSensorI2C(AS5600_I2C);</span><br><span class="line"></span><br><span class="line"><span class="comment">// current sensor</span></span><br><span class="line">InlineCurrentSense current_sense = InlineCurrentSense(<span class="number">0.01f</span>, <span class="number">50.0f</span>, <span class="number">34</span>, <span class="number">35</span>, <span class="number">36</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// instantiate the commander.2</span></span><br><span class="line"></span><br><span class="line">Commander command = Commander(Serial);</span><br><span class="line"><span class="type">void</span> <span class="title function_">doTarget</span><span class="params">(<span class="type">char</span>* cmd)</span> &#123; command.scalar(&amp;motor.target, cmd); &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123; </span><br><span class="line">  <span class="comment">// initialise magnetic sensor hardware</span></span><br><span class="line">  sensor.init();</span><br><span class="line">  <span class="comment">// link the motor to the sensora</span></span><br><span class="line">  motor.linkSensor(&amp;sensor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// driver config</span></span><br><span class="line">  <span class="comment">// power supply voltage [V]</span></span><br><span class="line">  driver.voltage_power_supply = <span class="number">18</span>;</span><br><span class="line">  driver.init();</span><br><span class="line">  <span class="comment">// link driver</span></span><br><span class="line">  motor.linkDriver(&amp;driver);</span><br><span class="line">  <span class="comment">// link the driver to the current sense</span></span><br><span class="line">  current_sense.linkDriver(&amp;driver);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// current sense init hardware</span></span><br><span class="line">  current_sense.init();</span><br><span class="line">  <span class="comment">// link the current sense to the motor</span></span><br><span class="line">  motor.linkCurrentSense(&amp;current_sense);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// set torque mode:</span></span><br><span class="line">  motor.torque_controller = TorqueControlType::foc_current; </span><br><span class="line">  <span class="comment">// set motion control loop to be used</span></span><br><span class="line">  motor.controller = MotionControlType::torque;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// foc current control parameters (Arduino UNO/Mega)</span></span><br><span class="line">  motor.PID_current_q.P = <span class="number">5</span>;</span><br><span class="line">  motor.PID_current_q.I= <span class="number">300</span>;</span><br><span class="line">  motor.PID_current_d.P= <span class="number">5</span>;</span><br><span class="line">  motor.PID_current_d.I = <span class="number">300</span>;</span><br><span class="line">  motor.LPF_current_q.Tf = <span class="number">0.01</span>; </span><br><span class="line">  motor.LPF_current_d.Tf = <span class="number">0.01</span>; </span><br><span class="line"></span><br><span class="line">  <span class="comment">// use monitoring with serial </span></span><br><span class="line">  Serial.begin(<span class="number">115200</span>);</span><br><span class="line">  <span class="comment">// comment out if not needed</span></span><br><span class="line">  motor.useMonitoring(Serial);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// initialize motor</span></span><br><span class="line">  motor.init();</span><br><span class="line">  <span class="comment">// align sensor and start FOC</span></span><br><span class="line">  motor.initFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add target command T</span></span><br><span class="line">  command.add(<span class="string">&#x27;T&#x27;</span>, doTarget, <span class="string">&quot;target current&quot;</span>);</span><br><span class="line"></span><br><span class="line">  Serial.println(F(<span class="string">&quot;Motor ready.&quot;</span>));</span><br><span class="line">  _delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// main FOC algorithm function</span></span><br><span class="line">  motor.loopFOC();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Motion control function</span></span><br><span class="line">  motor.move();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// user communication</span></span><br><span class="line">  command.run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>2023年电赛期间，当时虽然还没做力矩闭环，但是已经完成的位置闭环已经足够完成E类控制题了，当时用的网上买来的数字舵机精度不满足要求(激光笔云台3m外指向精度1cm以内),当场用两个4010做了个新云台，精度不知道高了几个数量级</p>
+<p>到写这篇总结时候虽然已经过去一年了，但是东西还在，随手拿起来拍张照片吧，电赛那四天三夜也是很难忘的经历了</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/foc-driver-finally/21b15661c5ad6a7de24ad9e7f6cc525.jpg"></th>
+<th align="center">当时做的两轴激光笔云台，集成esp32,as5600,drv8313，当时还没做好电流检测，精度的限制已经不在于执行硬件了，变成激光定位算法了。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<h1 id="大功率驱动设计"><a href="#大功率驱动设计" class="headerlink" title="大功率驱动设计"></a>大功率驱动设计</h1><p>这个驱动没有集成主控需要输入三相PWM信号进行控制</p>
+<h2 id="原理图下载-1"><a href="#原理图下载-1" class="headerlink" title="原理图下载"></a>原理图<a href="SCH_EG2104+NCE6080_2024-07-02.json">下载</a></h2>
+
+	<div class="row">
+    <embed src="Schematic_EG2104+NCE6080_2024-07-02.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+
+<h2 id="PCB下载-1"><a href="#PCB下载-1" class="headerlink" title="PCB下载"></a>PCB<a href="PCB_PCB_EG2104+NCE6080_2_2024-07-02.json">下载</a></h2><p><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702152608.png"></p>
+<h2 id="3D及实物-1"><a href="#3D及实物-1" class="headerlink" title="3D及实物"></a>3D及实物</h2><table>
+<thead>
+<tr>
+<th align="center"><img src="/2024/foc-driver-finally/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240702152849.png"></th>
+<th align="center"><img src="/2024/foc-driver-finally/3d9015afaf27f26da5a2927097fa7ce.jpg"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">3D</td>
+<td align="center">照片</td>
+</tr>
+<tr>
+<td align="center"><img width=2000/></td>
+<td align="center"><img width=2000/></td>
+</tr>
+</tbody></table>
+<h1 id="特别感谢"><a href="#特别感谢" class="headerlink" title="特别感谢"></a>特别感谢</h1><p><a target="_blank" rel="noopener" href="https://www.simplefoc.com/">Simplefoc Project</a><br><a target="_blank" rel="noopener" href="https://www.jlc.com/">JLC</a><br>2023年电赛电源组学长，QQX</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2024/foc-driver-finally/">http://triority.cc/2024/foc-driver-finally/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PCB%E8%AE%BE%E8%AE%A1/">PCB设计</a><a class="post-meta__tags" href="/tags/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/">电力电子</a><a class="post-meta__tags" href="/tags/esp32/">esp32</a><a class="post-meta__tags" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">单片机</a></div><div class="post_share"><div class="social-share" data-image="/img/3ff5fd67c30ac14c014e009861d6d0e.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/minecraft-server-launcher/" title="非常离谱的MC服务端启动程序"><img class="cover" src="/img/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240520212634.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">非常离谱的MC服务端启动程序</div></div></a></div><div class="next-post pull-right"><a href="/2024/Ultra-high-speed-linear-motor/" title="超高速直线电机"><img class="cover" src="/img/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240720191614.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">超高速直线电机</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E5%8A%9F%E7%8E%87%E4%B8%BB%E6%8E%A7%E9%A9%B1%E5%8A%A8%E9%9B%86%E6%88%90%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">小功率主控驱动集成设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">硬件设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理图下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PCB%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.1.2.</span> <span class="toc-text">PCB下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3D%E5%8F%8A%E5%AE%9E%E7%89%A9"><span class="toc-number">1.1.3.</span> <span class="toc-text">3D及实物</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%95%E6%9D%BF"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">底板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E6%B5%81%E6%A3%80%E6%B5%8B%E6%8F%92%E4%BB%B6"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">电流检测插件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E9%97%AD%E7%8E%AF%E6%8E%A7%E5%88%B6"><span class="toc-number">1.2.1.</span> <span class="toc-text">位置闭环控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9F%E5%BA%A6%E9%97%AD%E7%8E%AF%E6%8E%A7%E5%88%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">速度闭环控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9B%E7%9F%A9-foc%E7%94%B5%E6%B5%81-%E9%97%AD%E7%8E%AF%E6%8E%A7%E5%88%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">力矩(foc电流)闭环控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E5%8A%9F%E7%8E%87%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">大功率驱动设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE%E4%B8%8B%E8%BD%BD-1"><span class="toc-number">2.1.</span> <span class="toc-text">原理图下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PCB%E4%B8%8B%E8%BD%BD-1"><span class="toc-number">2.2.</span> <span class="toc-text">PCB下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3D%E5%8F%8A%E5%AE%9E%E7%89%A9-1"><span class="toc-number">2.3.</span> <span class="toc-text">3D及实物</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%89%B9%E5%88%AB%E6%84%9F%E8%B0%A2"><span class="toc-number">3.</span> <span class="toc-text">特别感谢</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

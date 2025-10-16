@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Surface Pro使用rEFind引导Windows和Ubuntu双系统 | Triority's blog</title><meta name="author" content="Triority"><meta name="copyright" content="Triority"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="优雅的双系统引导">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Surface Pro使用rEFind引导Windows和Ubuntu双系统">
+<meta property="og:url" content="http://triority.cc/2024/surface-rEFind/index.html">
+<meta property="og:site_name" content="Triority&#39;s blog">
+<meta property="og:description" content="优雅的双系统引导">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://triority.cc/img/b3ebe4434dfdbe95d46db4c08a30255.jpg">
+<meta property="article:published_time" content="2024-04-14T22:10:50.000Z">
+<meta property="article:modified_time" content="2025-10-16T14:58:41.543Z">
+<meta property="article:author" content="Triority">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://triority.cc/img/b3ebe4434dfdbe95d46db4c08a30255.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://triority.cc/2024/surface-rEFind/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":10,"unescape":true,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Surface Pro使用rEFind引导Windows和Ubuntu双系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-10-16 14:58:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><style type="text/css">
+.spoiler {
+  display: inline-flex;
+}
+p.spoiler {
+  display: flex;
+}
+.spoiler a {
+  pointer-events: none;
+}
+.spoiler-blur, .spoiler-blur > * {
+  transition: text-shadow .5s ease;
+}
+.spoiler .spoiler-blur, .spoiler .spoiler-blur > * {
+  color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 10px grey;
+  cursor: pointer;
+}
+.spoiler .spoiler-blur:hover, .spoiler .spoiler-blur:hover > * {
+  text-shadow: 0 0 5px grey;
+}
+.spoiler-box, .spoiler-box > * {
+  transition: color .5s ease,
+  background-color .5s ease;
+}
+.spoiler .spoiler-box, .spoiler .spoiler-box > * {
+  color: black;
+  background-color: black;
+  text-shadow: none;
+}
+    .spoiler .spoiler-box.spoiler-1ffd9, .spoiler .spoiler-box.spoiler-1ffd9 > * {
+      color: black;
+      background-color: black;
+    }</style><meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Triority's blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/b3ebe4434dfdbe95d46db4c08a30255.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Triority's blog"><img class="site-icon" src="/img/favicon.png"/><span class="site-name">Triority's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/services/"><i class="fa-fw fas fa-list"></i><span> 服务</span></a></div><div class="menus_item"><a class="site-page" href="/photo/"><i class="fa-fw fas fa-book"></i><span> 相册</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Surface Pro使用rEFind引导Windows和Ubuntu双系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-04-14T22:10:50.000Z" title="发表于 2024-04-14 22:10:50">2024-04-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/">折腾记录</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>19分钟</span></span><span class="post-meta-separator">|</span><span class="leancloud_visitors" id="/2024/surface-rEFind/" data-flag-title="Surface Pro使用rEFind引导Windows和Ubuntu双系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span class="leancloud-visitors-count"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h1><p>最近换了新的平板，从surface pro 7 i5 8+128G换成了surface pro 7 plus i7 16+512G，可以说是解决了以前一切的使用痛点(也许有个LTE会更加完美?但是不太必要)，由于windows系统无与伦比的巨大功耗，准备再分出64G安装一个ubuntu用于应急情况</p>
+<p>写这篇文章还有一个原因就是在我大一刚买电脑时候参考的C**N上一篇很好的双系统安装教程文章现在改成收费了，让我十分不爽，也重新写一份给入门的同学们看，最后有关surface的特定内容忽略就好。关于双系统中Ubuntu系统的卸载可以参考<a href="https://triority.cc/2022/windows-ubuntu-uninstall/">这篇之前的文章</a>
+  <span class="spoiler" onclick="this.classList.toggle('spoiler')">
+    <span class="spoiler-box spoiler-1ffd9">（这篇文章的结尾还有C**N那篇文章的链接）</span>
+  </span></p>
+<h1 id="安装Ubuntu"><a href="#安装Ubuntu" class="headerlink" title="安装Ubuntu"></a>安装Ubuntu</h1><p>提前准备了一个64G空白位置用于安装ubuntu22.04 LTS系统，启动盘制作好后，在按下音量+的时候按电源键开机，直到进入BIOS松开音量键，设置U盘启动，关闭安全启动(如果你有)，进入ubuntu安装程序。</p>
+<div class="note warning disabled"><p>安全启动(Secureboot)仅允许受信任的系统在Surface上启动，安装非windows系统会无法直接启动<br>一旦关闭安全启动，如果你开启了bitlocker进入windows系统需要输入密钥，而且windows hello无法使用。<br>后面会写如何打开安全启动情况下使用linux</p>
+</div>
+
+<p>安装程序中一路continue在<code>install type</code>界面中选择<code>Something else</code>，然后<code>continue</code>，设置系统分区。</p>
+<p>找到刚才留出的64G空间，也就是显示的<code>free space</code>，选择后点击加号新建分区。需要新建的分区如下：</p>
+<ul>
+<li><code>/swap</code>交换分区作为虚拟内存，逻辑分区，一般内存8G甚至更小的需要给8-16G左右，16G及以上看自己情况，我觉得我不需要所以没有设置</li>
+<li><code>/boot</code>分区放置Ubuntu的启动引导文件，逻辑分区，默认ext4，大小512M即可</li>
+<li><code>/</code> 根目录，逻辑分区，默认ext4，如果你不打算单独分出<code>/home</code>分区那么剩下的空间都给这里，否则给个几十G就足够了(如果你的总空间比较小给十几G也可以总之大概1&#x2F;4吧)</li>
+<li><code>/home</code>用户目录，默认ext4，如果你单独设置了这个路径，那么剩下的空间都给这里就可以了</li>
+</ul>
+<p>然后下面<code>Device for boot loader installation</code>选择刚才设置的<code>/boot</code>的设备，我这里是<code>/dev/nvme0n1p5</code>然后继续continue，直到系统安装完成</p>
+<p>如果你只是想安装一个双系统而不想用rEFind，可以用ubuntu来引导Windows启动，但是这样每次进入都会默认选择第一项进入ubuntu。我们可以把它改成保存上次设置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/default/grub</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># If you change this file, run &#x27;update-grub&#x27; afterwards to update</span><br><span class="line"># /boot/grub/grub.cfg.</span><br><span class="line"># For full documentation of the options in this file, see:</span><br><span class="line">#   info -f grub -n &#x27;Simple configuration&#x27;</span><br><span class="line"># 下面这个默认是0改成saved即可</span><br><span class="line">GRUB_DEFAULT=saved</span><br><span class="line">GRUB_TIMEOUT_STYLE=hidden</span><br><span class="line"># 这个是等待时间，默认10s没啥必要改成3了</span><br><span class="line">GRUB_TIMEOUT=3 </span><br><span class="line">GRUB_DISTRIBUTOR=`lsb_release -i -s 2&gt; /dev/null || echo Debian`</span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash&quot;</span><br><span class="line">GRUB_CMDLINE_LINUX=&quot;&quot;</span><br><span class="line"></span><br><span class="line"># Uncomment to enable BadRAM filtering, modify to suit your needs</span><br><span class="line"># This works with Linux (no patch required) and with any kernel that obtains</span><br><span class="line"># the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)</span><br><span class="line">#GRUB_BADRAM=&quot;0x01234567,0xfefefefe,0x89abcdef,0xefefefef&quot;</span><br><span class="line"></span><br><span class="line"># Uncomment to disable graphical terminal (grub-pc only)</span><br><span class="line">#GRUB_TERMINAL=console</span><br><span class="line"></span><br><span class="line"># The resolution used on graphical terminal</span><br><span class="line"># note that you can use only modes which your graphic card supports via VBE</span><br><span class="line"># you can see them in real GRUB with the command `vbeinfo&#x27;</span><br><span class="line">#GRUB_GFXMODE=640x480</span><br><span class="line"></span><br><span class="line"># Uncomment if you don&#x27;t want GRUB to pass &quot;root=UUID=xxx&quot; parameter to Linux</span><br><span class="line">#GRUB_DISABLE_LINUX_UUID=true</span><br><span class="line"></span><br><span class="line"># Uncomment to disable generation of recovery mode menu entries</span><br><span class="line">#GRUB_DISABLE_RECOVERY=&quot;true&quot;</span><br><span class="line"></span><br><span class="line"># Uncomment to get a beep at grub start</span><br><span class="line">#GRUB_INIT_TUNE=&quot;480 440 1&quot;</span><br></pre></td></tr></table></figure>
+<h1 id="安装rEFind"><a href="#安装rEFind" class="headerlink" title="安装rEFind"></a>安装rEFind</h1><p>rEFInd是一个非常好看好用的UEFI启动管理器，如果不用第三方引导，启动windows要么先启动ubuntu然后选择启动windows，要么BIOS设置windows优先然后每次启动ubuntu都要修改bios(然后再改回去十分离谱不建议)</p>
+<p>rEFind在ubuntu或windows都可以安装，但是在windows下极其麻烦，强烈建议在ubuntu安装，下面也是这样做的。</p>
+<p>进入ubuntu系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-add-repository ppa:rodsmith/refind  	</span><br><span class="line">sudo apt-get update  	</span><br><span class="line">sudo apt-get install refind</span><br></pre></td></tr></table></figure>
+<p>安装过程中会有一些询问，不用看直接yes就好</p>
+<p>完成到这一步，电脑默认会首选<code>rEFInd</code>引导，如果没有，去BIOS中设置一下引导顺序为<code>rEFind</code>优先</p>
+<p>现在其实已经可以使用了，但是比较丑陋，所以接下来我们安装一个主题来美化</p>
+<h1 id="可选-美化：rEFind主题设置"><a href="#可选-美化：rEFind主题设置" class="headerlink" title="(可选)美化：rEFind主题设置"></a>(可选)美化：rEFind主题设置</h1><h2 id="配置文件信息"><a href="#配置文件信息" class="headerlink" title="配置文件信息"></a>配置文件信息</h2><p><code>rEFind</code>的配置信息位于<code>/boot/efi/EFI/refind/refind.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"># refind.conf</span><br><span class="line"># Configuration file for the rEFInd boot menu</span><br><span class="line">#</span><br><span class="line"> </span><br><span class="line"># Timeout in seconds for the main menu screen. Setting the timeout to 0</span><br><span class="line"># disables automatic booting (i.e., no timeout). Setting it to -1 causes</span><br><span class="line"># an immediate boot to the default OS *UNLESS* a keypress is in the buffer</span><br><span class="line"># when rEFInd launches, in which case that keypress is interpreted as a</span><br><span class="line"># shortcut key. If no matching shortcut is found, rEFInd displays its</span><br><span class="line"># menu with no timeout.</span><br><span class="line">#</span><br><span class="line">#设置默认等待时间为5s</span><br><span class="line">#timeout 0代表无限等待 timeout -1代表立即进入对应的系统</span><br><span class="line">timeout 5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Set the screen&#x27;s video resolution. Pass this option either:</span><br><span class="line">#  * two values, corresponding to the X and Y resolutions</span><br><span class="line">#  * one value, corresponding to a GOP (UEFI) video mode</span><br><span class="line"># Note that not all resolutions are supported. On UEFI systems, passing</span><br><span class="line"># an incorrect value results in a message being shown on the screen to</span><br><span class="line"># that effect, along with a list of supported modes. On EFI 1.x systems</span><br><span class="line"># (e.g., Macintoshes), setting an incorrect mode silently fails. On both</span><br><span class="line"># types of systems, setting an incorrect resolution results in the default</span><br><span class="line"># resolution being used. A resolution of 1024x768 usually works, but higher</span><br><span class="line"># values often don&#x27;t.</span><br><span class="line"># Default is &quot;0 0&quot; (use the system default resolution, usually 800x600).</span><br><span class="line">#</span><br><span class="line">#分辨率设置，我建议这里别动，上面注释中也说了。1024*768以上的分辨率并不支持，我是默认的，没动它，所以没事别自己搞个1920 1080（更新：可用）</span><br><span class="line">#resolution 1024 768</span><br><span class="line">#resolution 1440 900</span><br><span class="line">#resolution 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Directories that should NOT be scanned for boot loaders. By default,</span><br><span class="line"># rEFInd doesn&#x27;t scan its own directory, the EFI/tools directory, the</span><br><span class="line"># EFI/memtest directory, the EFI/memtest86 directory, or the</span><br><span class="line"># com.apple.recovery.boot directory. Using the dont_scan_dirs option</span><br><span class="line"># enables you to &quot;blacklist&quot; other directories; but be sure to use &quot;+&quot;</span><br><span class="line"># as the first element if you want to continue blacklisting existing</span><br><span class="line"># directories. You might use this token to keep EFI/boot/bootx64.efi out</span><br><span class="line"># of the menu if that&#x27;s a duplicate of another boot loader or to exclude</span><br><span class="line"># a directory that holds drivers or non-bootloader utilities provided by</span><br><span class="line"># a hardware manufacturer. If a directory is listed both here and in</span><br><span class="line"># also_scan_dirs, dont_scan_dirs takes precedence. Note that this</span><br><span class="line"># blacklist applies to ALL the filesystems that rEFInd scans, not just</span><br><span class="line"># the ESP, unless you precede the directory name by a filesystem name or</span><br><span class="line"># partition unique GUID, as in &quot;myvol:EFI/somedir&quot; to exclude EFI/somedir</span><br><span class="line"># from the scan on the myvol volume but not on other volumes.</span><br><span class="line">#</span><br><span class="line">#这部分看注释的意思，应该是不扫描ESP分区的某些文件夹，我自己为了去除某些多余</span><br><span class="line">#的启动项，于是设置了dont_scan_dirs ESP:/EFI/ubuntu，但不知道为什么，没有用，启动项里仍会出现Ubuntu的引导项，所以我不建议在这部分选择屏蔽引导项.</span><br><span class="line">#dont_scan_dirs ESP:/EFI/boot,EFI/Dell,EFI/memtest86</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Files that should NOT be included as EFI boot loaders (on the</span><br><span class="line"># first line of the display). If you&#x27;re using a boot loader that</span><br><span class="line"># relies on support programs or drivers that are installed alongside</span><br><span class="line"># the main binary or if you want to &quot;blacklist&quot; certain loaders by</span><br><span class="line"># name rather than location, use this option. Note that this will</span><br><span class="line"># NOT prevent certain binaries from showing up in the second-row</span><br><span class="line"># set of tools. Most notably, various Secure Boot and recovery</span><br><span class="line"># tools are present in this list, but may appear as second-row</span><br><span class="line"># items.</span><br><span class="line"># The file may be specified as a bare name (e.g., &quot;notme.efi&quot;), as</span><br><span class="line"># a complete pathname (e.g., &quot;/EFI/somedir/notme.efi&quot;), or as a</span><br><span class="line"># complete pathname with volume (e.g., &quot;SOMEDISK:/EFI/somedir/notme.efi&quot;</span><br><span class="line"># or 2C17D5ED-850D-4F76-BA31-47A561740082:/EFI/somedir/notme.efi&quot;).</span><br><span class="line"># OS tags hidden via the Delete or &#x27;-&#x27; key in the rEFInd menu are</span><br><span class="line"># added to this list, but stored in NVRAM.</span><br><span class="line"># The default is shim.efi,shim-fedora.efi,shimx64.efi,PreLoader.efi,</span><br><span class="line"># TextMode.efi,ebounce.efi,GraphicsConsole.efi,MokManager.efi,HashTool.efi,</span><br><span class="line"># HashTool-signed.efi,bootmgr.efi,fb&#123;arch&#125;.efi</span><br><span class="line"># (where &quot;&#123;arch&#125;&quot; is the architecture code, like &quot;x64&quot;).</span><br><span class="line">#</span><br><span class="line">#这部分和上面那部分类似，都是屏蔽之用，区别在于上面部分是针对文件夹，这部分是针</span><br><span class="line">#对具体文件，这部分在去除某些启动项有着极为关键的作用，我将详细展开叙述。</span><br><span class="line">#dont_scan_files shim.efi,MokManager.efi</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除多余启动项"><a href="#删除多余启动项" class="headerlink" title="删除多余启动项"></a>删除多余启动项</h2><p><code>refind</code>他针对某些<code>.efi</code>的文件会选择无脑的引导，因此我们为了简洁或者美观，需要屏蔽某些文件的引导，屏蔽不会修改原EFI分区中的系统引导文件。针对我的<code>ubuntu</code>，引导文件位于<code>ubuntu/grubx64.efi</code>（EFI分区的相对路径），以及我的<code>windows</code>引导文件，位于<code>Microsoft/Boot/bootmgfw.efi</code>，而我们需要保留的就这两个，其他的一律屏蔽。下面命令代表屏蔽了<code>ubuntu</code>文件夹下的<code>shim.efi</code>引导文件和其他文件XXX</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dont_scan_files /EFI/ubuntu/shim.efi,XXX,XXX</span><br></pre></td></tr></table></figure>
+
+<h2 id="主题配置"><a href="#主题配置" class="headerlink" title="主题配置"></a>主题配置</h2><p>在<code>refind.conf</code>文件最后需要加一行指令来加载主题文件(（相对路径是指你的主题配置文件<code>theme.config</code>在以<code>refind</code>目录为根目录的文件路径）)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include &lt;相对路径&gt;/theme.config </span><br></pre></td></tr></table></figure>
+<p>比如我的theme文件位于<code>refind</code>目录下的<code>themes/rEFInd-minimal</code>处</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include themes/rEFInd-minimal/theme.conf</span><br></pre></td></tr></table></figure>
+<p><code>refind</code>文件夹位于EFI分区目录，<code>theme</code>文件夹位于<code>refind</code>文件夹，主题文件位于<code>theme</code>文件夹</p>
+<p>关于<code>theme.conf</code>文件，这是<a target="_blank" rel="noopener" href="https://github.com/topics/refind-theme">官方介绍文档</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"># Minimal refind theme</span><br><span class="line"></span><br><span class="line"># Hide user interface elements for personal preference or to increase</span><br><span class="line"># security:</span><br><span class="line">#  banner      - the rEFInd title banner (built-in or loaded via &quot;banner&quot;)</span><br><span class="line">#  label       - boot option text label in the menu</span><br><span class="line">#  singleuser  - remove the submenu options to boot Mac OS X in single-user</span><br><span class="line">#                or verbose modes; affects ONLY MacOS X</span><br><span class="line">#  safemode    - remove the submenu option to boot Mac OS X in &quot;safe mode&quot;</span><br><span class="line">#  hwtest      - the submenu option to run Apple&#x27;s hardware test</span><br><span class="line">#  arrows      - scroll arrows on the OS selection tag line</span><br><span class="line">#  hints       - brief command summary in the menu</span><br><span class="line">#  editor      - the options editor (+, F2, or Insert on boot options menu)</span><br><span class="line">#  all         - all of the above</span><br><span class="line"># Default is none of these (all elements active)</span><br><span class="line">#</span><br><span class="line">hideui singleuser,hints,arrows,label,badges</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Set the name of a subdirectory in which icons are stored. Icons must</span><br><span class="line"># have the same names they have in the standard directory. The directory</span><br><span class="line"># name is specified relative to the main rEFInd binary&#x27;s directory. If</span><br><span class="line"># an icon can&#x27;t be found in the specified directory, an attempt is made</span><br><span class="line"># to load it from the default directory; thus, you can replace just some</span><br><span class="line"># icons in your own directory and rely on the default for others.</span><br><span class="line"># Default is &quot;icons&quot;.</span><br><span class="line">#各种系统的启动图标</span><br><span class="line">icons_dir themes/rEFInd-minimal/icons</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Use a custom title banner instead of the rEFInd icon and name. The file</span><br><span class="line"># path is relative to the directory where refind.efi is located. The color</span><br><span class="line"># in the top left corner of the image is used as the background color</span><br><span class="line"># for the menu screens. Currently uncompressed BMP images with color</span><br><span class="line"># depths of 24, 8, 4 or 1 bits are supported, as well as PNG images.</span><br><span class="line">#这是启动界面背景图片路径，也是相对路径，且暂时似乎只支持png格式的图片</span><br><span class="line">banner themes/rEFInd-minimal/background.png</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Tells rEFInd whether to display banner images pixel-for-pixel (noscale)</span><br><span class="line"># or to scale banner images to fill the screen (fillscreen). The former is</span><br><span class="line"># the default.</span><br><span class="line">#默认全屏填充</span><br><span class="line">banner_scale fillscreen</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Custom images for the selection background. There is a big one (144 x 144)</span><br><span class="line"># for the OS icons, and a small one (64 x 64) for the function icons in the</span><br><span class="line"># second row. If only a small image is given, that one is also used for</span><br><span class="line"># the big icons by stretching it in the middle. If only a big one is given,</span><br><span class="line"># the built-in default will be used for the small icons.</span><br><span class="line">#</span><br><span class="line"># Like the banner option above, these options take a filename of an</span><br><span class="line"># uncompressed BMP image file with a color depth of 24, 8, 4, or 1 bits,</span><br><span class="line"># or a PNG image. The PNG format is required if you need transparency</span><br><span class="line"># support (to let you &quot;see through&quot; to a full-screen banner).</span><br><span class="line">#</span><br><span class="line">selection_big   themes/rEFInd-minimal/selection_big.png</span><br><span class="line">selection_small themes/rEFInd-minimal/selection_small.png</span><br><span class="line"></span><br><span class="line"># Which non-bootloader tools to show on the tools line, and in what</span><br><span class="line"># order to display them:</span><br><span class="line">#  shell           - the EFI shell (requires external program; see rEFInd</span><br><span class="line">#                    documentation for details)</span><br><span class="line">#  gptsync         - the (dangerous) gptsync.efi utility (requires external</span><br><span class="line">#                    program; see rEFInd documentation for details)</span><br><span class="line">#  apple_recovery  - boots the Apple Recovery HD partition, if present</span><br><span class="line">#  mok_tool        - makes available the Machine Owner Key (MOK) maintenance</span><br><span class="line">#                    tool, MokManager.efi, used on Secure Boot systems</span><br><span class="line">#  about           - an &quot;about this program&quot; option</span><br><span class="line">#  exit            - a tag to exit from rEFInd</span><br><span class="line">#  shutdown        - shuts down the computer (a bug causes this to reboot</span><br><span class="line">#                    EFI systems)</span><br><span class="line">#  reboot          - a tag to reboot the computer</span><br><span class="line">#  firmware        - a tag to reboot the computer into the firmware&#x27;s</span><br><span class="line">#                    user interface (ignored on older computers)</span><br><span class="line"># Default is shell,apple_recovery,mok_tool,about,shutdown,reboot,firmware</span><br><span class="line">#</span><br><span class="line">showtools shutdown</span><br></pre></td></tr></table></figure>
+<h1 id="可选-安装Ubuntu下的surface硬件驱动"><a href="#可选-安装Ubuntu下的surface硬件驱动" class="headerlink" title="(可选)安装Ubuntu下的surface硬件驱动"></a>(可选)安装Ubuntu下的surface硬件驱动</h1><div class="note info modern"><p>感谢<a target="_blank" rel="noopener" href="https://github.com/linux-surface/linux-surface">linux-surface项目的贡献</a></p>
+</div>
+
+<p>导入用于签名软件包的密钥</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -qO - https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc \</span><br><span class="line">    | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg</span><br></pre></td></tr></table></figure>
+<p>如果你的网络不是特别好可能会报错，你可以把这个命令的下载和导入分开执行，下载链接可以直接使用文件替换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc</span><br><span class="line">cat surface.asc | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/linux-surface.gpg</span><br></pre></td></tr></table></figure>
+<p>然后添加存储库配置并更新APT</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb [arch=amd64] https://pkg.surfacelinux.com/debian release main&quot; \</span><br><span class="line">	| sudo tee /etc/apt/sources.list.d/linux-surface.list</span><br><span class="line"></span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
+<p>安装linux-surface内核及其依赖项，还可以启用iptsd服务以使用触摸屏</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install linux-image-surface linux-headers-surface iptsd libwacom-surface</span><br><span class="line">sudo systemctl enable iptsd</span><br></pre></td></tr></table></figure>
+<p>如果在启用服务时候报错没有找到服务配置文件可能需要自己创建然后写入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /lib/systemd/system/iptsd.service</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Intel Precise Touch &amp; Stylus Daemon</span><br><span class="line">Documentation=https://github.com/linux-surface/iptsd</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/bin/iptsd</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=default.target</span><br></pre></td></tr></table></figure>
+<p>重启电脑，surface硬件基本都可以使用了</p>
+<h1 id="对于下面的可选项十分重要重要重要-风险提示和过程解释"><a href="#对于下面的可选项十分重要重要重要-风险提示和过程解释" class="headerlink" title="(对于下面的可选项十分重要重要重要)风险提示和过程解释"></a>(对于下面的可选项十分重要重要重要)风险提示和过程解释</h1><div class="note danger modern"><p>接下来的操作涉及系统引导等底层的重要内容，如果你没有基本的计算机知识建议到这里点到为止。要进行下面的操作务必了解你在做什么以及如何修复或回滚你的操作，最严重的后果可能会让你的电脑变成砖头。请先看下图，这是写这篇文章时候我遇到的错误<br><img src="/img/b3ebe4434dfdbe95d46db4c08a30255.jpg"></p>
+</div>
+
+
+<p>下面简要介绍一下我们在做什么以及为什么要这样做</p>
+<h1 id="可选-surface开启安全启动：签名ubuntu的内核"><a href="#可选-surface开启安全启动：签名ubuntu的内核" class="headerlink" title="(可选)surface开启安全启动：签名ubuntu的内核"></a>(可选)surface开启安全启动：签名ubuntu的内核</h1><p>由于我们在安装surface驱动的时候更改了系统内核，会导致<code>secure boot</code>在开启状态下无法直接引导系统，所以我们需要将内核进行签名，将Linux-Surface内核的密钥导入到引导加载程序中，以便内核可以引导而不禁用<code>secure boot</code></p>
+<p>安装签名工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install linux-surface-secureboot-mok</span><br></pre></td></tr></table></figure>
+<p>有的版本的mok会直接给你一个密码来给你，后面导入的流程里就不会再需要输入密码了。安装时候终端输出都会告诉你，类似这样</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> apt install linux-surface-secureboot-mok</span><br><span class="line">[<span class="built_in">sudo</span>] password <span class="keyword">for</span> triority: </span><br><span class="line">Reading package lists... Done</span><br><span class="line">Building dependency tree... Done</span><br><span class="line">Reading state information... Done</span><br><span class="line">The following NEW packages will be installed:</span><br><span class="line">  linux-surface-secureboot-mok</span><br><span class="line">0 upgraded, 1 newly installed, 0 to remove and 94 not upgraded.</span><br><span class="line">Need to get 5,616 B of archives.</span><br><span class="line">After this operation, 18.4 kB of additional disk space will be used.</span><br><span class="line">Get:1 https://pkg.surfacelinux.com/debian release/main amd64 linux-surface-secureboot-mok amd64 20231003-1 [5,616 B]</span><br><span class="line">Fetched 5,616 B <span class="keyword">in</span> 8s (678 B/s)                          </span><br><span class="line">Selecting previously unselected package linux-surface-secureboot-mok.</span><br><span class="line">(Reading database ... 195210 files and directories currently installed.)</span><br><span class="line">Preparing to unpack .../linux-surface-secureboot-mok_20231003-1_amd64.deb ...</span><br><span class="line">Unpacking linux-surface-secureboot-mok (20231003-1) ...</span><br><span class="line">Setting up linux-surface-secureboot-mok (20231003-1) ...</span><br><span class="line"></span><br><span class="line">The secure-boot certificate has been installed to</span><br><span class="line"></span><br><span class="line">    /usr/share/linux-surface-secureboot/surface.cer</span><br><span class="line"></span><br><span class="line">It will now be automatically enrolled <span class="keyword">for</span> you and guarded with the password</span><br><span class="line"></span><br><span class="line">    surface</span><br><span class="line"></span><br><span class="line">To finish the enrollment process you need to reboot, <span class="built_in">where</span> you will <span class="keyword">then</span> be</span><br><span class="line">asked to enroll the certificate. During the import, you will be prompted <span class="keyword">for</span></span><br><span class="line">the password mentioned above. Please make sure that you are indeed adding</span><br><span class="line">the right key and confirm by entering <span class="string">&#x27;surface&#x27;</span>.</span><br><span class="line"></span><br><span class="line">Note that you can always manage your secure-boot keys, including the one</span><br><span class="line">just enrolled, from inside Linux via the <span class="string">&#x27;mokutil&#x27;</span> tool.</span><br></pre></td></tr></table></figure>
+
+<p>然后下载<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.cer">linux-surface签名公钥</a></p>
+<p>导入公钥</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mokutil --import surface.cer</span><br></pre></td></tr></table></figure>
+<p>此过程会要求你输入一个一次性密码，一定要记住一会要用，但是只会用这一次</p>
+<p>重启后会进入一个比较原始的蓝色界面，回车后选择<code>import mok</code>，然后continue直到要求你输入刚才设置的密码，然后完成即可</p>
+<p>完成后即可进入UEFI，在<code>secure boot</code>中将<code>boot configuration</code>改为<code>Microsoft &amp; 3rd party CA</code>就可以使用安全启动了</p>
+<h1 id="可选-surface开启安全启动：签名rEFind"><a href="#可选-surface开启安全启动：签名rEFind" class="headerlink" title="(可选)surface开启安全启动：签名rEFind"></a>(可选)surface开启安全启动：签名rEFind</h1><p>其实最开始跟上面差不多，看看目录内容(我闲的,没必要)然后导入密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">ls</span> /boot/efi/EFI</span><br><span class="line">Boot  Microsoft  refind  tools ubuntu</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">ls</span> /boot/efi/EFI/ubuntu</span><br><span class="line">BOOTX64.CSV  grub.cfg  grubx64.efi  mmx64.efi  shimx64.efi</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">ls</span> /boot/efi/EFI/refind/keys</span><br><span class="line">altlinux.cer          openSUSE-UEFI-CA-Certificate.cer</span><br><span class="line">canonical-uefi-ca.cer         redhatsecureboot003.cer</span><br><span class="line">centossecureboot201.cer         redhatsecureboot401.cer</span><br><span class="line">centossecurebootca2.cer         redhatsecurebootca2.cer</span><br><span class="line">debian.cer          redhatsecurebootca4.cer</span><br><span class="line">fedora-ca.cer          refind.cer</span><br><span class="line">microsoft-kekca-public.cer        refind_local.cer</span><br><span class="line">microsoft-pca-public.cer        refind_local.crt</span><br><span class="line">microsoft-uefica-public.cer        SLES-UEFI-CA-Certificate.cer</span><br><span class="line">openSUSE-UEFI-CA-Certificate-4096.cer</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">ls</span> /boot/efi/EFI/refind</span><br><span class="line">BOOT.CSV  drivers_x64  icons  keys  refind.conf  refind_x64.efi  vars</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">cp</span> -i /boot/efi/EFI/ubuntu/shimx64.efi /boot/efi/EFI/refind</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> <span class="built_in">cp</span> -i /boot/efi/EFI/ubuntu/mmx64.efi /boot/efi/EFI/refind</span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$ <span class="built_in">sudo</span> mokutil -i /boot/efi/EFI/refind/keys/refind.cer</span><br><span class="line">input password: </span><br><span class="line">input password again: </span><br><span class="line">triority@triority-Surface-Pro-7-PLUS:~$</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://www.triority.cc/">Triority</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://triority.cc/2024/surface-rEFind/">http://triority.cc/2024/surface-rEFind/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://triority.cc" target="_blank">Triority's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/linux/">linux</a><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a></div><div class="post_share"><div class="social-share" data-image="/img/b3ebe4434dfdbe95d46db4c08a30255.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/sdr-ft8/" title="SDR使用FT8模式通联信号接收"><img class="cover" src="/img/88057845a059ca6c10a9feb6498515d.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SDR使用FT8模式通联信号接收</div></div></a></div><div class="next-post pull-right"><a href="/2024/raspberry-pico-c/" title="在vscode中使用c语言开发raspberry-pico"><img class="cover" src="/img/RUN.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">在vscode中使用c语言开发raspberry-pico</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Triority</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">124</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">36</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Triority"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Triority" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:triority@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">The domain name of this website has been changed to triority.cc(Using CDN via cloudflare, recommended) / www.triority.cc(Connecting directly, works better in Chinese mainland). Please contact me if you have any questions.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Start"><span class="toc-number">1.</span> <span class="toc-text">Start</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Ubuntu"><span class="toc-number">2.</span> <span class="toc-text">安装Ubuntu</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85rEFind"><span class="toc-number">3.</span> <span class="toc-text">安装rEFind</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%AF%E9%80%89-%E7%BE%8E%E5%8C%96%EF%BC%9ArEFind%E4%B8%BB%E9%A2%98%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">(可选)美化：rEFind主题设置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">4.1.</span> <span class="toc-text">配置文件信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%A4%9A%E4%BD%99%E5%90%AF%E5%8A%A8%E9%A1%B9"><span class="toc-number">4.2.</span> <span class="toc-text">删除多余启动项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">主题配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%AF%E9%80%89-%E5%AE%89%E8%A3%85Ubuntu%E4%B8%8B%E7%9A%84surface%E7%A1%AC%E4%BB%B6%E9%A9%B1%E5%8A%A8"><span class="toc-number">5.</span> <span class="toc-text">(可选)安装Ubuntu下的surface硬件驱动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%B8%8B%E9%9D%A2%E7%9A%84%E5%8F%AF%E9%80%89%E9%A1%B9%E5%8D%81%E5%88%86%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81-%E9%A3%8E%E9%99%A9%E6%8F%90%E7%A4%BA%E5%92%8C%E8%BF%87%E7%A8%8B%E8%A7%A3%E9%87%8A"><span class="toc-number">6.</span> <span class="toc-text">(对于下面的可选项十分重要重要重要)风险提示和过程解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%AF%E9%80%89-surface%E5%BC%80%E5%90%AF%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8%EF%BC%9A%E7%AD%BE%E5%90%8Dubuntu%E7%9A%84%E5%86%85%E6%A0%B8"><span class="toc-number">7.</span> <span class="toc-text">(可选)surface开启安全启动：签名ubuntu的内核</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%AF%E9%80%89-surface%E5%BC%80%E5%90%AF%E5%AE%89%E5%85%A8%E5%90%AF%E5%8A%A8%EF%BC%9A%E7%AD%BE%E5%90%8DrEFind"><span class="toc-number">8.</span> <span class="toc-text">(可选)surface开启安全启动：签名rEFind</span></a></li></ol></div></div><div class="card-widget ads-wrap"><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height=300 src="//music.163.com/outchain/player?type=0&id=9796678610&auto=0&height=430"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2025 By Triority</div><div class="footer_custom_text">阿美莉卡ICP备114514号</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'HCrr1LolVdHjaQ03fiyQnqO4-gzGzoHsz',
+      appKey: 'SQPN055DPf1nyNHqYj5SBoo2',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
