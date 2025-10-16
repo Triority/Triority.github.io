@@ -17,15 +17,15 @@ jobs:
     runs-on: ubuntu-latest # 指定最新 ubuntu 系统
     steps:
       - name: Checkout
-        uses: actions/checkout@v2 # 拉取仓库代码
-      
+        uses: actions/checkout@v4 # 版本从 v2 更新到 v4
+
       - name: Setup Node.js
-        uses: actions/setup-node@v2 # 设置 node.js 环境
+        uses: actions/setup-node@v4 # 版本从 v2 更新到 v4
         with:
-          node-version: '16' # 建议指定一个明确的 Node.js 版本
+          node-version: '16'
 
       - name: Cache node_modules # 缓存 node_modules，提高编译速度
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -44,7 +44,7 @@ jobs:
           hexo g
 
       - name: Upload Artifact # 上传编译好的 public 文件夹作为产物
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # <--- 主要修复：版本从 v3 更新到 v4
         with:
           name: hexo-public # 产物名称
           path: public/ # 需要上传的目录
@@ -56,12 +56,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact # 下载 build 任务上传的产物
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4 # <--- 主要修复：版本从 v3 更新到 v4
         with:
           name: hexo-public # 产物名称，必须和 build 中的一致
 
       - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@v2.1.1
+        uses: easingthemes/ssh-deploy@v2.1.1 # 这个 action 目前没有大的版本更新，保持不变
         env:
           SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           ARGS: "-avzr --delete"
@@ -77,12 +77,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact # 下载 build 任务上传的产物
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4 # <--- 主要修复：版本从 v3 更新到 v4
         with:
           name: hexo-public # 产物名称，必须和 build 中的一致
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3 # 这个 action 目前 v3 仍是主流稳定版，保持不变
         with:
           personal_token: ${{ secrets.GH_PAGES_TOKEN }}
           external_repository: Triority/Triority.github.io
