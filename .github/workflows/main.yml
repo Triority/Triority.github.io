@@ -10,66 +10,84 @@ on:
       - '**/source/**'
 
 jobs:
-  blog: # 任务名称
+  # 任务一：编译 Hexo 静态文件
+  build:
+    name: Build
     timeout-minutes: 10 # 设置 10 分钟超时
     runs-on: ubuntu-latest # 指定最新 ubuntu 系统
     steps:
-      - uses: actions/checkout@v2 # 拉取仓库代码
-      - uses: actions/setup-node@v2 # 设置 node.js 环境
-      - name: Cache node_modules # 缓存 node_modules，提高编译速度，毕竟每月只有 2000 分钟。
+      - name: Checkout
+        uses: actions/checkout@v2 # 拉取仓库代码
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2 # 设置 node.js 环境
+        with:
+          node-version: '16' # 建议指定一个明确的 Node.js 版本
+
+      - name: Cache node_modules # 缓存 node_modules，提高编译速度
         uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Init Node.js # 安装源代码所需插件
-        run: |
-          npm install
-          echo "init node successful"
+            ${{ runner.os }}-node-
+
+      - name: Install Dependencies # 安装源代码所需插件
+        run: npm install
+
       - name: Install Hexo-cli # 安装 Hexo
-        run: |
-          npm install -g hexo-cli --save
-          echo "install hexo successful"
-      - name: Build # 编译创建静态博客文件
+        run: npm install -g hexo-cli --save
+      
+      - name: Build Static Files # 编译创建静态博客文件
         run: |
           hexo clean
           hexo g
-          echo "build blog successful"
-      - name: Deploy # 设置 git 信息并推送静态博客文件
+
+      - name: Upload Artifact # 上传编译好的 public 文件夹作为产物
+        uses: actions/upload-artifact@v3
+        with:
+          name: hexo-public # 产物名称
+          path: public/ # 需要上传的目录
+
+  # 任务二：部署到个人服务器
+  deploy_server:
+    name: Deploy to Server
+    needs: build # 依赖 build 任务，等待它成功完成后再执行
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact # 下载 build 任务上传的产物
+        uses: actions/download-artifact@v3
+        with:
+          name: hexo-public # 产物名称，必须和 build 中的一致
+
+      - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
-          # 私钥id_rsa，存在secrets的PRIVATE_KEY中
           SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          # 复制操作参数，"-avzr --delete"部署时清空服务器目标目录下的文件
-          ARGS: "-avzr --delete" 
-          # 源目录，相对于$GITHUB_WORKSPACE根目录的路径
-          SOURCE: "public/"
+          ARGS: "-avzr --delete"
+          SOURCE: "./" # 源目录，因为下载的产物就在根目录
           REMOTE_HOST: "www.triority.cc"
           REMOTE_USER: "root"
-          # 目标目录
           TARGET: "/hexo"
-      - run: echo "Deploy Successful!"
-      - name: Deploy to GitHub Pages # 推送至另一个仓库的 GitHub Pages
+          
+  # 任务三：部署到 GitHub Pages
+  deploy_gh_pages:
+    name: Deploy to GitHub Pages
+    needs: build # 依赖 build 任务，等待它成功完成后再执行
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact # 下载 build 任务上传的产物
+        uses: actions/download-artifact@v3
+        with:
+          name: hexo-public # 产物名称，必须和 build 中的一致
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          # 步骤 1 中生成的 Personal Access Token，存储在仓库的 Secrets 中
           personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          # 需要推送到的目标仓库，格式为 <用户名>/<仓库名>
-          # 例如: triority/triority.github.io
           external_repository: Triority/Triority.github.io
-          # 推送的目标分支，GitHub Pages 通常使用 gh-pages 或 main
           publish_branch: gh-pages
-          # 需要推送的文件夹，即 Hexo 生成的静态文件目录
-          publish_dir: ./public
-          # Git 推送时使用的用户名
+          publish_dir: ./ # 推送的文件夹，即下载的产物所在目录
           user_name: 'Triority[bot]'
-          # Git 推送时使用的邮箱
           user_email: 'github-actions[bot]@github.com'
-          # 推送时清空目标分支的历史文件
           force_orphan: true
-      - run: echo "Deploy to GitHub Pages Successful!"
