@@ -25,7 +25,7 @@ jobs:
           node-version: '16' # 建议指定一个明确的 Node.js 版本
 
       - name: Cache node_modules # 缓存 node_modules，提高编译速度
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
