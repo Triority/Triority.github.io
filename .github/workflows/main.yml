@@ -54,3 +54,22 @@ jobs:
           # 目标目录
           TARGET: "/hexo"
       - run: echo "Deploy Successful!"
+      - name: Deploy to GitHub Pages # 推送至另一个仓库的 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # 步骤 1 中生成的 Personal Access Token，存储在仓库的 Secrets 中
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
+          # 需要推送到的目标仓库，格式为 <用户名>/<仓库名>
+          # 例如: triority/triority.github.io
+          external_repository: Triority/Triority.github.io
+          # 推送的目标分支，GitHub Pages 通常使用 gh-pages 或 main
+          publish_branch: gh-pages
+          # 需要推送的文件夹，即 Hexo 生成的静态文件目录
+          publish_dir: ./public
+          # Git 推送时使用的用户名
+          user_name: 'Triority[bot]'
+          # Git 推送时使用的邮箱
+          user_email: 'github-actions[bot]@github.com'
+          # 推送时清空目标分支的历史文件
+          force_orphan: true
+      - run: echo "Deploy to GitHub Pages Successful!"
