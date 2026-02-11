@@ -464,6 +464,8 @@ if __name__ == '__main__':
     convert()
 ```
 ### RK3588 板载部署：post_deploy_rk3588.py
+首先要安装RKNNLite，其安装包在RKNN工具链中已经提供了多个预编译版本，直接pip安装就好
+
 ```python
 import cv2
 import numpy as np
@@ -604,10 +606,551 @@ if __name__ == "__main__":
 |  掩膜输入 |  {% dplayer "url=mask.mp4" %} |
 |  PC推理输出 |  {% dplayer "url=output_pc.mp4" %} |
 |  RKNN仿真输出 |  {% dplayer "url=sim_output.mp4" %} |
-|  RK3588推理输出 |  {% dplayer "url=output_rk3588.avi" %} |
+|  RK3588推理输出 |  {% dplayer "url=output_rk3588.mp4" %} |
 
 ~~仅仅经过两轮训练的~~[.pth模型](epoch_2.pth)、[ONNX模型](model_fp16.onnx)、[RKNN模型](model_fp16.rknn)
 
+### 计算性能优化
+#### 计算性能
+根据终端输出，当前帧率仅有不足2fps：
+```bash
+orangepi@orangepi5:~/rknn_unet$ python3 post_deploy_rk3588.py 
+--> Loading RKNN
+--> Init Runtime (3 Cores)
+I RKNN: [20:31:55.914] RKNN Runtime Information, librknnrt version: 2.3.0 (c949ad889d@2024-11-07T11:35:33)
+I RKNN: [20:31:55.914] RKNN Driver Information, version: 0.9.8
+I RKNN: [20:31:55.915] RKNN Model Information, version: 6, toolkit version: 1.5.2+b642f30c(compiler version: 1.5.2 (c6b7b351a@2023-08-23T15:34:44)), target: RKNPU v2, target platform: rk3588, framework name: ONNX, framework layout: NCHW, model inference type: static_shape
+--> Start Inference
+rga_api version 1.9.3_[2]
+Processed 50 frames, Current FPS: 1.30
+Processed 100 frames, Current FPS: 1.31
+Processed 150 frames, Current FPS: 1.30
+Processed 200 frames, Current FPS: 1.29
+Inference Done!
+```
+```bash
+orangepi@orangepi5:~$ sudo cat /sys/kernel/debug/rknpu/load
+NPU load:  Core0: 44%, Core1: 35%, Core2: 36%,
+```
+```bash
+orangepi@orangepi5:~$ top
+top - 20:32:25 up 33 min,  3 users,  load average: 0.36, 0.23, 0.30
+Tasks: 258 total,   2 running, 256 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  6.2 us,  1.3 sy,  0.0 ni, 92.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3735.4 total,    751.6 free,   1665.4 used,   1318.5 buff/cache
+MiB Swap:   1867.7 total,   1867.2 free,      0.5 used.   1713.6 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                                         
+   7070 orangepi   1 -19 1995580 976256 372092 R  50.2  25.5   0:16.95 python3                                         
+                                        
+```
+#### 多线程异步处理
+显然主要问题在于npu没有完全处于工作状态，大量时间浪费在等待CPU预处理数据上了，因此改进加入异步处理：
+```python
+import cv2
+import numpy as np
+from collections import deque
+from rknnlite.api import RKNNLite
+import time
+import os
+import threading
+from queue import Queue
+
+
+RKNN_MODEL = "model_fp16.rknn"
+VIDEO_PATH = "input.mp4"
+MASK_PATH = "mask.mp4"
+OUTPUT_PATH = "output_rk3588_pipeline.avi"
+SEQ_LEN = 5
+INPUT_W, INPUT_H = 640, 352
+
+IN_QUEUE_SIZE = 4
+OUT_QUEUE_SIZE = 4
+
+
+def preprocess_uint8(frame, mask):
+    f = cv2.resize(frame, (INPUT_W, INPUT_H))
+    f = cv2.cvtColor(f, cv2.COLOR_BGR2RGB)
+    m = cv2.resize(mask, (INPUT_W, INPUT_H), interpolation=cv2.INTER_NEAREST)
+    if len(m.shape) == 3: 
+        m = cv2.cvtColor(m, cv2.COLOR_BGR2GRAY)
+    _, m = cv2.threshold(m, 127, 255, cv2.THRESH_BINARY)
+    m = m[:, :, np.newaxis]
+    return np.concatenate([f, m], axis=-1)
+
+def finalize_input_nhwc(buffer):
+    data = np.concatenate(buffer, axis=-1).astype(np.float32)
+    data = (data / 255.0) 
+    for i in range(SEQ_LEN):
+        base = i * 4
+        data[:, :, base:base+3] = data[:, :, base:base+3] * 2.0 - 1.0
+    return data[np.newaxis, ...]
+
+def postprocess(output):
+    res = output[0].transpose(1, 2, 0)
+    res = (res + 1.0) / 2.0
+    res = np.clip(res * 255, 0, 255).astype(np.uint8)
+    return cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
+
+
+# 生产者：读取视频并预处理
+def capture_worker(in_q):
+    cap_v = cv2.VideoCapture(VIDEO_PATH)
+    cap_m = cv2.VideoCapture(MASK_PATH)
+    
+    if not cap_v.isOpened():
+        print("Error: Could not open videos")
+        in_q.put(None)
+        return
+
+    buffer = deque(maxlen=SEQ_LEN)
+    frame_idx = 0
+
+    while True:
+        ret_v, frame = cap_v.read()
+        ret_m, mask = cap_m.read()
+        if not ret_v or not ret_m:
+            break
+
+        # CPU 预处理
+        feat_uint8 = preprocess_uint8(frame, mask)
+        buffer.append(feat_uint8)
+        
+        if frame_idx == 0:
+            for _ in range(SEQ_LEN - 1):
+                buffer.append(feat_uint8)
+
+        if len(buffer) == SEQ_LEN:
+            # 准备 NPU 输入数据
+            input_data = finalize_input_nhwc(list(buffer))
+            in_q.put(input_data) # 放入推理队列
+
+        frame_idx += 1
+    
+    in_q.put(None) # 结束信号
+    cap_v.release()
+    cap_m.release()
+    print("Capture thread finished.")
+
+
+def inference_worker(in_q, out_q):
+    rknn = RKNNLite()
+    if rknn.load_rknn(RKNN_MODEL) != 0:
+        print("Load RKNN failed")
+        out_q.put(None)
+        return
+        
+    if rknn.init_runtime(core_mask=RKNNLite.NPU_CORE_0_1_2) != 0:
+        print("Init runtime failed")
+        out_q.put(None)
+        return
+
+    while True:
+        input_data = in_q.get()
+        if input_data is None:
+            break
+        
+        outputs = rknn.inference(inputs=[input_data], data_format="nhwc")
+        
+        if outputs is not None:
+            out_q.put(outputs[0])
+    
+    out_q.put(None) # 结束信号
+    rknn.release()
+    print("Inference thread finished.")
+
+# 消费者：后处理并写入视频
+def writer_worker(out_q):
+    cap_info = cv2.VideoCapture(VIDEO_PATH)
+    fps = cap_info.get(cv2.CAP_PROP_FPS)
+    width = int(cap_info.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap_info.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    if fps <= 0: fps = 25
+    cap_info.release()
+
+    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+    writer = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, (width, height))
+    
+    frame_count = 0
+    start_time = time.time()
+
+    while True:
+        npu_output = out_q.get()
+        if npu_output is None:
+            break
+        
+        # CPU 后处理
+        final_frame = postprocess(npu_output)
+        # 恢复原尺寸写入
+        final_frame = cv2.resize(final_frame, (width, height))
+        writer.write(final_frame)
+        
+        frame_count += 1
+        if frame_count % 50 == 0:
+            avg_fps = frame_count / (time.time() - start_time)
+            print(f"FPS: {avg_fps:.2f} | Processed: {frame_count}")
+
+    writer.release()
+    print(f"Writer thread finished. Saved to {OUTPUT_PATH}")
+
+
+def main():
+    if not os.path.exists(RKNN_MODEL):
+        print(f"Model {RKNN_MODEL} not found!")
+        return
+
+    q_in = Queue(maxsize=IN_QUEUE_SIZE)
+    q_out = Queue(maxsize=OUT_QUEUE_SIZE)
+
+    t_cap = threading.Thread(target=capture_worker, args=(q_in,))
+    t_inf = threading.Thread(target=inference_worker, args=(q_in, q_out))
+    t_wri = threading.Thread(target=writer_worker, args=(q_out,))
+
+    print("--> Pipeline Starting")
+    start_all = time.time()
+
+    t_cap.start()
+    t_inf.start()
+    t_wri.start()
+
+    # 等待所有线程完成
+    t_cap.join()
+    t_inf.join()
+    t_wri.join()
+
+    total_time = time.time() - start_all
+    print(f"Total processing time: {total_time:.2f} seconds")
+
+if __name__ == "__main__":
+    main()
+```
+修改之后帧率从1.3提升至1.6，npu占用从不到40%提升到超过50%。同时CPU占用也大幅提高。
+```bash
+orangepi@orangepi5:~/rknn_unet$ python3 post_deploy_rk3588_queue.py 
+--> Pipeline Starting
+rga_api version 1.9.3_[2]
+I RKNN: [21:12:16.441] RKNN Runtime Information, librknnrt version: 2.3.0 (c949ad889d@2024-11-07T11:35:33)
+I RKNN: [21:12:16.441] RKNN Driver Information, version: 0.9.8
+I RKNN: [21:12:16.442] RKNN Model Information, version: 6, toolkit version: 1.5.2+b642f30c(compiler version: 1.5.2 (c6b7b351a@2023-08-23T15:34:44)), target: RKNPU v2, target platform: rk3588, framework name: ONNX, framework layout: NCHW, model inference type: static_shape
+FPS: 1.64 | Processed: 50
+FPS: 1.65 | Processed: 100
+FPS: 1.64 | Processed: 150
+FPS: 1.65 | Processed: 200
+Capture thread finished.
+Writer thread finished. Saved to output_rk3588_pipeline.avi
+Inference thread finished.
+Total processing time: 150.56 seconds
+```
+```bash
+orangepi@orangepi5:~$ sudo cat /sys/kernel/debug/rknpu/load
+NPU load:  Core0: 61%, Core1: 50%, Core2: 50%,
+```
+```bash
+orangepi@orangepi5:~$ top
+top - 21:15:58 up  1:17,  3 users,  load average: 1.49, 0.88, 0.40
+Tasks: 266 total,   1 running, 265 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  9.9 us,  1.2 sy,  0.0 ni, 88.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   3735.4 total,    330.6 free,   2247.0 used,   1157.8 buff/cache
+MiB Swap:   1867.7 total,   1859.0 free,      8.8 used.   1126.9 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                                         
+   8092 orangepi  20   0 2920008   1.5g 377856 S  78.9  41.2   0:54.46 python3
+```
+#### 多进程异步
+到多线程的提升并没有我想象中的明显，因此可能是多线程受限于 Python 的 GIL 锁无法充分利用多核 CPU？因此尝试了多进程。但是测试表明性能不升反降，说明现在的瓶颈已经不在于CPU对数据的处理，而在于NPU受限于内存带宽依然在等待数据。此时想要减少内存IO只能修改模型规模或者INT8量化了
+```bash
+FPS: 1.49 | Count: 50
+FPS: 1.49 | Count: 100
+FPS: 1.50 | Count: 150
+FPS: 1.49 | Count: 200
+```
+```bash
+orangepi@orangepi5:~$ top
+top - 21:24:43 up  1:25,  3 users,  load average: 0.53, 0.39, 0.36
+Tasks: 259 total,   2 running, 257 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  9.2 us,  1.2 sy,  0.0 ni, 89.4 id,  0.0 wa,  0.0 hi,  0.1 si,  0.0 st
+MiB Mem :   3735.4 total,    979.8 free,   1584.8 used,   1170.8 buff/cache
+MiB Swap:   1867.7 total,   1859.0 free,      8.8 used.   1796.5 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND                                         
+   8513 orangepi   1 -19  925252 615056 324344 R  46.8  16.1   0:09.10 python3                                         
+   8514 orangepi  20   0  894128 142512  70432 S  18.3   3.7   0:04.35 python3                                         
+   8512 orangepi  20   0 1306848 222452 106436 S  10.0   5.8   0:02.90 python3
+```
+```bash
+orangepi@orangepi5:~$ sudo cat /sys/kernel/debug/rknpu/load
+NPU load:  Core0: 46%, Core1: 37%, Core2: 37%,
+```
+#### INT8量化
+警告：下面的代码有问题，输出偏色，依然在修复中，请勿使用，等后面项目做完再回来搞量化的事。这一节后面的实验证明瓶颈依然在CPU，暂时量化不是重点
+
+首先需要生成npy格式的校准数据集：
+```python
+import cv2
+import numpy as np
+import os
+import random
+
+# --- 配置 ---
+WATERMARK_DIR = r"D:\Dataset\watermarked_videos"
+MASK_DIR = r"D:\Dataset\mask_videos"
+CALIB_SAVE_DIR = "./calibration_data"
+DATASET_TEXT = "dataset.txt"
+SEQ_LEN = 5
+INPUT_W, INPUT_H = 640, 352  # (W, H)
+SAMPLE_COUNT = 100
+
+os.makedirs(CALIB_SAVE_DIR, exist_ok=True)
+
+
+def preprocess_uint8(frame, mask):
+    f = cv2.resize(frame, (INPUT_W, INPUT_H))
+    f = cv2.cvtColor(f, cv2.COLOR_BGR2RGB)
+    m = cv2.resize(mask, (INPUT_W, INPUT_H), interpolation=cv2.INTER_NEAREST)
+    if len(m.shape) == 3: m = cv2.cvtColor(m, cv2.COLOR_BGR2GRAY)
+    _, m = cv2.threshold(m, 127, 255, cv2.THRESH_BINARY)
+    m = m[:, :, np.newaxis]
+    return np.concatenate([f, m], axis=-1)  # [H, W, 4] uint8
+
+
+def generate_calibration():
+    video_files = [f for f in os.listdir(WATERMARK_DIR) if f.endswith('.mp4')]
+    random.shuffle(video_files)
+
+    count = 0
+    with open(DATASET_TEXT, 'w') as f_txt:
+        for v_name in video_files:
+            if count >= SAMPLE_COUNT:
+                break
+
+            v_path = os.path.join(WATERMARK_DIR, v_name)
+            m_path = os.path.join(MASK_DIR, v_name)
+
+            cap_v = cv2.VideoCapture(v_path)
+            cap_m = cv2.VideoCapture(m_path)
+
+            # 随机跳过前面的帧
+            for _ in range(random.randint(5, 20)):
+                cap_v.grab()
+                cap_m.grab()
+
+            buffer = []
+            for _ in range(SEQ_LEN):
+                ret_v, frame = cap_v.read()
+                ret_m, mask = cap_m.read()
+                if not ret_v or not ret_m: break
+                buffer.append(preprocess_uint8(frame, mask))
+
+            cap_v.release()
+            cap_m.release()
+
+            if len(buffer) == SEQ_LEN:
+                # 1. 拼接为 [H, W, 20]
+                data = np.concatenate(buffer, axis=-1)
+
+                # NHWC -> NCHW
+                # 将通道移到前面: [20, H, W]
+                data = data.transpose(2, 0, 1)
+                # 增加 Batch 维度[1, 20, H, W]
+                data = data[np.newaxis, ...]
+
+                npy_name = f"sample_{count:03d}.npy"
+                npy_path = os.path.abspath(os.path.join(CALIB_SAVE_DIR, npy_name))
+                np.save(npy_path, data)
+
+                f_txt.write(npy_path + '\n')
+                count += 1
+                print(f"Generated {npy_name} with shape {data.shape}")
+
+    print(f"已生成 {count} 个校准样本。")
+
+
+if __name__ == "__main__":
+    generate_calibration()
+
+```
+然后使用rknn的量化工具进行量化得到INT8模型：
+```python
+from rknn.api import RKNN
+import os
+
+ONNX_MODEL = 'model_fp16.onnx'
+RKNN_MODEL = 'model_int8.rknn'
+DATASET_TEXT = './dataset.txt'
+
+def convert():
+    rknn = RKNN(verbose=False)
+
+    print('--> Config RKNN')
+    # 这里的 means 和 stds 会按照通道顺序应用,因为输入是 [R1,G1,B1,M1, R2,G2,B2,M2...],统一设置 127.5
+    channel_count = 20
+    means = [[127.5] * channel_count]
+    stds = [[127.5] * channel_count]
+
+    rknn.config(
+        target_platform='rk3588',
+        mean_values=means,
+        std_values=stds,
+        quantized_dtype='asymmetric_quantized-8',
+        quantized_algorithm='normal',
+        # 开启优化，减少 NPU 内部的数据搬运
+        optimization_level=3 
+    )
+
+    print('--> Loading ONNX model')
+    if rknn.load_onnx(model=ONNX_MODEL) != 0:
+        print("Load failed!"); return
+
+    print('--> Building model (INT8)')
+    # 现在 dataset 里的 npy 是 (1, 20, 352, 640)，符合工具要求
+    if rknn.build(do_quantization=True, dataset=DATASET_TEXT) != 0:
+        print("Build failed!"); return
+
+    print('--> Exporting RKNN')
+    rknn.export_rknn(RKNN_MODEL)
+    print('Done!')
+
+if __name__ == '__main__':
+    convert()
+```
+编写新的推理代码，和之前的改动不大，主要是输入输出数据类型的变化，现在是 -128 到 127 的原始整数（INT8）
+
+十分尴尬的是，这段代码执行的帧率并没有变化，依然是1.6，且NPU占用降低到了25%左右，CPU占用保持80%左右不变。然而当我把视频输出resize的代码注释掉之后帧率提升到了1.8，显然其实瓶颈还是在CPU对数据的预处理
+```python
+import cv2
+import numpy as np
+from collections import deque
+from rknnlite.api import RKNNLite
+import time
+import os
+
+
+RKNN_MODEL = "model_int8.rknn" 
+VIDEO_PATH = "input.mp4"
+MASK_PATH = "mask.mp4"
+OUTPUT_PATH = "output_rk3588_int8.avi"
+
+SEQ_LEN = 5
+INPUT_W, INPUT_H = 640, 352
+TARGET_FRAME_IDX = 2
+
+
+def preprocess_int8(frame, mask):
+    """
+    返回 [H, W, 4] uint8
+    """
+    f = cv2.resize(frame, (INPUT_W, INPUT_H), interpolation=cv2.INTER_AREA)
+    f = cv2.cvtColor(f, cv2.COLOR_BGR2RGB)
+    
+    # Resize Mask 并严格二值化
+    m = cv2.resize(mask, (INPUT_W, INPUT_H), interpolation=cv2.INTER_NEAREST)
+    if len(m.shape) == 3:
+        m = cv2.cvtColor(m, cv2.COLOR_BGR2GRAY)
+    _, m = cv2.threshold(m, 127, 255, cv2.THRESH_BINARY)
+    m = m[:, :, np.newaxis] 
+    
+    # 拼接 RGB(3) + Mask(1) = 4通道 uint8
+    return np.concatenate([f, m], axis=-1)
+
+def postprocess_int8(output_tensor, original_size):
+    """
+    output_tensor: NPU输出的 int8 类型数组 (范围 -128 到 127)
+    """
+    # 1. 将 int8 转换为 float32 并执行反量化 (还原到 -1.0 ~ 1.0)
+    # 因为模型最后是 Tanh，量化后的 127 对应 1.0
+    res = output_tensor[0].astype(np.float32) / 127.0
+    
+    # 2. 维度转换 [3, H, W] -> [H, W, 3]
+    res = res.transpose(1, 2, 0)
+    
+    # 3. 反归一化：将 [-1, 1] 映射回 [0, 255] 像素空间
+    res = (res + 1.0) / 2.0
+    res = np.clip(res * 255, 0, 255).astype(np.uint8)
+    
+    # 4. 颜色空间转换 BGR 并拉伸回原视频尺寸
+    res = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
+    return cv2.resize(res, original_size, interpolation=cv2.INTER_LINEAR)
+
+
+def main():
+    if not os.path.exists(RKNN_MODEL):
+        print(f"Error: 找不到模型文件 {RKNN_MODEL}")
+        return
+
+    rknn = RKNNLite()
+    if rknn.load_rknn(RKNN_MODEL) != 0:
+        print("加载模型失败"); return
+
+    if rknn.init_runtime(core_mask=RKNNLite.NPU_CORE_0_1_2) != 0:
+        print("初始化失败"); return
+
+    cap_v = cv2.VideoCapture(VIDEO_PATH)
+    cap_m = cv2.VideoCapture(MASK_PATH)
+    
+    if not cap_v.isOpened():
+        print("错误: 无法打开视频文件"); return
+
+    fps = cap_v.get(cv2.CAP_PROP_FPS)
+    orig_w = int(cap_v.get(cv2.CAP_PROP_FRAME_WIDTH))
+    orig_h = int(cap_v.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    if fps <= 0: fps = 25
+
+    fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+    writer = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, (orig_w, orig_h))
+
+    buffer = deque(maxlen=SEQ_LEN)
+    frame_idx = 0
+    start_time = time.time()
+
+    print("--> 开始 NPU 推理...")
+    
+    while True:
+        ret_v, frame = cap_v.read()
+        ret_m, mask = cap_m.read()
+        if not ret_v or not ret_m:
+            break
+
+        feat_uint8 = preprocess_int8(frame, mask)
+        buffer.append(feat_uint8)
+        
+        if frame_idx == 0:
+            for _ in range(SEQ_LEN - 1):
+                buffer.append(feat_uint8)
+
+        if len(buffer) == SEQ_LEN:
+            # NPU 输入：[1, H, W, 20] uint8
+            input_data = np.concatenate(list(buffer), axis=-1)
+            input_data = input_data[np.newaxis, ...]
+
+            # NPU 推理inputs 传入 uint8，RKNN 内部节点自动执行归一化减法
+            outputs = rknn.inference(inputs=[input_data], data_format='nhwc')
+            
+            if outputs is None:
+                print("推理出错!"); break
+
+            # 将 int8 转换回像素
+            final_frame = postprocess_int8(outputs[0], (orig_w, orig_h))
+            writer.write(final_frame)
+
+        frame_idx += 1
+        if frame_idx % 100 == 0:
+            elapsed = time.time() - start_time
+            print(f"帧数: {frame_idx} | 平均 FPS: {frame_idx / elapsed:.2f}")
+
+    cap_v.release()
+    cap_m.release()
+    writer.release()
+    rknn.release()
+    
+    total_time = time.time() - start_time
+    print(f"\n任务完成！")
+    print(f"总处理帧数: {frame_idx}")
+    print(f"最终平均帧率: {frame_idx / total_time:.2f} FPS")
+
+if __name__ == "__main__":
+    main()
+    
+```
 
 ## 项目实践：实时水下图像恢复的模型板载部署
 
