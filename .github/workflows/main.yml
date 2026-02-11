@@ -91,3 +91,4 @@ jobs:
           user_name: 'Triority[bot]'
           user_email: 'github-actions[bot]@github.com'
           force_orphan: true
+          cname: www.triority.cc
