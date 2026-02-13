@@ -18,7 +18,6 @@ menu:
   #   Movie: /movies/ || fas fa-video
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
-  服务: /services/ || fas fa-list
   相册: /photo/ || fas fa-book
 
 # Code Blocks (代碼相關)
