@@ -1,6 +1,6 @@
 ---
 title: 香橙派5（RK3588）AI模型推理
-cover: 
+cover: /img/0628.png
 date: 2026-1-11 20:12:14
 categories: 
 - [文档&笔记]
@@ -1153,4 +1153,447 @@ if __name__ == "__main__":
 ```
 
 ## 项目实践：实时水下图像恢复的模型板载部署
+由于项目代码等内容不宜公开，且模型转换和部署方式和上面相同，因此不再描述。现在模型已经部署完成，但是单帧推理256*256输入板载单个npu用时900ms，三个npu并行耗时700ms，必须对推理速度进行优化，目标是达到1080p 30FPS。
+### 在onnx2rknn查看算子推理设备
+由于模型很多算子并不支持直接由npu执行，这部分操作被退回至CPU执行，因此消耗了大量时间。要优化速度首先要知道算子在哪个设备上执行的，以及具体时间消耗是多少。
 
+在使用rknn-toolkit2进行转换时，就已经会打印出算子计算设备：
+```python
+rknn = RKNN(verbose=True) # 这里设为 True 会打印最底层的转换细节
+# 一些代码...
+rknn.build() # 控制台会输出一个关于模型的表格
+```
+我这里表格内容如下：
+```
+D RKNN: [04:33:42.488] RKNNModelBuildPass: [Statistics]
+D RKNN: [04:33:42.488] total_regcfg_size     :    742928
+D RKNN: [04:33:42.488] total_diff_regcfg_size:    181328
+D RKNN: [04:33:42.488] ID   OpType           DataType Target InputShape                                   OutputShape            DDR Cycles     NPU Cycles     Total Cycles   Time(us)       MacUsage(%)    Task Number    Lut Number     RW(KB)         FullName        
+D RKNN: [04:33:42.488] 0    InputOperator    FLOAT16  CPU    \                                            (1,3,256,256)          0              0              0              0              \              0              0              384.00         InputOperator:input
+D RKNN: [04:33:42.488] 1    Conv             FLOAT16  NPU    (1,3,256,256),(3,3,1,1)                      (1,3,256,256)          0              0              0              0              \              0              0              1408.05                        
+D RKNN: [04:33:42.488] 2    Pad              FLOAT16  CPU    (1,3,256,256),(8)                            (1,3,258,258)          0              0              0              0              \              0              0              2064.12        Pad:/pr_encoder/conv1/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 3    ConvLeakyRelu    FLOAT16  NPU    (1,3,258,258),(64,3,3,3),(64)                (1,64,256,256)         0              0              0              0              \              0              0              9241.31        Conv:/pr_encoder/conv1/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 4    Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/pr_encoder/conv1/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 5    ConvLeakyRelu    FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/pr_encoder/conv1/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 6    MaxPool          FLOAT16  NPU    (1,64,256,256)                               (1,64,128,128)         0              0              0              0              \              0              0              10240.00       MaxPool:/pr_encoder/pool1/MaxPool
+D RKNN: [04:33:42.488] 7    Pad              FLOAT16  CPU    (1,64,128,128),(8)                           (1,64,130,130)         0              0              0              0              \              0              0              4160.56        Pad:/pr_encoder/conv2/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 8    ConvLeakyRelu    FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)              (1,64,128,128)         0              0              0              0              \              0              0              4232.75        Conv:/pr_encoder/conv2/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 9    Pad              FLOAT16  CPU    (1,64,128,128),(8)                           (1,64,130,130)         0              0              0              0              \              0              0              4160.56        Pad:/pr_encoder/conv2/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 10   ConvLeakyRelu    FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)              (1,64,128,128)         0              0              0              0              \              0              0              4232.75        Conv:/pr_encoder/conv2/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 11   MaxPool          FLOAT16  NPU    (1,64,128,128)                               (1,64,64,64)           0              0              0              0              \              0              0              2560.00        MaxPool:/pr_encoder/pool2/MaxPool
+D RKNN: [04:33:42.488] 12   Pad              FLOAT16  CPU    (1,64,64,64),(8)                             (1,64,66,66)           0              0              0              0              \              0              0              1056.56        Pad:/pr_encoder/conv3/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 13   ConvLeakyRelu    FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)                (1,64,64,64)           0              0              0              0              \              0              0              1128.75        Conv:/pr_encoder/conv3/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 14   Pad              FLOAT16  CPU    (1,64,64,64),(8)                             (1,64,66,66)           0              0              0              0              \              0              0              1056.56        Pad:/pr_encoder/conv3/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 15   ConvLeakyRelu    FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)                (1,64,64,64)           0              0              0              0              \              0              0              1128.75        Conv:/pr_encoder/conv3/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 16   MaxPool          FLOAT16  NPU    (1,64,64,64)                                 (1,64,32,32)           0              0              0              0              \              0              0              640.00         MaxPool:/pr_encoder/pool3/MaxPool
+D RKNN: [04:33:42.488] 17   Pad              FLOAT16  CPU    (1,64,32,32),(8)                             (1,64,34,34)           0              0              0              0              \              0              0              272.56         Pad:/pr_encoder/conv4/body/body.0/Pad
+D RKNN: [04:33:42.488] 18   ConvLeakyRelu    FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)                (1,64,32,32)           0              0              0              0              \              0              0              344.75         Conv:/pr_encoder/conv4/body/body.1/Conv
+D RKNN: [04:33:42.488] 19   Pad              FLOAT16  CPU    (1,64,32,32),(8)                             (1,64,34,34)           0              0              0              0              \              0              0              272.56         Pad:/pr_encoder/conv4/body/body.3/Pad
+D RKNN: [04:33:42.488] 20   Conv             FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)                (1,64,32,32)           0              0              0              0              \              0              0              344.75         Conv:/pr_encoder/conv4/body/body.4/Conv
+D RKNN: [04:33:42.488] 21   Conv             FLOAT16  NPU    (1,64,32,32),(1,64,7,7),(64)                 (1,64,5,5)             0              0              0              0              \              0              0              137.50         Conv:/pr_encoder/conv4/body/body.5/global_pool/GlobalAveragePool_2conv_0
+D RKNN: [04:33:42.488] 22   Conv             FLOAT16  NPU    (1,64,5,5),(1,64,5,5),(64)                   (1,64,1,1)             0              0              0              0              \              0              0              6.62           Conv:/pr_encoder/conv4/body/body.5/global_pool/GlobalAveragePool_output_0
+D RKNN: [04:33:42.488] 23   ConvLeakyRelu    FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                    (1,4,1,1)              0              0              0              0              \              0              0              0.70           Conv:/pr_encoder/conv4/body/body.5/conv_double/conv_double.0/Conv
+D RKNN: [04:33:42.488] 24   Conv             FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                    (1,64,1,1)             0              0              0              0              \              0              0              1.39           Conv:/pr_encoder/conv4/body/body.5/conv_double/conv_double.2/Conv
+D RKNN: [04:33:42.488] 25   Sigmoid          FLOAT16  NPU    (1,64,1,1)                                   (1,64,1,1)             0              0              0              0              \              0              0              0.25           Sigmoid:/pr_encoder/conv4/body/body.5/conv_double/conv_double.3/Sigmoid
+D RKNN: [04:33:42.488] 26   Mul              FLOAT16  NPU    (1,64,32,32),(1,64,1,1)                      (1,64,32,32)           0              0              0              0              \              0              0              256.12         Mul:/pr_encoder/conv4/body/body.5/Mul
+D RKNN: [04:33:42.488] 27   Add              FLOAT16  NPU    (1,64,32,32),(1,64,32,32)                    (1,64,32,32)           0              0              0              0              \              0              0              384.00         Add:/pr_encoder/conv4/Add
+D RKNN: [04:33:42.488] 28   Pad              FLOAT16  CPU    (1,64,32,32),(8)                             (1,64,34,34)           0              0              0              0              \              0              0              272.56         Pad:/pr_conv/body/body.0/Pad
+D RKNN: [04:33:42.488] 29   ConvLeakyRelu    FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)                (1,64,32,32)           0              0              0              0              \              0              0              344.75         Conv:/pr_conv/body/body.1/Conv
+D RKNN: [04:33:42.488] 30   Pad              FLOAT16  CPU    (1,64,32,32),(8)                             (1,64,34,34)           0              0              0              0              \              0              0              272.56         Pad:/pr_conv/body/body.3/Pad
+D RKNN: [04:33:42.488] 31   Conv             FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)                (1,64,32,32)           0              0              0              0              \              0              0              344.75         Conv:/pr_conv/body/body.4/Conv
+D RKNN: [04:33:42.488] 32   Conv             FLOAT16  NPU    (1,64,32,32),(1,64,7,7),(64)                 (1,64,5,5)             0              0              0              0              \              0              0              137.50         Conv:/pr_conv/body/body.5/global_pool/GlobalAveragePool_2conv_0
+D RKNN: [04:33:42.488] 33   Conv             FLOAT16  NPU    (1,64,5,5),(1,64,5,5),(64)                   (1,64,1,1)             0              0              0              0              \              0              0              6.62           Conv:/pr_conv/body/body.5/global_pool/GlobalAveragePool_output_0
+D RKNN: [04:33:42.488] 34   ConvLeakyRelu    FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                    (1,4,1,1)              0              0              0              0              \              0              0              0.70           Conv:/pr_conv/body/body.5/conv_double/conv_double.0/Conv
+D RKNN: [04:33:42.488] 35   Conv             FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                    (1,64,1,1)             0              0              0              0              \              0              0              1.39           Conv:/pr_conv/body/body.5/conv_double/conv_double.2/Conv
+D RKNN: [04:33:42.488] 36   Sigmoid          FLOAT16  NPU    (1,64,1,1)                                   (1,64,1,1)             0              0              0              0              \              0              0              0.25           Sigmoid:/pr_conv/body/body.5/conv_double/conv_double.3/Sigmoid
+D RKNN: [04:33:42.488] 37   Mul              FLOAT16  NPU    (1,64,32,32),(1,64,1,1)                      (1,64,32,32)           0              0              0              0              \              0              0              256.12         Mul:/pr_conv/body/body.5/Mul
+D RKNN: [04:33:42.488] 38   Add              FLOAT16  NPU    (1,64,32,32),(1,64,32,32)                    (1,64,32,32)           0              0              0              0              \              0              0              384.00         Add:/pr_conv/Add
+D RKNN: [04:33:42.488] 39   Resize           FLOAT16  CPU    (1,64,32,32),(0),(4)                         (1,64,64,64)           0              0              0              0              \              0              0              640.02         Resize:/pr_Up3/up/up.0/Resize
+D RKNN: [04:33:42.488] 40   Concat           FLOAT16  NPU    (1,64,64,64),(1,64,64,64)                    (1,128,64,64)          0              0              0              0              \              0              0              2048.00        Concat:/Concat  
+D RKNN: [04:33:42.488] 41   Pad              FLOAT16  CPU    (1,128,64,64),(8)                            (1,128,66,66)          0              0              0              0              \              0              0              2113.06        Pad:/pr_UpConv3/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 42   ConvLeakyRelu    FLOAT16  NPU    (1,128,66,66),(64,128,3,3),(64)              (1,64,64,64)           0              0              0              0              \              0              0              1745.25        Conv:/pr_UpConv3/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 43   Pad              FLOAT16  CPU    (1,64,64,64),(8)                             (1,64,66,66)           0              0              0              0              \              0              0              1056.56        Pad:/pr_UpConv3/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 44   ConvLeakyRelu    FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)                (1,64,64,64)           0              0              0              0              \              0              0              1128.75        Conv:/pr_UpConv3/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 45   Resize           FLOAT16  CPU    (1,64,64,64),(0),(4)                         (1,64,128,128)         0              0              0              0              \              0              0              2560.02        Resize:/pr_Up2/up/up.0/Resize
+D RKNN: [04:33:42.488] 46   Concat           FLOAT16  NPU    (1,64,128,128),(1,64,128,128)                (1,128,128,128)        0              0              0              0              \              0              0              8192.00        Concat:/Concat_1
+D RKNN: [04:33:42.488] 47   Pad              FLOAT16  CPU    (1,128,128,128),(8)                          (1,128,130,130)        0              0              0              0              \              0              0              8321.06        Pad:/pr_UpConv2/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 48   ConvLeakyRelu    FLOAT16  NPU    (1,128,130,130),(64,128,3,3),(64)            (1,64,128,128)         0              0              0              0              \              0              0              6417.25        Conv:/pr_UpConv2/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 49   Pad              FLOAT16  CPU    (1,64,128,128),(8)                           (1,64,130,130)         0              0              0              0              \              0              0              4160.56        Pad:/pr_UpConv2/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 50   ConvLeakyRelu    FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)              (1,64,128,128)         0              0              0              0              \              0              0              4232.75        Conv:/pr_UpConv2/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 51   Resize           FLOAT16  CPU    (1,64,128,128),(0),(4)                       (1,64,256,256)         0              0              0              0              \              0              0              10240.02       Resize:/pr_Up1/up/up.0/Resize
+D RKNN: [04:33:42.488] 52   Concat           FLOAT16  NPU    (1,64,256,256),(1,64,256,256)                (1,128,256,256)        0              0              0              0              \              0              0              32768.00       Concat:/Concat_2
+D RKNN: [04:33:42.488] 53   Conv             FLOAT16  NPU    (1,128,256,256),(1,128,7,7),(128)            (1,128,37,37)          0              0              0              0              \              0              0              16739.00       Conv:/gap/GlobalAveragePool_2conv_0
+D RKNN: [04:33:42.488] 54   Conv             FLOAT16  NPU    (1,128,37,37),(1,128,7,7),(128)              (1,128,6,6)            0              0              0              0              \              0              0              364.00         Conv:/gap/GlobalAveragePool_2conv_1
+D RKNN: [04:33:42.488] 55   Conv             FLOAT16  NPU    (1,128,6,6),(1,128,6,6),(128)                (1,128,1,1)            0              0              0              0              \              0              0              18.75          Conv:/gap/GlobalAveragePool_output_0
+D RKNN: [04:33:42.488] 56   Conv             FLOAT16  NPU    (1,128,1,1),(40,128,1,1),(40)                (1,40,1,1)             0              0              0              0              \              0              0              10.52          Conv:/u_conv_layer/Conv
+D RKNN: [04:33:42.488] 57   Slice            FLOAT16  NPU    (1,40,1,1),(1),(1),(1),(1)                   (1,20,1,1)             0              0              0              0              \              0              0              0.16           Slice:/Slice    
+D RKNN: [04:33:42.488] 58   Conv             FLOAT16  NPU    (1,20,1,1),(128,20,1,1),(128)                (1,128,1,1)            0              0              0              0              \              0              0              8.80           Conv:/conv_u/Conv
+D RKNN: [04:33:42.488] 59   Conv             FLOAT16  NPU    (1,128,1,1),(40,128,1,1),(40)                (1,40,1,1)             0              0              0              0              \              0              0              10.52          Conv:/s_conv_layer/Conv
+D RKNN: [04:33:42.488] 60   Slice            FLOAT16  NPU    (1,40,1,1),(1),(1),(1),(1)                   (1,20,1,1)             0              0              0              0              \              0              0              0.16           Slice:/Slice_1  
+D RKNN: [04:33:42.488] 61   ConvLeakyRelu    FLOAT16  NPU    (1,20,1,1),(128,20,1,1),(128)                (1,128,1,1)            0              0              0              0              \              0              0              8.80           Conv:/conv_s/Conv
+D RKNN: [04:33:42.488] 62   Reshape          FLOAT16  CPU    (1,128,256,256),(4)                          (128,65536,1,1)        0              0              0              0              \              0              0              32768.03       Reshape:/insnorm/InstanceNormalization_2ln_reshape1
+D RKNN: [04:33:42.488] 63   exLayerNorm      FLOAT16  NPU    (128,65536,1,1),(1,65536,1,1)                (128,65536,1,1)        0              0              0              0              \              0              0              32896.00       exLayerNorm:/insnorm/InstanceNormalization_2ln
+D RKNN: [04:33:42.488] 64   Reshape          FLOAT16  CPU    (128,65536,1,1),(4)                          (1,128,256,256)        0              0              0              0              \              0              0              32768.03       Reshape:/insnorm/InstanceNormalization_2ln_reshape2
+D RKNN: [04:33:42.488] 65   Mul              FLOAT16  NPU    (1,128,256,256),(1,128,1,1)                  (1,128,256,256)        0              0              0              0              \              0              0              32768.25       Mul:/Mul        
+D RKNN: [04:33:42.488] 66   Add              FLOAT16  NPU    (1,128,256,256),(1,128,1,1)                  (1,128,256,256)        0              0              0              0              \              0              0              32768.25       Add:/Add        
+D RKNN: [04:33:42.488] 67   Pad              FLOAT16  CPU    (1,128,256,256),(8)                          (1,128,258,258)        0              0              0              0              \              0              0              33025.06       Pad:/pr_UpConv1/conv/conv.0/Pad
+D RKNN: [04:33:42.488] 68   ConvLeakyRelu    FLOAT16  NPU    (1,128,258,258),(64,128,3,3),(64)            (1,64,256,256)         0              0              0              0              \              0              0              24977.25       Conv:/pr_UpConv1/conv/conv.1/Conv
+D RKNN: [04:33:42.488] 69   Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/pr_UpConv1/conv/conv.4/Pad
+D RKNN: [04:33:42.488] 70   ConvLeakyRelu    FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/pr_UpConv1/conv/conv.5/Conv
+D RKNN: [04:33:42.488] 71   Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/out_conv/out_conv.0/body/body.0/Pad
+D RKNN: [04:33:42.488] 72   ConvLeakyRelu    FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/out_conv/out_conv.0/body/body.1/Conv
+D RKNN: [04:33:42.488] 73   Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/out_conv/out_conv.0/body/body.3/Pad
+D RKNN: [04:33:42.488] 74   Conv             FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/out_conv/out_conv.0/body/body.4/Conv
+D RKNN: [04:33:42.488] 75   Conv             FLOAT16  NPU    (1,64,256,256),(1,64,7,7),(64)               (1,64,37,37)           0              0              0              0              \              0              0              8369.50        Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_2conv_0
+D RKNN: [04:33:42.488] 76   Conv             FLOAT16  NPU    (1,64,37,37),(1,64,7,7),(64)                 (1,64,6,6)             0              0              0              0              \              0              0              182.00         Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_2conv_1
+D RKNN: [04:33:42.488] 77   Conv             FLOAT16  NPU    (1,64,6,6),(1,64,6,6),(64)                   (1,64,1,1)             0              0              0              0              \              0              0              9.38           Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_output_0
+D RKNN: [04:33:42.488] 78   ConvLeakyRelu    FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                    (1,4,1,1)              0              0              0              0              \              0              0              0.70           Conv:/out_conv/out_conv.0/body/body.5/conv_double/conv_double.0/Conv
+D RKNN: [04:33:42.488] 79   Conv             FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                    (1,64,1,1)             0              0              0              0              \              0              0              1.39           Conv:/out_conv/out_conv.0/body/body.5/conv_double/conv_double.2/Conv
+D RKNN: [04:33:42.488] 80   Sigmoid          FLOAT16  NPU    (1,64,1,1)                                   (1,64,1,1)             0              0              0              0              \              0              0              0.25           Sigmoid:/out_conv/out_conv.0/body/body.5/conv_double/conv_double.3/Sigmoid
+D RKNN: [04:33:42.488] 81   Mul              FLOAT16  NPU    (1,64,256,256),(1,64,1,1)                    (1,64,256,256)         0              0              0              0              \              0              0              16384.12       Mul:/out_conv/out_conv.0/body/body.5/Mul
+D RKNN: [04:33:42.488] 82   Add              FLOAT16  NPU    (1,64,256,256),(1,64,256,256)                (1,64,256,256)         0              0              0              0              \              0              0              24576.00       Add:/out_conv/out_conv.0/Add
+D RKNN: [04:33:42.488] 83   Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/out_conv/out_conv.1/body/body.0/Pad
+D RKNN: [04:33:42.488] 84   ConvLeakyRelu    FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/out_conv/out_conv.1/body/body.1/Conv
+D RKNN: [04:33:42.488] 85   Pad              FLOAT16  CPU    (1,64,256,256),(8)                           (1,64,258,258)         0              0              0              0              \              0              0              16512.56       Pad:/out_conv/out_conv.1/body/body.3/Pad
+D RKNN: [04:33:42.488] 86   Conv             FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)              (1,64,256,256)         0              0              0              0              \              0              0              16584.75       Conv:/out_conv/out_conv.1/body/body.4/Conv
+D RKNN: [04:33:42.488] 87   Conv             FLOAT16  NPU    (1,64,256,256),(1,64,7,7),(64)               (1,64,37,37)           0              0              0              0              \              0              0              8369.50        Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_2conv_0
+D RKNN: [04:33:42.488] 88   Conv             FLOAT16  NPU    (1,64,37,37),(1,64,7,7),(64)                 (1,64,6,6)             0              0              0              0              \              0              0              182.00         Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_2conv_1
+D RKNN: [04:33:42.488] 89   Conv             FLOAT16  NPU    (1,64,6,6),(1,64,6,6),(64)                   (1,64,1,1)             0              0              0              0              \              0              0              9.38           Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_output_0
+D RKNN: [04:33:42.488] 90   ConvLeakyRelu    FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                    (1,4,1,1)              0              0              0              0              \              0              0              0.70           Conv:/out_conv/out_conv.1/body/body.5/conv_double/conv_double.0/Conv
+D RKNN: [04:33:42.488] 91   Conv             FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                    (1,64,1,1)             0              0              0              0              \              0              0              1.39           Conv:/out_conv/out_conv.1/body/body.5/conv_double/conv_double.2/Conv
+D RKNN: [04:33:42.488] 92   Sigmoid          FLOAT16  NPU    (1,64,1,1)                                   (1,64,1,1)             0              0              0              0              \              0              0              0.25           Sigmoid:/out_conv/out_conv.1/body/body.5/conv_double/conv_double.3/Sigmoid
+D RKNN: [04:33:42.488] 93   Mul              FLOAT16  NPU    (1,64,256,256),(1,64,1,1)                    (1,64,256,256)         0              0              0              0              \              0              0              16384.12       Mul:/out_conv/out_conv.1/body/body.5/Mul
+D RKNN: [04:33:42.488] 94   Add              FLOAT16  NPU    (1,64,256,256),(1,64,256,256)                (1,64,256,256)         0              0              0              0              \              0              0              24576.00       Add:/out_conv/out_conv.1/Add
+D RKNN: [04:33:42.488] 95   Conv             FLOAT16  NPU    (1,64,256,256),(3,64,1,1),(3)                (1,3,256,256)          0              0              0              0              \              0              0              10240.44       Conv:/out_conv/out_conv.2/Conv
+D RKNN: [04:33:42.488] 96   OutputOperator   FLOAT16  CPU    (1,3,256,256)                                \                      0              0              0              0              \              0              0              2048.00        OutputOperator:output
+D RKNN: [04:33:42.489] <<<<<<<< end: N4rknn18RKNNModelBuildPassE
+```
+可以看到所有的 Pad 算子（对应代码里的 nn.ReflectionPad2d(1)）、Resize (对应 nn.Upsample) 目标都是 CPU，且InstanceNormalization 虽然核心 exLayerNorm (ID 63) 在 NPU 上，但前后的 Reshape 全在 CPU
+
+但是这些操作具体需要多少时间就需要通过adb连接到开发板使用rknn_server进行分析了
+
+### adb连接rknn_server：测量算子推理耗时
+1.首先确认adb已经开启：
+```bash
+ps -ef | grep adbd
+```
+2.启动 rknn_server：
+```bash
+# 检查是否安装了rknn_server
+orangepi@orangepi5:~$ strings /usr/bin/rknn_server | grep -i "rknn_server version"
+rknn_server version: 2.3.0 (e80ac5c build@2024-11-07T12:52:53)
+# 启动
+orangepi@orangepi5:~$ ulimit -n 65535
+orangepi@orangepi5:~$ /usr/bin/rknn_server &
+[1] 3496
+orangepi@orangepi5:~$ start rknn server, version:2.3.0 (e80ac5c build@2024-11-07T12:52:53)
+I NPUTransfer(3496): Starting NPU Transfer Server, Transfer version 2.2.2 (@2024-06-18T03:50:51)
+```
+3.在PC上连接：
+
+```bash
+triority@ubuntu:~/Desktop/rknn_test/UIE$ adb connect 192.168.10.43:5555
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+connected to 192.168.10.43:5555
+
+triority@ubuntu:~/Desktop/rknn_test/UIE$ adb devices
+List of devices attached
+192.168.10.43:5555	device
+
+```
+现在对转换程序做一些修改：
+```python
+from rknn.api import RKNN
+
+# 网络连接填入IP:端口:'192.168.3.15:5555'
+# USB 填入 adb devices 看到的序列号，或者仅连接一个设备时留空
+DEVICE_ID = '192.168.10.43:5555' 
+
+rknn = RKNN(verbose=True)
+
+rknn.config(mean_values=[[0, 0, 0]], std_values=[[1, 1, 1]], target_platform='rk3588')
+
+print('--> Loading model')
+ret = rknn.load_onnx(model='puienet_deploy.onnx')
+if ret != 0:
+    print('Load model failed!')
+    exit(ret)
+
+print('--> Building model')
+ret = rknn.build(do_quantization=False) # 先fp16
+if ret != 0:
+    print('Build model failed!')
+    exit(ret)
+
+
+print('--> 初始化板载运行环境...')
+ret = rknn.init_runtime(target='rk3588', device_id=DEVICE_ID, perf_debug=True)
+if ret != 0:
+    print('初始化 runtime 失败！')
+    # 即使失败也导出模型，所以这里不直接 exit
+else:
+    print('--> 开始评估算子级性能 (eval_perf)...')
+    # is_print=True 会在终端打印详细的每一层耗时表格
+    rknn.eval_perf(is_print=True)
+
+print('--> Export rknn model')
+ret = rknn.export_rknn('./puienet_rk3588.rknn')
+if ret != 0:
+    print('Export rknn model failed!')
+    exit(ret)
+
+print('Done')
+
+rknn.release()
+
+```
+输出的统计结果如下：
+```bash
+---------------------------------------------------------------------------------------------------
+                                 Operator Time Consuming Ranking Table            
+---------------------------------------------------------------------------------------------------
+OpType             CallNumber   CPUTime(us)  GPUTime(us)  NPUTime(us)  TotalTime(us)  TimeRatio(%)  
+---------------------------------------------------------------------------------------------------
+ConvLeakyRelu      21           0            0            49852        49852          27.24%        
+Transpose          2            0            0            27731        27731          15.15%        
+Resize             3            23583        0            0            23583          12.89%        
+exNorm             1            0            0            20555        20555          11.23%        
+Pad                20           0            0            20167        20167          11.02%        
+Conv               22           0            0            17892        17892          9.78%         
+Add                5            0            0            8039         8039           4.39%         
+Mul                5            0            0            7468         7468           4.08%         
+Concat             3            0            0            4261         4261           2.33%         
+MaxPool            3            0            0            3153         3153           1.72%         
+ConvSigmoid        4            0            0            149          149            0.08%         
+OutputOperator     1            103          0            0            103            0.06%         
+Slice              2            0            0            42           42             0.02%         
+InputOperator      1            4            0            0            4              0.00%         
+Reshape            2            0            0            4            4              0.00%         
+---------------------------------------------------------------------------------------------------
+Total                           23690        0            159313       183003        
+---------------------------------------------------------------------------------------------------
+```
+还有详细的每一层的具体统计
+```bash
+--> 开始评估算子级性能 (eval_perf)...
+CPU Current Frequency List:
+    - 1800000
+    - 2400000
+    - 2400000
+NPU Current Frequency List:
+    - 1000000000
+DDR Current Frequency List:
+    - Unknown
+
+Warning: The performance result is just for debugging, may worse than actual performance!
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                          Network Layer Information Table                                                                                
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID   OpType             DataType Target InputShape                               OutputShape            Cycles(DDR/NPU/Total)    Time(us)     MacUsage(%)          WorkLoad(0/1/2)      RW(KB)       FullName        
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    InputOperator      FLOAT16  CPU    \                                        (1,3,256,256)          0/0/0                    4                                 0.0%/0.0%/0.0%       0            InputOperator:input
+2    Conv               FLOAT16  NPU    (1,3,256,256),(3,3,1,1)                  (1,3,256,256)          60956/131072/131072      390          0.30/0.00/0.00       100.0%/0.0%/0.0%     384                          
+3    Pad                FLOAT16  NPU    (1,3,256,256),(8)                        (1,3,258,258)          0/0/0                    307                               100.0%/0.0%/0.0%     1024         Pad:/pr_encoder/conv1/conv/conv.0/Pad
+4    ConvLeakyRelu      FLOAT16  NPU    (1,3,258,258),(64,3,3,3),(64)            (1,64,256,256)         400064/2359296/2359296   2514         8.80/0.00/0.00       100.0%/0.0%/0.0%     1049         Conv:/pr_encoder/conv1/conv/conv.1/Conv
+5    Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    2003                              100.0%/0.0%/0.0%     8192         Pad:/pr_encoder/conv1/conv/conv.4/Pad
+6    ConvLeakyRelu      FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5873         80.34/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/pr_encoder/conv1/conv/conv.5/Conv
+7    MaxPool            FLOAT16  NPU    (1,64,256,256)                           (1,64,128,128)         0/0/0                    2371                              100.0%/0.0%/0.0%     8192         MaxPool:/pr_encoder/pool1/MaxPool
+8    Pad                FLOAT16  NPU    (1,64,128,128),(8)                       (1,64,130,130)         0/0/0                    531                               100.0%/0.0%/0.0%     2048         Pad:/pr_encoder/conv2/conv/conv.0/Pad
+9    ConvLeakyRelu      FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)          (1,64,128,128)         183240/1179648/1179648   1461         80.74/0.00/0.00      100.0%/0.0%/0.0%     2184         Conv:/pr_encoder/conv2/conv/conv.1/Conv
+10   Pad                FLOAT16  NPU    (1,64,128,128),(8)                       (1,64,130,130)         0/0/0                    578                               100.0%/0.0%/0.0%     2048         Pad:/pr_encoder/conv2/conv/conv.4/Pad
+11   ConvLeakyRelu      FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)          (1,64,128,128)         183240/1179648/1179648   1461         80.74/0.00/0.00      100.0%/0.0%/0.0%     2184         Conv:/pr_encoder/conv2/conv/conv.5/Conv
+12   MaxPool            FLOAT16  NPU    (1,64,128,128)                           (1,64,64,64)           0/0/0                    605                               100.0%/0.0%/0.0%     2048         MaxPool:/pr_encoder/pool2/MaxPool
+13   Pad                FLOAT16  NPU    (1,64,64,64),(8)                         (1,64,66,66)           0/0/0                    163                               100.0%/0.0%/0.0%     512          Pad:/pr_encoder/conv3/conv/conv.0/Pad
+14   ConvLeakyRelu      FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)            (1,64,64,64)           48865/294912/294912      354          83.31/0.00/0.00      100.0%/0.0%/0.0%     616          Conv:/pr_encoder/conv3/conv/conv.1/Conv
+15   Pad                FLOAT16  NPU    (1,64,64,64),(8)                         (1,64,66,66)           0/0/0                    162                               100.0%/0.0%/0.0%     512          Pad:/pr_encoder/conv3/conv/conv.4/Pad
+16   ConvLeakyRelu      FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)            (1,64,64,64)           48865/294912/294912      357          82.61/0.00/0.00      100.0%/0.0%/0.0%     616          Conv:/pr_encoder/conv3/conv/conv.5/Conv
+17   MaxPool            FLOAT16  NPU    (1,64,64,64)                             (1,64,32,32)           0/0/0                    177                               100.0%/0.0%/0.0%     512          MaxPool:/pr_encoder/pool3/MaxPool
+18   Pad                FLOAT16  NPU    (1,64,32,32),(8)                         (1,64,34,34)           0/0/0                    74                                100.0%/0.0%/0.0%     128          Pad:/pr_encoder/conv4/body/body.0/Pad
+19   ConvLeakyRelu      FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)            (1,64,32,32)           14925/73728/73728        114          64.67/0.00/0.00      100.0%/0.0%/0.0%     216          Conv:/pr_encoder/conv4/body/body.1/Conv
+20   Pad                FLOAT16  NPU    (1,64,32,32),(8)                         (1,64,34,34)           0/0/0                    69                                100.0%/0.0%/0.0%     128          Pad:/pr_encoder/conv4/body/body.3/Pad
+21   Conv               FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)            (1,64,32,32)           14925/73728/73728        115          64.11/0.00/0.00      100.0%/0.0%/0.0%     216          Conv:/pr_encoder/conv4/body/body.4/Conv
+22   Conv               FLOAT16  NPU    (1,64,32,32),(1,64,7,7),(64)             (1,64,5,5)             5953/1568/5953           47           0.33/0.00/0.00       100.0%/0.0%/0.0%     134          Conv:/pr_encoder/conv4/body/body.5/global_pool/GlobalAveragePool_2conv0
+23   Conv               FLOAT16  NPU    (1,64,5,5),(1,64,5,5),(64)               (1,64,1,1)             287/400/400              38           0.01/0.00/0.00       100.0%/0.0%/0.0%     6            Conv:/pr_encoder/conv4/body/body.5/global_pool/GlobalAveragePool_2conv1
+24   ConvLeakyRelu      FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                (1,4,1,1)              31/32/32                 21           0.00/0.00/0.00       100.0%/0.0%/0.0%     0            Conv:/pr_encoder/conv4/body/body.5/conv_double/conv_double.0/Conv
+25   ConvSigmoid        FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                (1,64,1,1)             61/128/128               37           0.00/0.00/0.00       100.0%/0.0%/0.0%     1            Conv:/pr_encoder/conv4/body/body.5/conv_double/conv_double.2/Conv
+26   Mul                FLOAT16  NPU    (1,64,32,32),(1,64,1,1)                  (1,64,32,32)           0/0/0                    60                                100.0%/0.0%/0.0%     128          Mul:/pr_encoder/conv4/body/body.5/Mul
+27   Add                FLOAT16  NPU    (1,64,32,32),(1,64,32,32)                (1,64,32,32)           0/0/0                    71                                100.0%/0.0%/0.0%     256          Add:/pr_encoder/conv4/Add
+28   Pad                FLOAT16  NPU    (1,64,32,32),(8)                         (1,64,34,34)           0/0/0                    68                                100.0%/0.0%/0.0%     128          Pad:/pr_conv/body/body.0/Pad
+29   ConvLeakyRelu      FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)            (1,64,32,32)           14925/73728/73728        114          64.67/0.00/0.00      100.0%/0.0%/0.0%     216          Conv:/pr_conv/body/body.1/Conv
+30   Pad                FLOAT16  NPU    (1,64,32,32),(8)                         (1,64,34,34)           0/0/0                    69                                100.0%/0.0%/0.0%     128          Pad:/pr_conv/body/body.3/Pad
+31   Conv               FLOAT16  NPU    (1,64,34,34),(64,64,3,3),(64)            (1,64,32,32)           14925/73728/73728        115          64.11/0.00/0.00      100.0%/0.0%/0.0%     216          Conv:/pr_conv/body/body.4/Conv
+32   Conv               FLOAT16  NPU    (1,64,32,32),(1,64,7,7),(64)             (1,64,5,5)             5953/1568/5953           47           0.33/0.00/0.00       100.0%/0.0%/0.0%     134          Conv:/pr_conv/body/body.5/global_pool/GlobalAveragePool_2conv0
+33   Conv               FLOAT16  NPU    (1,64,5,5),(1,64,5,5),(64)               (1,64,1,1)             287/400/400              37           0.01/0.00/0.00       100.0%/0.0%/0.0%     6            Conv:/pr_conv/body/body.5/global_pool/GlobalAveragePool_2conv1
+34   ConvLeakyRelu      FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                (1,4,1,1)              31/32/32                 22           0.00/0.00/0.00       100.0%/0.0%/0.0%     0            Conv:/pr_conv/body/body.5/conv_double/conv_double.0/Conv
+35   ConvSigmoid        FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                (1,64,1,1)             61/128/128               38           0.00/0.00/0.00       100.0%/0.0%/0.0%     1            Conv:/pr_conv/body/body.5/conv_double/conv_double.2/Conv
+36   Mul                FLOAT16  NPU    (1,64,32,32),(1,64,1,1)                  (1,64,32,32)           0/0/0                    58                                100.0%/0.0%/0.0%     128          Mul:/pr_conv/body/body.5/Mul
+37   Add                FLOAT16  NPU    (1,64,32,32),(1,64,32,32)                (1,64,32,32)           0/0/0                    64                                100.0%/0.0%/0.0%     256          Add:/pr_conv/Add
+38   Resize             FLOAT16  CPU    (1,64,32,32),(0),(4)                     (1,64,64,64)           0/0/0                    1190                              0.0%/0.0%/0.0%       128          Resize:/pr_Up3/up/up.0/Resize
+39   Concat             FLOAT16  NPU    (1,64,64,64),(1,64,64,64)                (1,128,64,64)          0/0/0                    241                               100.0%/0.0%/0.0%     1024         Concat:/Concat  
+40   Pad                FLOAT16  NPU    (1,128,64,64),(8)                        (1,128,66,66)          0/0/0                    299                               100.0%/0.0%/0.0%     1024         Pad:/pr_UpConv3/conv/conv.0/Pad
+41   ConvLeakyRelu      FLOAT16  NPU    (1,128,66,66),(64,128,3,3),(64)          (1,64,64,64)           75554/589824/589824      739          79.81/0.00/0.00      100.0%/0.0%/0.0%     1233         Conv:/pr_UpConv3/conv/conv.1/Conv
+42   Pad                FLOAT16  NPU    (1,64,64,64),(8)                         (1,64,66,66)           0/0/0                    162                               100.0%/0.0%/0.0%     512          Pad:/pr_UpConv3/conv/conv.4/Pad
+43   ConvLeakyRelu      FLOAT16  NPU    (1,64,66,66),(64,64,3,3),(64)            (1,64,64,64)           48865/294912/294912      357          82.61/0.00/0.00      100.0%/0.0%/0.0%     616          Conv:/pr_UpConv3/conv/conv.5/Conv
+44   Resize             FLOAT16  CPU    (1,64,64,64),(0),(4)                     (1,64,128,128)         0/0/0                    4510                              0.0%/0.0%/0.0%       512          Resize:/pr_Up2/up/up.0/Resize
+45   Concat             FLOAT16  NPU    (1,64,128,128),(1,64,128,128)            (1,128,128,128)        0/0/0                    811                               100.0%/0.0%/0.0%     4096         Concat:/Concat_1
+46   Pad                FLOAT16  NPU    (1,128,128,128),(8)                      (1,128,130,130)        0/0/0                    1025                              100.0%/0.0%/0.0%     4096         Pad:/pr_UpConv2/conv/conv.0/Pad
+47   ConvLeakyRelu      FLOAT16  NPU    (1,128,130,130),(64,128,3,3),(64)        (1,64,128,128)         277808/2359296/2359296   3009         78.41/0.00/0.00      100.0%/0.0%/0.0%     4369         Conv:/pr_UpConv2/conv/conv.1/Conv
+48   Pad                FLOAT16  NPU    (1,64,128,128),(8)                       (1,64,130,130)         0/0/0                    576                               100.0%/0.0%/0.0%     2048         Pad:/pr_UpConv2/conv/conv.4/Pad
+49   ConvLeakyRelu      FLOAT16  NPU    (1,64,130,130),(64,64,3,3),(64)          (1,64,128,128)         183240/1179648/1179648   1463         80.63/0.00/0.00      100.0%/0.0%/0.0%     2184         Conv:/pr_UpConv2/conv/conv.5/Conv
+50   Resize             FLOAT16  CPU    (1,64,128,128),(0),(4)                   (1,64,256,256)         0/0/0                    17883                             0.0%/0.0%/0.0%       2048         Resize:/pr_Up1/up/up.0/Resize
+51   Concat             FLOAT16  NPU    (1,64,256,256),(1,64,256,256)            (1,128,256,256)        0/0/0                    3209                              100.0%/0.0%/0.0%     16384        Concat:/Concat_2
+52   Conv               FLOAT16  NPU    (1,128,256,256),(1,128,7,7),(128)        (1,128,37,37)          724645/134848/724645     1864         0.90/0.00/0.00       100.0%/0.0%/0.0%     16396        Conv:/gap/GlobalAveragePool_2conv0
+53   Conv               FLOAT16  NPU    (1,128,37,37),(1,128,7,7),(128)          (1,128,6,6)            15758/4704/15758         123          0.36/0.00/0.00       100.0%/0.0%/0.0%     355          Conv:/gap/GlobalAveragePool_2conv1
+54   Conv               FLOAT16  NPU    (1,128,6,6),(1,128,6,6),(128)            (1,128,1,1)            812/1152/1152            39           0.02/0.00/0.00       100.0%/0.0%/0.0%     18           Conv:/gap/GlobalAveragePool_2conv2
+55   Conv               FLOAT16  NPU    (1,128,1,1),(40,128,1,1),(40)            (1,40,1,1)             456/192/456              36           0.03/0.00/0.00       100.0%/0.0%/0.0%     10           Conv:/u_conv_layer/Conv
+56   Slice              FLOAT16  NPU    (1,40,1,1),(1),(1),(1),(1)               (1,20,1,1)             0/0/0                    21                                100.0%/0.0%/0.0%     0            Slice:/Slice    
+57   Conv               FLOAT16  NPU    (1,20,1,1),(128,20,1,1),(128)            (1,128,1,1)            381/256/381              36           0.01/0.00/0.00       100.0%/0.0%/0.0%     8            Conv:/conv_u/Conv
+58   Conv               FLOAT16  NPU    (1,128,1,1),(40,128,1,1),(40)            (1,40,1,1)             456/192/456              37           0.03/0.00/0.00       100.0%/0.0%/0.0%     10           Conv:/s_conv_layer/Conv
+59   Slice              FLOAT16  NPU    (1,40,1,1),(1),(1),(1),(1)               (1,20,1,1)             0/0/0                    21                                100.0%/0.0%/0.0%     0            Slice:/Slice_1  
+60   ConvLeakyRelu      FLOAT16  NPU    (1,20,1,1),(128,20,1,1),(128)            (1,128,1,1)            381/256/381              36           0.01/0.00/0.00       100.0%/0.0%/0.0%     8            Conv:/conv_s/Conv
+61   Transpose          FLOAT16  NPU    (1,128,256,256)                          (256,256,1,128)        0/0/0                    15921                             100.0%/0.0%/0.0%     16384        Transpose:/Concat_2_output_0_tp
+62   Reshape            FLOAT16  NPU    (256,256,1,128),(4)                      (1,65536,1,128)        0/0/0                    2                                 0.0%/0.0%/0.0%       16384        Reshape:/Concat_2_output_0_tp_rs
+63   exNorm             FLOAT16  NPU    (1,65536,1,128),(1,1,1,128),...          (1,65536,1,128)        0/0/0                    20555                             100.0%/0.0%/0.0%     16448        exNorm:/insnorm/InstanceNormalization
+64   Reshape            FLOAT16  NPU    (1,65536,1,128),(4)                      (256,256,1,128)        0/0/0                    2                                 0.0%/0.0%/0.0%       16384        Reshape:/insnorm/InstanceNormalization_rs
+65   Transpose          FLOAT16  NPU    (256,256,1,128)                          (1,128,256,256)        0/0/0                    11810                             100.0%/0.0%/0.0%     16384        Transpose:/insnorm/InstanceNormalization_rs_tp
+66   Mul                FLOAT16  NPU    (1,128,256,256),(1,128,1,1)              (1,128,256,256)        0/0/0                    3653                              100.0%/0.0%/0.0%     16384        Mul:/Mul        
+67   Add                FLOAT16  NPU    (1,128,256,256),(1,128,1,1)              (1,128,256,256)        0/0/0                    3646                              100.0%/0.0%/0.0%     16384        Add:/Add        
+68   Pad                FLOAT16  NPU    (1,128,256,256),(8)                      (1,128,258,258)        0/0/0                    3987                              100.0%/0.0%/0.0%     16384        Pad:/pr_UpConv1/conv/conv.0/Pad
+69   ConvLeakyRelu      FLOAT16  NPU    (1,128,258,258),(64,128,3,3),(64)        (1,64,256,256)         1081285/9437184/9437184  14314        65.93/0.00/0.00      100.0%/0.0%/0.0%     16785        Conv:/pr_UpConv1/conv/conv.1/Conv
+70   Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    1974                              100.0%/0.0%/0.0%     8192         Pad:/pr_UpConv1/conv/conv.4/Pad
+71   ConvLeakyRelu      FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5874         80.33/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/pr_UpConv1/conv/conv.5/Conv
+72   Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    2013                              100.0%/0.0%/0.0%     8192         Pad:/out_conv/out_conv.0/body/body.0/Pad
+73   ConvLeakyRelu      FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5895         80.04/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/out_conv/out_conv.0/body/body.1/Conv
+74   Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    2018                              100.0%/0.0%/0.0%     8192         Pad:/out_conv/out_conv.0/body/body.3/Pad
+75   Conv               FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5877         80.29/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/out_conv/out_conv.0/body/body.4/Conv
+76   Conv               FLOAT16  NPU    (1,64,256,256),(1,64,7,7),(64)           (1,64,37,37)           362323/67424/362323      981          0.85/0.00/0.00       100.0%/0.0%/0.0%     8198         Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_2conv0
+77   Conv               FLOAT16  NPU    (1,64,37,37),(1,64,7,7),(64)             (1,64,6,6)             7879/2352/7879           101          0.22/0.00/0.00       100.0%/0.0%/0.0%     177          Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_2conv1
+78   Conv               FLOAT16  NPU    (1,64,6,6),(1,64,6,6),(64)               (1,64,1,1)             406/576/576              40           0.01/0.00/0.00       100.0%/0.0%/0.0%     9            Conv:/out_conv/out_conv.0/body/body.5/global_pool/GlobalAveragePool_2conv2
+79   ConvLeakyRelu      FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                (1,4,1,1)              31/32/32                 20           0.00/0.00/0.00       100.0%/0.0%/0.0%     0            Conv:/out_conv/out_conv.0/body/body.5/conv_double/conv_double.0/Conv
+80   ConvSigmoid        FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                (1,64,1,1)             61/128/128               37           0.00/0.00/0.00       100.0%/0.0%/0.0%     1            Conv:/out_conv/out_conv.0/body/body.5/conv_double/conv_double.2/Conv
+81   Mul                FLOAT16  NPU    (1,64,256,256),(1,64,1,1)                (1,64,256,256)         0/0/0                    1835                              100.0%/0.0%/0.0%     8192         Mul:/out_conv/out_conv.0/body/body.5/Mul
+82   Add                FLOAT16  NPU    (1,64,256,256),(1,64,256,256)            (1,64,256,256)         0/0/0                    2096                              100.0%/0.0%/0.0%     16384        Add:/out_conv/out_conv.0/Add
+83   Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    2041                              100.0%/0.0%/0.0%     8192         Pad:/out_conv/out_conv.1/body/body.0/Pad
+84   ConvLeakyRelu      FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5833         80.89/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/out_conv/out_conv.1/body/body.1/Conv
+85   Pad                FLOAT16  NPU    (1,64,256,256),(8)                       (1,64,258,258)         0/0/0                    2048                              100.0%/0.0%/0.0%     8192         Pad:/out_conv/out_conv.1/body/body.3/Pad
+86   Conv               FLOAT16  NPU    (1,64,258,258),(64,64,3,3),(64)          (1,64,256,256)         717967/4718592/4718592   5875         80.32/0.00/0.00      100.0%/0.0%/0.0%     8392         Conv:/out_conv/out_conv.1/body/body.4/Conv
+87   Conv               FLOAT16  NPU    (1,64,256,256),(1,64,7,7),(64)           (1,64,37,37)           362323/67424/362323      982          0.85/0.00/0.00       100.0%/0.0%/0.0%     8198         Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_2conv0
+88   Conv               FLOAT16  NPU    (1,64,37,37),(1,64,7,7),(64)             (1,64,6,6)             7879/2352/7879           54           0.41/0.00/0.00       100.0%/0.0%/0.0%     177          Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_2conv1
+89   Conv               FLOAT16  NPU    (1,64,6,6),(1,64,6,6),(64)               (1,64,1,1)             406/576/576              37           0.01/0.00/0.00       100.0%/0.0%/0.0%     9            Conv:/out_conv/out_conv.1/body/body.5/global_pool/GlobalAveragePool_2conv2
+90   ConvLeakyRelu      FLOAT16  NPU    (1,64,1,1),(4,64,1,1),(4)                (1,4,1,1)              31/32/32                 21           0.00/0.00/0.00       100.0%/0.0%/0.0%     0            Conv:/out_conv/out_conv.1/body/body.5/conv_double/conv_double.0/Conv
+91   ConvSigmoid        FLOAT16  NPU    (1,4,1,1),(64,4,1,1),(64)                (1,64,1,1)             61/128/128               37           0.00/0.00/0.00       100.0%/0.0%/0.0%     1            Conv:/out_conv/out_conv.1/body/body.5/conv_double/conv_double.2/Conv
+92   Mul                FLOAT16  NPU    (1,64,256,256),(1,64,1,1)                (1,64,256,256)         0/0/0                    1862                              100.0%/0.0%/0.0%     8192         Mul:/out_conv/out_conv.1/body/body.5/Mul
+93   Add                FLOAT16  NPU    (1,64,256,256),(1,64,256,256)            (1,64,256,256)         0/0/0                    2162                              100.0%/0.0%/0.0%     16384        Add:/out_conv/out_conv.1/Add
+94   Conv               FLOAT16  NPU    (1,64,256,256),(3,64,1,1),(3)            (1,3,256,256)          443317/131072/443317     1021         2.41/0.00/0.00       100.0%/0.0%/0.0%     8192         Conv:/out_conv/out_conv.2/Conv
+95   OutputOperator     FLOAT16  CPU    (1,3,256,256)                            \                      0/0/0                    103                               0.0%/0.0%/0.0%       2048         OutputOperator:output
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total Operator Elapsed Per Frame Time(us): 183003
+Total Memory Read/Write Per Frame Size(KB): 407048.59
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+```
+### 推理速度优化
+#### 需求
+需要实现1080p分辨率下30FPS的推理速度，当前256*256分辨率单帧时间180ms，帧率差距巨大。分辨率方面可以通过分块处理解决
+#### 优化思路
++ 大部分算子只能使用单个npu核心参与计算，因此可以独立操作三个核心分别完成不同帧的计算从而单帧时间提升3倍
++ 上采样的插值用双线性插值计算回退至CPU，时间占23.5ms，换成最近邻插值可以给npu处理
++ 镜像填充ReflectionPad2d回退CPU用时20ms，如果可以换成Conv2d(padding=1)零填充交给npu处理
++ InstanceNorm现在时间消耗48ms，如果能GroupNorm组归一化也能快得多
++ INT8量化
+### 可能遇到的问题
+#### adb版本不对应
+这里要注意一件事，rknn要求adb版本必须是40，更高或更低都不行。其中platform-tools 28.0.1 对应 ADB 1.0.40。
+
+如果下面的代码提示版本不匹配，例如终端输出这样表示系统adb版本为39，与要求的40不匹配：
+```bash
+connected to 192.168.10.43:5555
+--> 尝试连接板子 [192.168.10.43:5555] 进行初始化...
+I target set by user is: rk3588
+I Check RK3588 board npu runtime version
+I Starting ntp or adb, target is RK3588
+I Device [192.168.10.43:5555] not found in ntb device list.
+I Start adb...
+adb server version (39) doesn't match this client (40); killing...
+* daemon started successfully
+error: device '192.168.10.43:5555' not found
+E init_runtime: Connect to Device Failure (-1), Please make sure the USB connection is normal!
+E init_runtime: Catch exception when init runtime!
+E init_runtime: Traceback (most recent call last):
+E init_runtime:   File "rknn/api/rknn_base.py", line 2469, in rknn.api.rknn_base.RKNNBase.init_runtime
+E init_runtime:   File "rknn/api/rknn_runtime.py", line 211, in rknn.api.rknn_runtime.RKNNRuntime.__init__
+E init_runtime:   File "rknn/api/rknn_platform.py", line 344, in rknn.api.rknn_platform.start_ntp_or_adb
+E init_runtime: Exception: Init runtime environment failed!
+W If you can't handle this error, please try updating to the latest version of the toolkit2 and runtime from:
+  https://eyun.baidu.com/s/3eTDMk6Y (Pwd: rknn)  Path: RK_NPU_SDK / RK_NPU_SDK_1.X.0 / develop /
+  If the error still exists in the latest version, please collect the corresponding error logs and the model,
+  convert script, and input data that can reproduce the problem, and then submit an issue on:
+  https://redmine.rock-chips.com (Please consult our sales or FAE for the redmine account)
+初始化 runtime 失败！
+请检查：1.板子 ./rknn_server 是否正在运行？ 2.PC和板子是否能 ping 通？
+--> Export rknn model
+```
+目前直接从Google下载最新版已经是41了，所以必须手动指定下载旧版本：
+```bash
+wget https://dl.google.com/android/repository/platform-tools_r28.0.1-linux.zip
+```
+解压后进入目录验证版本:
+```bash
+triority@ubuntu:~/platform-tools$ ./adb version
+Android Debug Bridge version 1.0.40
+Version 4986621
+Installed as /home/triority/platform-tools/adb
+```
+现在用这个adb覆盖系统已有那个：
+```bash
+# 替换 SDK 路径下的
+sudo cp adb /usr/lib/android-sdk/platform-tools/adb
+# 替换系统指令路径下的
+sudo cp adb /usr/bin/adb
+```
+
+#### onnx版本误识别
+以及我遇到了onnx库版本的bug导致识别onnx文件的opset_version为19导致版本过高不支持报错，需要卸载重装其他版本
+```bash
+triority@ubuntu:~/Desktop/rknn_test/UIE$ python3 onnx2rknn_adb.py 
+I rknn-toolkit2 version: 2.3.0
+--> Loading model
+I Loading : 100%|███████████████████████████████████████████████| 66/66 [00:00<00:00, 131695.56it/s]
+--> Building model
+D base_optimize ...
+D base_optimize done.
+D 
+D fold_constant ...
+E build: Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 1945, in rknn.api.rknn_base.RKNNBase.build
+  File "rknn/api/graph_optimizer.py", line 938, in rknn.api.graph_optimizer.GraphOptimizer.fold_constant
+  File "rknn/api/session.py", line 34, in rknn.api.session.Session.__init__
+  File "rknn/api/session.py", line 131, in rknn.api.session.Session.sess_build
+  File "/home/triority/.local/lib/python3.8/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py", line 360, in __init__
+    self._create_inference_session(providers, provider_options, disabled_optimizers)
+  File "/home/triority/.local/lib/python3.8/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py", line 399, in _create_inference_session
+    sess = C.InferenceSession(session_options, self._model_bytes, False, self._read_config_from_model)
+onnxruntime.capi.onnxruntime_pybind11_state.InvalidArgument: [ONNXRuntimeError] : 2 : INVALID_ARGUMENT : Failed to load model with error: /onnxruntime_src/onnxruntime/core/graph/model_load_utils.h:46 void onnxruntime::model_load_utils::ValidateOpsetForDomain(const std::unordered_map<std::basic_string<char>, int>&, const onnxruntime::logging::Logger&, bool, const string&, int) ONNX Runtime only *guarantees* support for models stamped with official released onnx opset versions. Opset 19 is under development and support for this is limited. The operator schemas and or other functionality may change before next ONNX release and in this case ONNX Runtime will not guarantee backward compatibility. Current official support for domain ai.onnx is till opset 18.
+
+
+I ===================== WARN(0) =====================
+E rknn-toolkit2 version: 2.3.0
+Traceback (most recent call last):
+  File "rknn/api/rknn_log.py", line 344, in rknn.api.rknn_log.error_catch_decorator.error_catch_wrapper
+  File "rknn/api/rknn_base.py", line 1945, in rknn.api.rknn_base.RKNNBase.build
+  File "rknn/api/graph_optimizer.py", line 938, in rknn.api.graph_optimizer.GraphOptimizer.fold_constant
+  File "rknn/api/session.py", line 34, in rknn.api.session.Session.__init__
+  File "rknn/api/session.py", line 131, in rknn.api.session.Session.sess_build
+  File "/home/triority/.local/lib/python3.8/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py", line 360, in __init__
+    self._create_inference_session(providers, provider_options, disabled_optimizers)
+  File "/home/triority/.local/lib/python3.8/site-packages/onnxruntime/capi/onnxruntime_inference_collection.py", line 399, in _create_inference_session
+    sess = C.InferenceSession(session_options, self._model_bytes, False, self._read_config_from_model)
+onnxruntime.capi.onnxruntime_pybind11_state.InvalidArgument: [ONNXRuntimeError] : 2 : INVALID_ARGUMENT : Failed to load model with error: /onnxruntime_src/onnxruntime/core/graph/model_load_utils.h:46 void onnxruntime::model_load_utils::ValidateOpsetForDomain(const std::unordered_map<std::basic_string<char>, int>&, const onnxruntime::logging::Logger&, bool, const string&, int) ONNX Runtime only *guarantees* support for models stamped with official released onnx opset versions. Opset 19 is under development and support for this is limited. The operator schemas and or other functionality may change before next ONNX release and in this case ONNX Runtime will not guarantee backward compatibility. Current official support for domain ai.onnx is till opset 18.
+```
+
+```bash
+pip3 uninstall onnx onnxruntime
+pip3 install onnx==1.16.0 onnxruntime
+```
