@@ -1,11 +1,13 @@
 ---
 title: 香橙派5（RK3588）AI模型推理
-cover: /img/0628.png
+cover: /img/pi5-01.png
 date: 2026-1-11 20:12:14
 categories: 
 - [文档&笔记]
 tags:
 - 笔记
+- 香橙派
+- python
 description: 使用RK3588的NPU进行图像恢复模型的运行部署
 ---
 # 前言
