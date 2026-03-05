@@ -1498,7 +1498,7 @@ Total Memory Read/Write Per Frame Size(KB): 407048.59
 ### 推理速度优化
 #### 需求
 需要实现720p分辨率下24FPS的推理速度，当前256*256分辨率单帧时间180ms，帧率差距巨大。分辨率方面可以通过分块处理解决
-#### 推理速度时间优化
+#### npu推理时间优化
 主要修改点：
 + 绝大部分算子只能使用单个npu核心参与计算，因此可以独立操作三个核心，使用队列分配任务，分别完成不同块的计算从而单帧时间提升3倍
 + 上采样的插值用双线性插值计算回退至CPU，时间占23.5ms，换成最近邻插值可以给npu处理
@@ -1645,9 +1645,332 @@ Total                           60           0            5293         5353
 +  之前 SE 模块产生的Add、Mul、ConvSigmoid 合计占了 4.1ms，删除之后也带来相对较大的提升
 +  总读写（RW）从之前的 300MB+ 降到了目前的 65MB，缓解了带宽压力
 
-#### 推理质量效果优化
+#### 推理部署运行优化
+RK3588的CPU性能也不是很高，对于1080p 24fps视频的实时处理必须进行足够高效的并行处理才能达到。
+
++ 异步帧级流水线：为了避免硬件资源在不同阶段出现空闲，采用生产者-消费者模型，将整个流程分为三个阶段：生产者进程捕获视频流并完成首层降采样；执行层Worker进程池并行，利用帧并行策略，每核心分配2个进程交叉掩盖CPU转换时间；结果收集层负责帧顺序重排、二次升采样与GUI
++ 双向共享内存原子化提交：主进程将图像直接写入该地址，子进程通过指针直接读取，无数据移动的资源开销，NPU 处理结果直接回写到对应的共享地址。Worker进程在推理分块时，先在私有画布上拼图，只有当一帧的 15 个块全部拼齐后，才执行一次全量内存拷贝
++ NPU多核绑定：显式将不同进程固定到特定核心（Core 0/1/2），避免了操作系统调度开销
++ 使用RGA硬件完成resize等图像处理，尽可能减少CPU开销
+
+```python
+import cv2
+import numpy as np
+import time
+import threading
+import multiprocessing as mp
+from multiprocessing import shared_memory
+from queue import Empty, Queue as ThreadQueue
+from rknnlite.api import RKNNLite
+import os
+import gc  
+import rga_c
 
 
+MODEL_PATH = 'puienet_rk3588.rknn'
+VIDEO_SOURCE = 'input_1080p.mp4'
+SAVE_VIDEO = False     
+OUTPUT_VIDEO = 'output_processed.avi' 
+
+USE_CAMERA = True
+CAMERA_INDEX = 0      
+
+TARGET_W, TARGET_H = 1024, 640
+FINAL_W, FINAL_H = 1920, 1080
+INPUT_SIZE = 256
+OVERLAP = 64
+
+NUM_BUFFERS = 16 
+NUM_WORKERS = 6
+
+def get_tile_coords():
+    coords = []
+    x_starts = [0, 192, 384, 576, 768]
+    y_starts = [0, 192, 384]
+    for y in y_starts:
+        for x in x_starts:
+            coords.append((x, y, x + 256, y + 256))
+    return coords
+TILE_COORDS = get_tile_coords()
+
+W_GRAD = np.linspace(0, 128, OVERLAP).reshape(1, OVERLAP, 1).astype(np.uint16)
+W_GRAD_INV = 128 - W_GRAD
+H_GRAD = np.linspace(0, 128, OVERLAP).reshape(OVERLAP, 1, 1).astype(np.uint16)
+H_GRAD_INV = 128 - H_GRAD
+
+
+class VideoReaderThread(threading.Thread):
+    def __init__(self, src):
+        super().__init__()
+        self.src = CAMERA_INDEX if USE_CAMERA else src
+        if USE_CAMERA:
+            self.cap = cv2.VideoCapture(self.src, cv2.CAP_V4L2)
+            self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+            self.cap.set(cv2.CAP_PROP_FPS, 30)
+            self.fps = 30
+            self.total_frames = 999999
+        else:
+            self.cap = cv2.VideoCapture(self.src)
+            self.fps = self.cap.get(cv2.CAP_PROP_FPS)
+            self.total_frames = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+        self.queue = ThreadQueue(maxsize=NUM_BUFFERS)
+        self.daemon = True
+        self.running = True
+        self.is_finished = False
+    
+    def run(self):
+        print(f"--> [Reader] : {self.src}")
+        fail_cnt = 0
+        while self.running:
+            if not self.queue.full():
+                ret, frame = self.cap.read()
+                if not ret:
+                    fail_cnt += 1
+                    if not USE_CAMERA and fail_cnt > 100:
+                        self.is_finished = True; break
+                    time.sleep(0.01); continue
+                fail_cnt = 0
+                self.queue.put(frame)
+            else:
+                if USE_CAMERA:
+                    try: self.queue.get_nowait()
+                    except Empty: pass
+                else:
+                    time.sleep(0.005)
+        self.cap.release()
+
+
+def frame_worker_process(worker_id, model_path, in_shm_name, out_shm_name, task_queue, result_queue, exit_event):
+    core_mask = 1 << (worker_id % 3)
+    try:
+        shm_in = shared_memory.SharedMemory(name=in_shm_name)
+        in_buf = np.ndarray((NUM_BUFFERS, TARGET_H, TARGET_W, 3), dtype=np.uint8, buffer=shm_in.buf)
+        shm_out = shared_memory.SharedMemory(name=out_shm_name)
+        out_buf = np.ndarray((NUM_BUFFERS, TARGET_H, TARGET_W, 3), dtype=np.uint8, buffer=shm_out.buf)
+        
+        rknn = RKNNLite()
+        rknn.load_rknn(model_path)
+        rknn.init_runtime(core_mask=core_mask)
+        print(f"--> Worker {worker_id} Ready")
+
+        tile_in = np.zeros((INPUT_SIZE, INPUT_SIZE, 3), dtype=np.uint8)
+        local_canvas = np.zeros((TARGET_H, TARGET_W, 3), dtype=np.uint8)
+        tiles_cache = [None] * 15 
+        
+        while not exit_event.is_set():
+            try:
+                task = task_queue.get(timeout=0.5)
+                fid, b_idx, t_start, t_pre_e = task
+                
+                t_npu_s = time.perf_counter()
+                frame_raw = in_buf[b_idx]
+                for tid, (x1, y1, x2, y2) in enumerate(TILE_COORDS):
+                    tile_in[:] = frame_raw[y1:y2, x1:x2]
+                    out_list = rknn.inference(inputs=[tile_in])
+                    out_tensor = out_list[0][0] 
+                    tiles_cache[tid] = cv2.convertScaleAbs(out_tensor.transpose(1, 2, 0), alpha=255.0)
+                
+                for tid, (x1, y1, x2, y2) in enumerate(TILE_COORDS):
+                    local_canvas[y1:y2, x1:x2] = tiles_cache[tid]
+                
+                # 融合算法
+                for i in range(15):
+                    if (i + 1) % 5 != 0:
+                        x1, y1, _, _ = TILE_COORDS[i]
+                        xs = x1 + INPUT_SIZE - OVERLAP
+                        left = tiles_cache[i][:, -OVERLAP:].astype(np.uint16)
+                        right = tiles_cache[i+1][:, :OVERLAP].astype(np.uint16)
+                        local_canvas[y1:y1+INPUT_SIZE, xs:xs+OVERLAP] = ((left * W_GRAD_INV + right * W_GRAD) >> 7).astype(np.uint8)
+                for i in range(10):
+                    x1, y1, _, _ = TILE_COORDS[i]
+                    ys = y1 + INPUT_SIZE - OVERLAP
+                    top = tiles_cache[i][-OVERLAP:, :].astype(np.uint16)
+                    bot = tiles_cache[i+5][:OVERLAP, :].astype(np.uint16)
+                    local_canvas[ys:ys+OVERLAP, x1:x1+INPUT_SIZE] = ((top * H_GRAD_INV + bot * H_GRAD) >> 7).astype(np.uint8)
+                
+                out_buf[b_idx][:] = local_canvas
+                t_done = time.perf_counter()
+                
+                result_queue.put({
+                    'fid': fid, 'b_idx': b_idx,
+                    't_npu_total': (t_done - t_npu_s) * 1000,
+                    't_start': t_start, 't_pre': (t_pre_e - t_start) * 1000
+                })
+                for i in range(15): tiles_cache[i] = None
+            except Empty: continue
+    finally:
+        shm_in.close(); shm_out.close()
+
+
+if __name__ == '__main__':
+    for p in ["/sys/class/devfreq/fb000000.npu/governor", "/sys/class/devfreq/fdb00000.npu/governor"]:
+        if os.path.exists(p): os.system(f"echo performance > {p}"); break
+
+    reader = VideoReaderThread(VIDEO_SOURCE)
+    reader.start()
+
+    shm_in = shared_memory.SharedMemory(create=True, size=TARGET_W*TARGET_H*3*NUM_BUFFERS)
+    shm_out = shared_memory.SharedMemory(create=True, size=TARGET_W*TARGET_H*3*NUM_BUFFERS)
+    in_buf_base = np.ndarray((NUM_BUFFERS, TARGET_H, TARGET_W, 3), dtype=np.uint8, buffer=shm_in.buf)
+    out_buf_base = np.ndarray((NUM_BUFFERS, TARGET_H, TARGET_W, 3), dtype=np.uint8, buffer=shm_out.buf)
+
+    rga_input_tmp = np.zeros((TARGET_H, TARGET_W, 3), dtype=np.uint8)
+    rga_final_tmp = np.zeros((FINAL_H, FINAL_W, 3), dtype=np.uint8)
+
+
+    writer = None
+    if SAVE_VIDEO:
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG') 
+        writer = cv2.VideoWriter(OUTPUT_VIDEO, fourcc, reader.fps, (FINAL_W, FINAL_H))
+        if writer.isOpened():
+            print(f"--> [Writer] 成功初始化: {OUTPUT_VIDEO} (MJPG)")
+        else:
+            print("--> [Writer] 初始化失败！")
+
+    task_queue = mp.Queue(maxsize=NUM_BUFFERS)
+    result_queue = mp.Queue()
+    exit_event = mp.Event()
+
+    processes = [mp.Process(target=frame_worker_process, args=(i, MODEL_PATH, shm_in.name, shm_out.name, task_queue, result_queue, exit_event)) for i in range(NUM_WORKERS)]
+    for p in processes: p.start()
+
+    next_fid_send, next_fid_show = 0, 0
+    reorder_buffer = {}
+    t_program_start = time.time()
+
+    try:
+        while True:
+            # 1. 生产者
+            if not reader.is_finished:
+                current_depth = 6 if USE_CAMERA else (NUM_BUFFERS - 2)
+                if (next_fid_send - next_fid_show) < current_depth:
+                    if not reader.queue.empty():
+                        frame = reader.queue.get()
+                        t_s = time.perf_counter()
+                        b_idx = next_fid_send % NUM_BUFFERS
+                        rga_c.rga_resize_and_cvt(frame, rga_input_tmp, False, True)
+                        in_buf_base[b_idx][:] = rga_input_tmp
+                        task_queue.put((next_fid_send, b_idx, t_s, time.perf_counter()))
+                        next_fid_send += 1
+
+            # 2. 消费者
+            try:
+                while True:
+                    res = result_queue.get_nowait()
+                    reorder_buffer[res['fid']] = res
+            except Empty: pass
+
+            if next_fid_show in reorder_buffer:
+                s = reorder_buffer.pop(next_fid_show)
+                rga_c.rga_resize_and_cvt(out_buf_base[s['b_idx']], rga_final_tmp, True, False)
+                
+                # 执行写入
+                if writer is not None:
+                    writer.write(rga_final_tmp)
+                
+                cv2.imshow('RK3588 Recovery High-FPS', rga_final_tmp)
+                
+                if next_fid_show % 20 == 0:
+                    fps = 20 / (time.time() - t_program_start)
+                    print(f"[FID:{next_fid_show}] NPU耗时:{s['t_npu_total']:.1f}ms | 帧率:{fps:.1f}fps")
+                    t_program_start = time.time()
+                
+                next_fid_show += 1
+                if cv2.waitKey(1) & 0xFF == ord('q'): break
+            else:
+                if reader.is_finished and next_fid_show >= next_fid_send: break
+                time.sleep(0.001)
+
+    finally:
+        print("--> 正在关闭程序并保存视频...")
+        exit_event.set()
+        reader.running = False
+        
+        if writer is not None:
+            writer.release()
+            print(f"--> [Success] 视频文件已保存: {OUTPUT_VIDEO}")
+        
+        for p in processes: 
+            p.terminate()
+            p.join()
+
+        try:
+            shm_in.close()
+            shm_in.unlink()
+            shm_out.close()
+            shm_out.unlink()
+        except: pass
+        
+        cv2.destroyAllWindows()
+        
+```
+
+rga_c.py:
+```python
+import ctypes
+import numpy as np
+import os
+import cv2
+
+RGA_LIB_PATH = '/usr/lib/aarch64-linux-gnu/librga.so'
+if not os.path.exists(RGA_LIB_PATH):
+    RGA_LIB_PATH = '/lib/aarch64-linux-gnu/librga.so.2'
+_librga = ctypes.CDLL(RGA_LIB_PATH)
+
+# RGA 格式定义
+RK_FORMAT_RGB_888 = 0x02
+RK_FORMAT_BGR_888 = 0x03
+
+class RgaBuffer(ctypes.Structure):
+    _fields_ = [
+        ("vir_addr", ctypes.c_void_p), ("phy_addr", ctypes.c_void_p),
+        ("fd", ctypes.c_int), ("handle", ctypes.c_int),
+        ("width", ctypes.c_int), ("height", ctypes.c_int),
+        ("wstride", ctypes.c_int), ("hstride", ctypes.c_int),
+        ("format", ctypes.c_int), ("color_space_mode", ctypes.c_int),
+        ("global_alpha", ctypes.c_int), ("rd_mode", ctypes.c_int),
+        ("reserved", ctypes.c_ubyte * 128)
+    ]
+
+_imresize = _librga.imresize_t
+
+def rga_resize_and_cvt(src_img, dst_img, src_is_rgb=False, dst_is_rgb=True):
+    """
+    控制输入输出格式
+    src_is_rgb: 输入数组是否是RGB格式
+    dst_is_rgb: 目标输出数组是否是RGB格式
+    """
+    if src_img is None or dst_img is None:
+        return -1
+    
+    src_h, src_w = src_img.shape[:2]
+    dst_h, dst_w = dst_img.shape[:2]
+    
+    s_buf = RgaBuffer()
+    s_buf.vir_addr = src_img.ctypes.data
+    s_buf.width, s_buf.height = src_w, src_h
+    s_buf.wstride, s_buf.hstride = src_w, src_h
+    s_buf.format = RK_FORMAT_RGB_888 if src_is_rgb else RK_FORMAT_BGR_888
+    
+    d_buf = RgaBuffer()
+    d_buf.vir_addr = dst_img.ctypes.data
+    d_buf.width, d_buf.height = dst_w, dst_h
+    d_buf.wstride, d_buf.hstride = dst_w, dst_h
+    d_buf.format = RK_FORMAT_RGB_888 if dst_is_rgb else RK_FORMAT_BGR_888
+    
+    ret = _imresize(ctypes.byref(s_buf), ctypes.byref(d_buf), ctypes.c_double(0.0), ctypes.c_double(0.0), 0, 1, None)
+    
+    if ret != 0:
+        res = cv2.resize(src_img, (dst_w, dst_h), interpolation=cv2.INTER_NEAREST)
+        if src_is_rgb != dst_is_rgb:
+            dst_img[:] = cv2.cvtColor(res, cv2.COLOR_RGB2BGR if src_is_rgb else cv2.COLOR_BGR2RGB)
+        else:
+            dst_img[:] = res
+    return ret
+```
 
 ### 可能遇到的问题
 #### adb版本不对应
