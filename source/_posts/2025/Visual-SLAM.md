@@ -1,6 +1,6 @@
 ---
 title: 本科毕业设计论文：巷道移动机器人SLAM技术研究
-cover: /img/
+cover: /img/ScreenShot_2026-03-05_190242_417.png
 date: 2025-02-6 20:41:20
 categories: 
 - [文档&笔记]
