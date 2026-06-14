@@ -3,7 +3,7 @@ title: 自定义硬件RK3588核心板的buildroot系统与应用交叉编译开�
 cover: /img/RUN.png
 categories:
   - 文档&笔记
-date: 2025-06-09 21:18:59
+date: 2026-06-09 21:18:59
 description: 首先使用正点原子的rk3588核心板+底板进行系统编译，然后裁剪并自制底板并运行buildroot系统
 ---
 # buildroot系统编译
