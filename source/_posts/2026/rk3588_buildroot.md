@@ -389,4 +389,216 @@ chmod +x /root/rkvision
 ```
 可以看到成功输出`Hello World!`
 
-### cmake
+### Cmake和自动化编译上传测试
+使用cmake编译：
+`toolchain-rk3588.cmake`是交叉编译工具链配置文件，
+```cmake
+# 目标系统linux
+set(CMAKE_SYSTEM_NAME Linux)
+# 目标处理器架构是 ARM64
+set(CMAKE_SYSTEM_PROCESSOR aarch64)
+
+# 定义SDK路径和输出路径
+set(SDK_ROOT "$ENV{HOME}/rk3588_linux_sdk")
+set(BR_OUT "${SDK_ROOT}/buildroot/output/rockchip_atk_dlrk3588")
+# 定义交叉编译器所在目录
+set(TOOLCHAIN_BIN "${BR_OUT}/host/bin")
+# 定义目标系统的 sysroot，即开发板 rootfs 的编译参考环境，编译器将从这里找 ARM64 版本的头文件和库
+set(SYSROOT "${BR_OUT}/host/aarch64-buildroot-linux-gnu/sysroot")
+
+# 指定 C/C++ 编译器
+set(CMAKE_C_COMPILER "${TOOLCHAIN_BIN}/aarch64-buildroot-linux-gnu-gcc")
+set(CMAKE_CXX_COMPILER "${TOOLCHAIN_BIN}/aarch64-buildroot-linux-gnu-g++")
+# 指定 sysroot，查找库、头文件、包配置时以这个 sysroot 作为根目录
+set(CMAKE_SYSROOT "${SYSROOT}")
+set(CMAKE_FIND_ROOT_PATH "${SYSROOT}")
+
+# 查找程序的规则，NEVER 程序工具从主机环境找
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+# 查找库、头文件、包的规则，ONLY 只在 sysroot 里找，防止链接到 Ubuntu 主机的 x86_64 库
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+# 设置 pkg-config 的 sysroot，让 pkg-config 输出路径时自动加上 sysroot 前缀
+set(ENV{PKG_CONFIG_SYSROOT_DIR} "${SYSROOT}")
+# 设置 pkg-config 搜索路径，只去 RK3588 sysroot 里找 .pc 文件
+set(ENV{PKG_CONFIG_LIBDIR} "${SYSROOT}/usr/lib/pkgconfig:${SYSROOT}/usr/share/pkgconfig")
+# 清空 PKG_CONFIG_PATH，避免 pkg-config 找到 Ubuntu 主机上的 .pc 文件
+set(ENV{PKG_CONFIG_PATH} "")
+```
+`CMakeLists.txt`项目编译规则文件：
+```cmake
+# CMake 最低版本
+cmake_minimum_required(VERSION 3.10)
+
+# 项目名称
+project(rkvision)
+
+# 设置 C++ 标准，强制要求
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 查找 PkgConfig，REQUIRED 表示必须找到，否则停止配置
+find_package(PkgConfig REQUIRED)
+
+# 调用 pkg-config 查找名为 opencv4 的模块
+pkg_check_modules(OPENCV REQUIRED opencv4)
+
+# 添加 OpenCV 头文件路径
+include_directories(
+    ${OPENCV_INCLUDE_DIRS}
+)
+# 添加 OpenCV 库目录
+link_directories(
+    ${OPENCV_LIBRARY_DIRS}
+)
+# 生成可执行程序，表示把src/main.cpp编译成一个可执行程序rkvision
+add_executable(rkvision
+    src/main.cpp
+)
+
+# 链接 OpenCV 库，告诉链接器 rkvision 这个程序需要链接 OpenCV 的库
+target_link_libraries(rkvision
+    ${OPENCV_LIBRARIES}
+)
+# 添加额外编译参数，把 OpenCV 额外要求的编译参数加进去，PRIVATE 表示这些选项只作用于 rkvision 这个目标
+target_compile_options(rkvision PRIVATE
+    ${OPENCV_CFLAGS_OTHER}
+)
+```
+
+`main.cpp`加入opencv图像读取并保存：
+```cpp
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <string>
+
+//主函数入口：argc命令行参数个数；argv命令行参数内容
+//例如运行./rkvision /dev/video22则argc = 2，argv[0] = "./rkvision"，argv[1] = "/dev/video22"
+int main(int argc, char** argv) {
+    std::string device = "/dev/video22";
+
+    if (argc >= 2) {
+        device = argv[1];
+    }
+
+    std::cout << "Opening camera through GStreamer: " << device << std::endl;
+
+    //构造 GStreamer 管线
+    std::string pipeline =
+        //使用 GStreamer 的 V4L2 插件从摄像头采集数据
+        "v4l2src device=" + device + " ! "
+        //摄像头输出原始视频NV12 格式1920x1080 分辨率30 FPS
+        "video/x-raw,format=NV12,width=1920,height=1080,framerate=30/1 ! "
+        //GStreamer 的格式转换插件把NV12转换成BGR
+        "videoconvert ! "
+        "video/x-raw,format=BGR ! "
+        //appsink 是 GStreamer 管线的出口，把图像交给 C++ 程序。drop=true如果程序处理不过来允许丢弃旧帧；sync=false不按时间戳严格同步尽快把帧交给程序
+        "appsink drop=true sync=false";
+
+    std::cout << "Pipeline: " << pipeline << std::endl;
+
+    //创建一个 OpenCV 视频采集对象，使用GStreamer 管线
+    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
+
+    if (!cap.isOpened()) {
+        std::cerr << "Error: failed to open camera with GStreamer pipeline." << std::endl;
+        return 1;
+    }
+
+    //创建图像对象
+    cv::Mat frame;
+
+    std::cout << "Reading one frame..." << std::endl;
+
+    //读取图像并检查
+    if (!cap.read(frame)) {
+        std::cerr << "Error: failed to read frame." << std::endl;
+        return 2;
+    }
+
+    if (frame.empty()) {
+        std::cerr << "Error: captured frame is empty." << std::endl;
+        return 3;
+    }
+
+    std::cout << "Captured frame: "
+              << frame.cols << "x" << frame.rows
+              << ", channels=" << frame.channels()
+              << std::endl;
+
+    std::string save_path = "/root/app/capture.jpg";
+
+    if (!cv::imwrite(save_path, frame)) {
+        std::cerr << "Error: failed to save image to " << save_path << std::endl;
+        return 4;
+    }
+
+    std::cout << "Saved image to: " << save_path << std::endl;
+
+    return 0;
+}
+```
+
+可以使用sh脚本自动化编译上传和测试：
+`deploy.sh`：
+```sh
+#!/bin/bash
+set -e
+
+BOARD_IP=192.168.144.103
+BOARD_USER=root
+APP_NAME=rkvision
+BUILD_DIR=build-rk3588
+REMOTE_DIR=/root/app
+
+SSH_TARGET=${BOARD_USER}@${BOARD_IP}
+
+# SSH 连接复用 socket 文件
+CONTROL_PATH="/tmp/ssh_mux_%r@%h:%p"
+
+# 重烧系统开发板 host key 会变化。
+# 下面两个选项可以避免每次提示 known_hosts 冲突。
+# 仅建议在自己的局域网开发板环境使用。
+SSH_OPTS=(
+    -o ControlMaster=auto
+    -o ControlPath=${CONTROL_PATH}
+    -o ControlPersist=10m
+    -o StrictHostKeyChecking=no
+    -o UserKnownHostsFile=/dev/null
+)
+
+echo "========== Build =========="
+
+mkdir -p ${BUILD_DIR}
+cd ${BUILD_DIR}
+
+cmake .. \
+  -DCMAKE_TOOLCHAIN_FILE=../toolchain-rk3588.cmake \
+  -DCMAKE_BUILD_TYPE=Debug
+
+make -j$(nproc)
+
+cd ..
+
+echo "========== Open SSH master connection =========="
+
+ssh "${SSH_OPTS[@]}" -MNf ${SSH_TARGET}
+
+echo "========== Deploy =========="
+
+ssh "${SSH_OPTS[@]}" ${SSH_TARGET} "mkdir -p ${REMOTE_DIR}"
+
+scp "${SSH_OPTS[@]}" ${BUILD_DIR}/${APP_NAME} ${SSH_TARGET}:${REMOTE_DIR}/
+
+echo "========== Run =========="
+
+ssh "${SSH_OPTS[@]}" ${SSH_TARGET} \
+    "chmod +x ${REMOTE_DIR}/${APP_NAME} && cd ${REMOTE_DIR} && ./${APP_NAME}"
+
+echo "========== Close SSH master connection =========="
+
+ssh "${SSH_OPTS[@]}" -O exit ${SSH_TARGET} 2>/dev/null || true
+```
+
